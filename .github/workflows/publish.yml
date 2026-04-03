@@ -23,12 +23,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y make texlive-latex-base poppler-utils
       - name: "Set up Python"
         uses: actions/setup-python@v6
         with:
           python-version-file: ".python-version"
       
+
       - name: Install uv
         uses: astral-sh/setup-uv@v7
         with:
