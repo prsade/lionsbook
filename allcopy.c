@@ -2295,6 +2295,8 @@ expand(newsize)
         sureg();
 }
 /* ---------------------------       */
+
+
 #
 /*
  */
@@ -2452,6 +2454,49 @@ int *bp;
         printf("bn%l er%o %o\n", rbp->b_blkno, o1, o2);
 }
 /* ---------------------------       */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #
 /*
  */
@@ -2542,6 +2587,16 @@ struct map *mp;
         }
 }
 /* ---------------------------       */
+
+
+
+
+
+
+
+
+
+
 /*
  * Location of the users' stored
  * registers relative to R0.
@@ -2558,6 +2613,40 @@ struct map *mp;
 #define RPS     (2)
 
 #define TBIT    020             /* PS trace bit */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #
 #include "../param.h"
 #include "../systm.h"
@@ -2776,6 +2865,38 @@ nullsys()
 {
 }
 /* ---------------------------       */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #
 /*
  */
@@ -2854,6 +2975,28 @@ int     sysent[]
         0, &nosys                       /* 63 = x */
 };
 /* ---------------------------       */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #
 #include "../param.h"
 #include "../systm.h"
@@ -3253,6 +3396,8 @@ bigger:
 }
 /* ---------------------------       */
 
+
+
 /*
  * Everything in this file is a routine implementing a system call.
  *
@@ -3528,6 +3673,30 @@ profil()
         u.u_prof[3] = (u.u_arg[3]>>1) & 077777; /* pc scale */
 }
 /* ---------------------------       */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #
 #include "../param.h"
 #include "../systm.h"
@@ -3703,6 +3872,31 @@ timeout(fun, arg, tim)
         PS->integ = s;
 }
 /* ---------------------------       */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #
 /*
  */
@@ -4090,6 +4284,19 @@ procxmt()
         return(0);
 }
 /* ---------------------------       */
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
  * Text structure.
  * One allocated per pure
@@ -4106,6 +4313,40 @@ struct text
         char    x_ccount;       /* number of loaded references */
 } text[NTEXT];
 /* ---------------------------       */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #
 #include "../param.h"
 #include "../systm.h"
@@ -4255,6 +4496,7 @@ int *xp;
                 if(--rp->x_ccount == 0)
                         mfree(coremap, rp->x_size, rp->x_caddr);
 }
+
 /*
  * Each buffer in the pool is usually doubly linked into 2 lists:
  * the device with which it is currently associated (always)
@@ -4341,6 +4583,20 @@ struct  buf bfreelist;
 #define B_ASYNC 0400    /* don't wait for I/O completion */
 
 #define B_DELWRI 01000  /* don't write till block leaves available list */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* Used to dissect integer device code
  * into major (driver designation) and
  * minor (driver parameter) parts.
@@ -4389,7 +4645,58 @@ struct  cdevsw  {
  * Set by cinit/tty.c
  */
 int     nchrdev;
-4651: 4652: 4653: 4654: 4655: 4656: int (*bdevsw[])() 4657: { 4658: &nulldev, &nulldev, &rkstrategy, &rktab, /* rk */ 4659: &nodev, &nodev, &nodev, 0, /* rp */ 4660: &nodev, &nodev, &nodev, 0, /* rf */ 4661: &nodev, &nodev, &nodev, 0, /* tm */ 4662: &nodev, &nodev, &nodev, 0, /* tc */ 4663: &nodev, &nodev, &nodev, 0, /* hs */ 4664: &nodev, &nodev, &nodev, 0, /* hp */ 4665: &nodev, &nodev, &nodev, 0, /* ht */ 4666: 0 4667: }; 4668: 4669: int (*cdevsw[])() 4670: { 4671: &klopen, &klclose, &klread, &klwrite, &klsgtty, /* console */ 4672: 4673: &pcopen, &pcclose, &pcread, &pcwrite, &nodev, /* pc */ 4674: 4675: &lpopen, &lpclose, &lpread, &lpwrite, &nodev, /* lp */ 4676: 4677: &nodev, &nodev, &nodev, &nodev, &nodev, /* dc */ 4678: &nodev, &nodev, &nodev, &nodev, &nodev, /* dh */ 4679: &nodev, &nodev, &nodev, &nodev, &nodev, /* dp */ 4680: &nodev, &nodev, &nodev, &nodev, &nodev, /* dj */ 4681: &nodev, &nodev, &nodev, &nodev, &nodev, /* dn */ 4682: &nulldev, &nulldev, &mmread, &mmwrite, &nodev, /* mem */ 4683: 4684: &nulldev, &nulldev, &rkread, &rkwrite, &nodev, /* rk */ 4685: 4686: &nodev, &nodev, &nodev, &nodev, &nodev, /* rf */ 4687: &nodev, &nodev, &nodev, &nodev, &nodev, /* rp */ 4688: &nodev, &nodev, &nodev, &nodev, &nodev, /* tm */ 4689: &nodev, &nodev, &nodev, &nodev, &nodev, /* hs */ 4690: &nodev, &nodev, &nodev, &nodev, &nodev, /* hp */ 4691: &nodev, &nodev, &nodev, &nodev, &nodev, /* ht */ 4692: 0 4693: }; 4694: 4695: int rootdev {(0<<8)|0}; 4696: int swapdev {(0<<8)|0}; 4697: int swplo 4000; /* cannot be zero */ 4698: int nswap 872;
+
+
+
+
+
+
+
+
+int (*bdevsw[])()
+{
+&nulldev, &nulldev, &rkstrategy, &rktab, /* rk */
+&nodev, &nodev, &nodev, 0, /* rp */
+&nodev, &nodev, &nodev, 0, /* rf */
+&nodev, &nodev, &nodev, 0, /* tm */
+&nodev, &nodev, &nodev, 0, /* tc */
+&nodev, &nodev, &nodev, 0, /* hs */
+&nodev, &nodev, &nodev, 0, /* hp */
+&nodev, &nodev, &nodev, 0, /* ht */
+0
+};
+
+int (*cdevsw[])()
+{
+&klopen, &klclose, &klread, &klwrite, &klsgtty, /* console */
+
+&pcopen, &pcclose, &pcread, &pcwrite, &nodev, /* pc */
+
+&lpopen, &lpclose, &lpread, &lpwrite, &nodev, /* lp */
+
+&nodev, &nodev, &nodev, &nodev, &nodev, /* dc */
+&nodev, &nodev, &nodev, &nodev, &nodev, /* dh */
+&nodev, &nodev, &nodev, &nodev, &nodev, /* dp */
+&nodev, &nodev, &nodev, &nodev, &nodev, /* dj */
+&nodev, &nodev, &nodev, &nodev, &nodev, /* dn */
+&nulldev, &nulldev, &mmread, &mmwrite, &nodev, /* mem */
+
+&nulldev, &nulldev, &rkread, &rkwrite, &nodev, /* rk */
+
+&nodev, &nodev, &nodev, &nodev, &nodev, /* rf */
+&nodev, &nodev, &nodev, &nodev, &nodev, /* rp */
+&nodev, &nodev, &nodev, &nodev, &nodev, /* tm */
+&nodev, &nodev, &nodev, &nodev, &nodev, /* hs */
+&nodev, &nodev, &nodev, &nodev, &nodev, /* hp */
+&nodev, &nodev, &nodev, &nodev, &nodev, /* ht */
+0
+};
+
+int rootdev {(0<<8)|0};
+int swapdev {(0<<8)|0};
+int swplo 4000; /* cannot be zero */
+int nswap 872;
+
 #
 /*
  */
