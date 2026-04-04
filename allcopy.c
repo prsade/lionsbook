@@ -5344,6 +5344,9 @@ struct buf *abp;
                         u.u_error = EIO;
 }
 /* ---------------------------       */
+
+
+
 #
 /*
  */
@@ -5483,6 +5486,17 @@ rkwrite(dev)
         physio(rkstrategy, &rrkbuf, dev, B_WRITE);
 }
 /* ---------------------------       */
+
+
+
+
+
+
+
+
+
+
+
 /*
  * One file structure is allocated
  * for each open/creat/pipe call.
@@ -5503,6 +5517,36 @@ struct  file
 #define FREAD   01
 #define FWRITE  02
 #define FPIPE   04
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
  * Definition of the unix super block.
  * The root super block is allocated and
@@ -5531,6 +5575,28 @@ struct  filsys
         int     pad[50];
 };
 /* ---------------------------       */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
  * Inode structure as it appears on
  * the disk. Not used by the system,
@@ -5563,6 +5629,24 @@ struct  inode
 #define IREAD   0400
 #define IWRITE  0200
 #define IEXEC   0100
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* The I node is the focus of all
  * file activity in unix. There is a unique
  * inode allocated for each active file,
@@ -5612,6 +5696,7 @@ struct  inode
 #define IREAD   0400            /* read, write, execute permissions */
 #define IWRITE  0200
 #define IEXEC   0100
+
 #
 #include "../param.h"
 #include "../systm.h"
@@ -5911,7 +5996,8 @@ sslep()
         spl0();
 }
 /* ---------------------------       */
-#
+
+
 #include "../param.h"
 #include "../systm.h"
 #include "../reg.h"
@@ -6109,7 +6195,9 @@ getmdev()
         return(d);
 }
 /* ---------------------------       */
-#
+
+
+
 /*
  */
 
@@ -6307,7 +6395,9 @@ struct buf *bp;
                                 return;
 }
 /* ---------------------------       */
-#
+
+
+
 #include "../param.h"
 #include "../conf.h"
 #include "../inode.h"
@@ -6505,7 +6595,9 @@ int *from, *to;
         while(--c);
 }
 /* ---------------------------       */
-#
+
+
+
 /*
  */
 
@@ -6772,7 +6864,40 @@ falloc()
         return(NULL);
 }
 /* ---------------------------       */
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
  */
 
@@ -7106,7 +7231,23 @@ update()
 }
 /* ---------------------------       */
 /* ---------------------------       */
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #include "../param.h"
 #include "../systm.h"
 #include "../user.h"
@@ -7349,7 +7490,14 @@ int *ip;
         iput(u.u_pdir);
 }
 /* ---------------------------       */
-#
+
+
+
+
+
+
+
+
 #include "../param.h"
 #include "../inode.h"
 #include "../user.h"
@@ -7548,6 +7696,7 @@ uchar()
         return(c);
 }
 /* ---------------------------       */
+
 #include "../param.h"
 #include "../systm.h"
 #include "../user.h"
@@ -7743,6 +7892,11 @@ int *ip;
         }
 }
 /* ---------------------------       */
+
+
+
+
+
 /*
  * A clist structure is the head
  * of a linked list queue of characters.
@@ -7837,7 +7991,13 @@ char partab[];                  /* ASCII table: parity, character class */
 
 #define BUSY    040             /* Output in progress */
 #define ASLEEP  0100            /* Wakeup when output done */
-#
+
+
+
+
+
+
+
 /*   KL/DL-11 driver */
 #include "../param.h"
 #include "../conf.h"
@@ -7934,7 +8094,10 @@ int *v;
         ttystty(tp, v);
 }
 /* ---------------------------       */
-#   / * general TTY subroutines */
+
+
+
+/ * general TTY subroutines */
 
 #include "../param.h"
 #include "../systm.h"
@@ -8432,7 +8595,9 @@ int *atp, *av;
         return(0);
 }
 /* ---------------------------       */
-#
+
+
+
 /* PC-11 Paper tape reader/punch driver */
 
 #include "../param.h"
@@ -8605,7 +8770,34 @@ pcleader()
         while (--i);
 }
 /* ---------------------------       */
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
  */
 
@@ -8801,7 +8993,11 @@ lpoutput(c)
         spl0();
 }
 /* ---------------------------       */
-#
+
+
+
+
+
 /*
  */
 
