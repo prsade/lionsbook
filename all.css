@@ -1,7 +1,14 @@
-@keyframes flash {
-  0% { background-color: #fcfc73; }
-  100% { background-color: transparent; }
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 }
-.flash-line {
-  animation: flash 2s ease-out;
+frameset {
+    border: none;
+}
+frame {
+    border: none;
+    height: 100%;
 }
