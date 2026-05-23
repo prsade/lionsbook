@@ -1,5 +1,5 @@
 Check it out on github
-http://warsus.github.io/lions-/
+http://github.com/prsade/lionsbook/
 
 # References
 ## Web Version of the Lions Commentary on Unix
