@@ -288,6 +288,8 @@
       if (!iframeWin) return;
 
       // We poll a bit because plastex pages are multi-file and the DOM changes on navigation.
+      // Use event delegation on the document for reliability (catches all .line-ref clicks
+      // even if attached late, and prevents navigation in the left iframe).
       let attempts = 0;
       const timer = setInterval(() => {
         attempts++;
@@ -301,26 +303,37 @@
             return;
           }
 
-          const links = doc.querySelectorAll('a.line-ref, dt a[href*="#line"]');
-          links.forEach(a => {
-            a.addEventListener('click', (e) => {
-              const href = a.getAttribute('href') || '';
-              const m = href.match(/#line(\d+)/);
-              if (m) {
-                e.preventDefault();
-                const line = parseInt(m[1], 10);
-                // Try to guess current sect from the iframe location
-                const sectMatch = (leftIframe.contentWindow.location.pathname || '').match(/sect\d+/);
-                const sect = sectMatch ? sectMatch[0] : null;
+          // Delegated click handler on the whole document inside the commentary iframe.
+          // This is much more robust than attaching to individual links.
+          // Using capture phase so we intercept before any default navigation in the left frame.
+          doc.addEventListener('click', (e) => {
+            const a = e.target.closest('a.line-ref, dt a[href*="#line"], a[data-line]');
+            if (!a) return;
 
-                // Tell the parent
-                window.postMessage({ type: 'goto-line', line, sect }, '*');
+            // Remove any legacy target (e.g. "source") that could cause wrong navigation.
+            if (a.hasAttribute('target')) {
+              a.removeAttribute('target');
+            }
 
-                // Also navigate the iframe ourselves in case the link was relative
-                // (the original link would have tried to target the old "source" frame name)
-              }
-            }, { passive: false });
-          });
+            const href = a.getAttribute('href') || '';
+            let m = href.match(/#line(\d+)/);
+            if (!m && a.hasAttribute('data-line')) {
+              m = [null, a.getAttribute('data-line')];
+            }
+
+            if (m) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+
+              const line = parseInt(m[1], 10);
+              // Try to guess current sect from the iframe location
+              const sectMatch = (leftIframe.contentWindow.location.pathname || '').match(/sect\d+/);
+              const sect = sectMatch ? sectMatch[0] : null;
+
+              // Tell the parent to update the RIGHT pane only
+              window.postMessage({ type: 'goto-line', line, sect }, '*');
+            }
+          }, { passive: false, capture: true });
 
           // Also update the title in the header when the commentary page changes
           const titleEl = doc.querySelector('title');

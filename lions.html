@@ -1,23 +1,30 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Lions' Commentary — Classic frames viewer (legacy)</title>
+    <title>Lions' Commentary — Classic frames viewer</title>
   </head>
-  <body>
-    <p style="font-family: system-ui; padding: 1rem; background:#fff3cd; border:1px solid #ffeaa7; max-width: 720px;">
-      <strong>Legacy frames viewer.</strong><br>
-      This uses the ancient &lt;frameset&gt; technique. It still mostly works but is not great for accessibility, mobile, or modern browsers.
-      <br><br>
-      <a href="viewer.html" style="font-weight:600">→ Try the new modern viewer (recommended)</a><br>
-      <small>You can still use this one if you really want the classic experience.</small>
-    </p>
-
-    <script type="text/javascript" src="jquery.js"></script>
-    <script type="text/javascript" src="js.js"></script>
-    <frameset cols="54%,46%">
-      <frame src="lionc/index.html" name="commentary">
-      <frame src="all.html" name="source">
-    </frameset>
-  </body>
+  <frameset cols="54%,46%">
+    <frame src="lionc/index.html" name="commentary" title="Commentary">
+    <frame src="all.html" name="source" title="Source code">
+    <noframes>
+      <body style="font-family: system-ui; padding: 2rem; max-width: 800px; margin: 0 auto;">
+        <h1>Lions' Commentary on UNIX 6th Edition</h1>
+        <p>
+          <strong>Your browser does not support frames.</strong><br>
+          This is the classic side-by-side view using &lt;frameset&gt; (the same technique as the original web version).
+        </p>
+        <p>
+          <a href="viewer.html">→ Open the modern viewer (recommended for most users)</a><br>
+          <a href="lionc/index.html">→ Open commentary only</a><br>
+          <a href="all.html">→ Open full source only</a>
+        </p>
+        <hr>
+        <p><small>
+          To use the classic frames view, open this file (<code>lions.html</code>) in a browser that still supports framesets
+          (most desktop browsers still do for local files).
+        </small></p>
+      </body>
+    </noframes>
+  </frameset>
 </html>
 

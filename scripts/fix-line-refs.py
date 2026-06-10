@@ -154,7 +154,7 @@ def process_html_file(
         new_a = soup.new_tag(
             "a",
             href=target_href,
-            target=a.get("target", "source"),
+            target="source",
             attrs={"class": "line-ref", "data-line": line_num},
         )
         new_a.string = f"{line_num}:"
@@ -185,9 +185,14 @@ def process_html_file(
 
         if existing_a:
             # Update href in case the relative path was previously wrong
-            # (this fixes links after we improved the relative-path logic)
             if existing_a.get("href") != target_href:
                 existing_a["href"] = target_href
+                changed = True
+
+            # Ensure target="source" for classic frameset support (lions.html with name="source").
+            # The modern viewer.html bridge will intercept clicks and strip target if needed.
+            if existing_a.get("target") != "source":
+                existing_a["target"] = "source"
                 changed = True
             continue
 
