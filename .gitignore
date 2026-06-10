@@ -57,16 +57,22 @@ uv.lock  # uncomment if you prefer not to commit the lockfile
 *.lot
 
 # -----------------------------------------------------------------------------
-# Generated web output (rebuild with "make lions" or CI)
-# We build this on demand / in CI for GitHub Pages.
-# Keeping it out of git avoids constant churn and huge diffs.
+# Generated web output
+#
+# Normally we keep lionc/ out of git (it is large and changes often).
+# However, for the hosted version we commit the *bilingual* (Polish + English
+# tooltips) result of the translation step.
+#
+# Workflow:
+#   - Run locally: `make lions`  (or `.\build.ps1`)
+#   - This runs the bilingual post-processor
+#   - Commit the result with:  git add -f lionc/
+#   - Push
+#
+# The GitHub Pages workflow deliberately does NOT run `make lions` so that
+# the committed bilingual version is what gets deployed.
 # -----------------------------------------------------------------------------
 lionc/
-
-# Special case: if you want to commit the Polish translation output,
-# you can un-ignore it selectively after a build, or maintain it
-# separately. For now we treat all of lionc/ as generated.
-# lionc/pol/
 
 # -----------------------------------------------------------------------------
 # Translation tooling secrets (CRITICAL - never commit real tokens)

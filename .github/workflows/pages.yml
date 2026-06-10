@@ -19,41 +19,27 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      # Opt into Node.js 24 to avoid deprecation warnings for actions using Node 20
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: "Set up Python"
-        uses: actions/setup-python@v6
-        with:
-          python-version-file: ".python-version"
-      
-      - name: Install uv
-        uses: astral-sh/setup-uv@v7
-        with:
-          # Install a specific version of uv.
-          version: "0.11.3"
-
-      # IMPORTANT:
-      # The bilingual Polish version (with original English in tooltips) is
-      # pre-generated locally using scripts/add-bilingual-tooltips.py and
-      # committed into the lionc/ directory.
+      # IMPORTANT for Polish bilingual version:
+      # The commentary in lionc/ is the pre-translated (Polish + English tooltips)
+      # version. It is committed manually after running `make lions` locally.
       #
-      # We deliberately do NOT run "make lions" here. Running it would
-      # re-generate the English version and re-run the translation script
-      # (which requires internet + the deep-translator package).
+      # We do NOT run `make lions` (or the translation script) in this workflow.
+      # This prevents re-translation on GitHub and ensures the exact committed
+      # version is what gets deployed.
       #
-      # To update the Polish commentary after changing the .tex sources:
+      # Update process (when .tex sources change):
       #   1. git pull
-      #   2. make lions          (or .\build.ps1 on Windows)
+      #   2. make lions   (or .\build.ps1)
       #   3. git add -f lionc/
-      #   4. git commit -m "Update Polish bilingual commentary"
+      #   4. git commit -m "chore: update Polish bilingual commentary + tooltips"
       #   5. git push
       #
-      # The committed lionc/ (Polish + tooltips) will be what GitHub Pages serves.
+      # The committed lionc/ (with Polish text + original English in title tooltips)
+      # will be served by GitHub Pages.
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

@@ -31,9 +31,15 @@ SCRIPT := scripts/fix-line-refs.py
 # -----------------------------------------------------------------------------
 # Main target
 # -----------------------------------------------------------------------------
-lions: $(LIONC_DIR) postprocess
-	@echo "Build complete. Output is in $(LIONC_DIR)/"
-	@echo "Open index.html or lions.html in a browser."
+lions: $(LIONC_DIR) postprocess bilingual
+	@echo "Build complete. Output is in $(LIONC_DIR)/ (bilingual Polish + English tooltips)"
+	@echo "To publish the Polish version on Git:"
+	@echo "  git add -f $(LIONC_DIR)/"
+	@echo "  git commit -m 'Update Polish bilingual commentary'"
+	@echo "  git push"
+	@echo ""
+	@echo "Note: The GitHub Pages workflow deploys the committed lionc/ directly"
+	@echo "(it does not re-run the build/translation to avoid re-translating on CI)."
 
 $(LIONC_DIR):
 	@echo "==> Running plastex..."
@@ -45,6 +51,10 @@ $(LIONC_DIR):
 postprocess:
 	@echo "==> Fixing line number cross-references..."
 	uv run python $(SCRIPT) --input-dir $(LIONC_DIR)
+
+bilingual:
+	@echo "==> Adding Polish translations + English tooltips..."
+	uv run python scripts/add-bilingual-tooltips.py --input-dir $(LIONC_DIR)
 
 # Legacy target name (kept for muscle memory). Same as postprocess.
 links: postprocess
