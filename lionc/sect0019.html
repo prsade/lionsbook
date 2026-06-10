@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<script>
+  MathJax = { 
+    tex: {
+		    inlineMath: [['\\(','\\)']]
+	} }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" type="text/javascript">
+</script>
+<meta content="plasTeX" name="generator"/>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>: The RK Disk Driver</title>
+<link href="sect0020.html" rel="next" title="Buffer Manipulation"/>
+<link href="sect0018.html" rel="prev" title="Introduction to Basic I/O"/>
+<link href="index.html" rel="up" title=""/>
+<link href="styles/theme-white.css" rel="stylesheet"/>
+<style id="line-ref-style">.line-ref { color: #0066cc; text-decoration: none; font-weight: 500; }
+.line-ref:hover { text-decoration: underline; background-color: #f0f7ff; }
+</style></head>
+<body>
+<header>
+<svg class="icon icon-list-numbered" id="toc-toggle"><use xlink:href="symbol-defs.svg#icon-list-numbered"></use></svg>
+<h1 id="doc_title"><a href="index.html"></a></h1>
+</header>
+<div class="wrapper">
+<nav class="toc">
+<ul class="sub-toc-0">
+<li class="">
+<a href="sect0001.html"><span class="toc_ref"></span> <span class="toc_entry">Preface</span></a>
+</li>
+<li class="">
+<a href="sect0002.html"><span class="toc_ref">1</span> <span class="toc_entry">Introduction</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0002.html#a0000000031"><span class="toc_ref">1.1</span> <span class="toc_entry">The UNIX Operating System</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000032"><span class="toc_ref">1.2</span> <span class="toc_entry">Utilities</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000033"><span class="toc_ref">1.3</span> <span class="toc_entry">Other Documentation</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000034"><span class="toc_ref">1.4</span> <span class="toc_entry">UNIX Programmer’s Manual</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000035"><span class="toc_ref">1.5</span> <span class="toc_entry">UNIX Documents</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000036"><span class="toc_ref">1.6</span> <span class="toc_entry">UNIX Operating System Source Code</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000037"><span class="toc_ref">1.7</span> <span class="toc_entry">Source Code Selections</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000038"><span class="toc_ref">1.8</span> <span class="toc_entry">Source Code Files</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000039"><span class="toc_ref">1.9</span> <span class="toc_entry">Use of these notes</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000040"><span class="toc_ref">1.10</span> <span class="toc_entry">A Note on Programming Standards</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0003.html"><span class="toc_ref">2</span> <span class="toc_entry">Fundamentals</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0003.html#a0000000041"><span class="toc_ref">2.1</span> <span class="toc_entry">The Processor</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000042"><span class="toc_ref">2.2</span> <span class="toc_entry">Processor Status Word</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000043"><span class="toc_ref">2.3</span> <span class="toc_entry">General Registers</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000044"><span class="toc_ref">2.4</span> <span class="toc_entry">Instruction Set</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000045"><span class="toc_ref">2.5</span> <span class="toc_entry">Addressing Modes</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000046"><span class="toc_ref">2.6</span> <span class="toc_entry">Unix Assembler</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000047"><span class="toc_ref">2.7</span> <span class="toc_entry">Memory Management</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000048"><span class="toc_ref">2.8</span> <span class="toc_entry">Segmentation Registers.</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000049"><span class="toc_ref">2.9</span> <span class="toc_entry">Page Description Register</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000050"><span class="toc_ref">2.10</span> <span class="toc_entry">Memory Allocation</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000051"><span class="toc_ref">2.11</span> <span class="toc_entry">Memory Management Status Registers</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000052"><span class="toc_ref">2.12</span> <span class="toc_entry">“i” and “d” Spaces</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000053"><span class="toc_ref">2.13</span> <span class="toc_entry">Initial Conditions</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000054"><span class="toc_ref">2.14</span> <span class="toc_entry">Special Device Registers</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0004.html"><span class="toc_ref">3</span> <span class="toc_entry">Reading “C” Programs</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0004.html#a0000000055"><span class="toc_ref">3.1</span> <span class="toc_entry">Some Selected Examples</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000056"><span class="toc_ref">3.2</span> <span class="toc_entry">Example 1</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000057"><span class="toc_ref">3.3</span> <span class="toc_entry">Example 2</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000058"><span class="toc_ref">3.4</span> <span class="toc_entry">Example 3</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000059"><span class="toc_ref">3.5</span> <span class="toc_entry">Example 4</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000060"><span class="toc_ref">3.6</span> <span class="toc_entry">Example 5</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000061"><span class="toc_ref">3.7</span> <span class="toc_entry">Example 6</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000062"><span class="toc_ref">3.8</span> <span class="toc_entry">Example 7</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000063"><span class="toc_ref">3.9</span> <span class="toc_entry">Example 8</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000064"><span class="toc_ref">3.10</span> <span class="toc_entry">Example 9</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000065"><span class="toc_ref">3.11</span> <span class="toc_entry">Example 10</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000066"><span class="toc_ref">3.12</span> <span class="toc_entry">Example 11</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000067"><span class="toc_ref">3.13</span> <span class="toc_entry">Example 12</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000068"><span class="toc_ref">3.14</span> <span class="toc_entry">Example 13</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000069"><span class="toc_ref">3.15</span> <span class="toc_entry">Example 14</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000070"><span class="toc_ref">3.16</span> <span class="toc_entry">Example 15</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000071"><span class="toc_ref">3.17</span> <span class="toc_entry">Example 16</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000072"><span class="toc_ref">3.18</span> <span class="toc_entry">Example 17</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0005.html"><span class="toc_ref">4</span> <span class="toc_entry">An Overview</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0005.html#a0000000073"><span class="toc_ref">4.1</span> <span class="toc_entry">Variable Allocation</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000074"><span class="toc_ref">4.2</span> <span class="toc_entry">Global Variables</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000075"><span class="toc_ref">4.3</span> <span class="toc_entry">The ‘C’ Preprocessor</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000076"><span class="toc_ref">4.4</span> <span class="toc_entry">Section One</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000077"><span class="toc_ref">4.5</span> <span class="toc_entry">The First Group of ‘.h’ Files</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000078"><span class="toc_ref">4.6</span> <span class="toc_entry">Assembly Language Files</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000079"><span class="toc_ref">4.7</span> <span class="toc_entry">Other Files in Section One</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000080"><span class="toc_ref">4.8</span> <span class="toc_entry">Section Two</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000081"><span class="toc_ref">4.9</span> <span class="toc_entry">Section Three</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000082"><span class="toc_ref">4.10</span> <span class="toc_entry">Section Four</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000083"><span class="toc_ref">4.11</span> <span class="toc_entry">Section Five</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0006.html"><span class="toc_ref"></span> <span class="toc_entry">Section One</span></a>
+</li>
+<li class="">
+<a href="sect0007.html"><span class="toc_ref">5</span> <span class="toc_entry">Two Files</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0007.html#a0000000084"><span class="toc_ref">5.1</span> <span class="toc_entry">The File ‘malloc.c’</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000085"><span class="toc_ref">5.2</span> <span class="toc_entry">Rules for List Maintenance</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000086"><span class="toc_ref">5.3</span> <span class="toc_entry">malloc (2528)</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000087"><span class="toc_ref">5.4</span> <span class="toc_entry">mfree (2556)</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000088"><span class="toc_ref">5.5</span> <span class="toc_entry">In conclusion ...</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000089"><span class="toc_ref">5.6</span> <span class="toc_entry">The File ‘prf.c’</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000090"><span class="toc_ref">5.7</span> <span class="toc_entry">printf (2340)</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000091"><span class="toc_ref">5.8</span> <span class="toc_entry">printn (2369)</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000092"><span class="toc_ref">5.9</span> <span class="toc_entry">putchar (2386)</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000093"><span class="toc_ref">5.10</span> <span class="toc_entry">panic (2419)</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000094"><span class="toc_ref">5.11</span> <span class="toc_entry">prdev (2433), deverror (2447)</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000095"><span class="toc_ref">5.12</span> <span class="toc_entry">Included Files</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0008.html"><span class="toc_ref">6</span> <span class="toc_entry">Getting Started</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0008.html#a0000000096"><span class="toc_ref">6.1</span> <span class="toc_entry">Operator Actions</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000097"><span class="toc_ref">6.2</span> <span class="toc_entry">start (0612)</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000098"><span class="toc_ref">6.3</span> <span class="toc_entry">main (1550)</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000099"><span class="toc_ref">6.4</span> <span class="toc_entry">Processes</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000100"><span class="toc_ref">6.5</span> <span class="toc_entry">Initialisation of proc[0]</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000101"><span class="toc_ref">6.6</span> <span class="toc_entry">The story continues ...</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000102"><span class="toc_ref">6.7</span> <span class="toc_entry">sched (1940)</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000103"><span class="toc_ref">6.8</span> <span class="toc_entry">sleep (2066)</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000104"><span class="toc_ref">6.9</span> <span class="toc_entry">swtch (2178)</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000105"><span class="toc_ref">6.10</span> <span class="toc_entry">main revisited</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0009.html"><span class="toc_ref">7</span> <span class="toc_entry">Processes</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0009.html#a0000000106"><span class="toc_ref">7.1</span> <span class="toc_entry">The Process</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000107"><span class="toc_ref">7.2</span> <span class="toc_entry">The proc Structure (0358)</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000108"><span class="toc_ref">7.3</span> <span class="toc_entry">The user Structure (0413)</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000109"><span class="toc_ref">7.4</span> <span class="toc_entry">The Per Process Data Area</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000110"><span class="toc_ref">7.5</span> <span class="toc_entry">The Segments</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000111"><span class="toc_ref">7.6</span> <span class="toc_entry">Execution of an Image</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000112"><span class="toc_ref">7.7</span> <span class="toc_entry">Kernel Mode Execution</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000113"><span class="toc_ref">7.8</span> <span class="toc_entry">User Mode Execution</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000114"><span class="toc_ref">7.9</span> <span class="toc_entry">An Example</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000115"><span class="toc_ref">7.10</span> <span class="toc_entry">Setting the Segmentation Registers</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000116"><span class="toc_ref">7.11</span> <span class="toc_entry">estabur (1650)</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000117"><span class="toc_ref">7.12</span> <span class="toc_entry">sureg (1739)</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000118"><span class="toc_ref">7.13</span> <span class="toc_entry">newproc (1826)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0010.html"><span class="toc_ref">8</span> <span class="toc_entry">Process Management</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0010.html#a0000000119"><span class="toc_ref">8.1</span> <span class="toc_entry">Process Switching</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000120"><span class="toc_ref">8.2</span> <span class="toc_entry">Interrupts</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000121"><span class="toc_ref">8.3</span> <span class="toc_entry">Program Swapping</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000122"><span class="toc_ref">8.4</span> <span class="toc_entry">Jobs</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000123"><span class="toc_ref">8.5</span> <span class="toc_entry">Assembler Procedures</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000124"><span class="toc_ref">8.6</span> <span class="toc_entry">savu (0725)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000125"><span class="toc_ref">8.7</span> <span class="toc_entry">retu (0740)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000126"><span class="toc_ref">8.8</span> <span class="toc_entry">aretu (0734)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000127"><span class="toc_ref">8.9</span> <span class="toc_entry">swtch (2178)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000128"><span class="toc_ref">8.10</span> <span class="toc_entry">setpri (2156)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000129"><span class="toc_ref">8.11</span> <span class="toc_entry">sleep (2066)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000130"><span class="toc_ref">8.12</span> <span class="toc_entry">wakeup (2113)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000131"><span class="toc_ref">8.13</span> <span class="toc_entry">setrun (2134)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000132"><span class="toc_ref">8.14</span> <span class="toc_entry">expand (2268)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000133"><span class="toc_ref">8.15</span> <span class="toc_entry">swtch revisited</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000134"><span class="toc_ref">8.16</span> <span class="toc_entry">Critical Sections</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0011.html"><span class="toc_ref"></span> <span class="toc_entry">Section Two</span></a>
+</li>
+<li class="">
+<a href="sect0012.html"><span class="toc_ref">9</span> <span class="toc_entry">Hardware Interrupts and Traps</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0012.html#a0000000135"><span class="toc_ref">9.1</span> <span class="toc_entry">Hardware Interrupts</span></a>
+</li>
+<li class="">
+<a href="sect0012.html#a0000000136"><span class="toc_ref">9.2</span> <span class="toc_entry">The Interrupt Vector</span></a>
+</li>
+<li class="">
+<a href="sect0012.html#a0000000137"><span class="toc_ref">9.3</span> <span class="toc_entry">Interrupt Handlers</span></a>
+</li>
+<li class="">
+<a href="sect0012.html#a0000000138"><span class="toc_ref">9.4</span> <span class="toc_entry">Priorities</span></a>
+</li>
+<li class="">
+<a href="sect0012.html#a0000000139"><span class="toc_ref">9.5</span> <span class="toc_entry">Interrupt Priorities</span></a>
+</li>
+<li class="">
+<a href="sect0012.html#a0000000140"><span class="toc_ref">9.6</span> <span class="toc_entry">Rules for Interrupt Handlers</span></a>
+</li>
+<li class="">
+<a href="sect0012.html#a0000000141"><span class="toc_ref">9.7</span> <span class="toc_entry">Traps</span></a>
+</li>
+<li class="">
+<a href="sect0012.html#a0000000142"><span class="toc_ref">9.8</span> <span class="toc_entry">Assembly Language ‘trap’</span></a>
+</li>
+<li class="">
+<a href="sect0012.html#a0000000143"><span class="toc_ref">9.9</span> <span class="toc_entry">Return</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0013.html"><span class="toc_ref">10</span> <span class="toc_entry">The Assembler “Trap” Routine</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0013.html#a0000000144"><span class="toc_ref">10.1</span> <span class="toc_entry">Sources of Traps and Interrupts</span></a>
+</li>
+<li class="">
+<a href="sect0013.html#a0000000145"><span class="toc_ref">10.2</span> <span class="toc_entry">fuibyte (0814), fuiword (0844)</span></a>
+</li>
+<li class="">
+<a href="sect0013.html#a0000000146"><span class="toc_ref">10.3</span> <span class="toc_entry">Interrupts</span></a>
+</li>
+<li class="">
+<a href="sect0013.html#a0000000147"><span class="toc_ref">10.4</span> <span class="toc_entry">call (0776)</span></a>
+</li>
+<li class="">
+<a href="sect0013.html#a0000000148"><span class="toc_ref">10.5</span> <span class="toc_entry">User Program Traps</span></a>
+</li>
+<li class="">
+<a href="sect0013.html#a0000000149"><span class="toc_ref">10.6</span> <span class="toc_entry">The Kernel Stack</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0014.html"><span class="toc_ref">11</span> <span class="toc_entry">Clock Interrupts</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0014.html#a0000000150"><span class="toc_ref">11.1</span> <span class="toc_entry">clock (3725)</span></a>
+</li>
+<li class="">
+<a href="sect0014.html#a0000000151"><span class="toc_ref">11.2</span> <span class="toc_entry">timeout (3845)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0015.html"><span class="toc_ref">12</span> <span class="toc_entry">Traps and System Calls</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0015.html#a0000000152"><span class="toc_ref">12.1</span> <span class="toc_entry">trap (2693)</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000153"><span class="toc_ref">12.2</span> <span class="toc_entry">Kernel Mode Traps</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000154"><span class="toc_ref">12.3</span> <span class="toc_entry">User Mode Traps</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000155"><span class="toc_ref">12.4</span> <span class="toc_entry">System Calls</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000156"><span class="toc_ref">12.5</span> <span class="toc_entry">System Call Handlers</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000157"><span class="toc_ref">12.6</span> <span class="toc_entry">The File ‘sysl.c’</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000158"><span class="toc_ref">12.7</span> <span class="toc_entry">exec (3020)</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000159"><span class="toc_ref">12.8</span> <span class="toc_entry">fork (3322)</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000160"><span class="toc_ref">12.9</span> <span class="toc_entry">sbreak (3354)</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000161"><span class="toc_ref">12.10</span> <span class="toc_entry">The Files ‘sys2.c’ and ‘sys3.c’</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000162"><span class="toc_ref">12.11</span> <span class="toc_entry">The File ‘sys4.c’</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0016.html"><span class="toc_ref">13</span> <span class="toc_entry">Software Interrupts</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0016.html#a0000000163"><span class="toc_ref">13.1</span> <span class="toc_entry">Anticipation</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000164"><span class="toc_ref">13.2</span> <span class="toc_entry">Causation</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000165"><span class="toc_ref">13.3</span> <span class="toc_entry">Effect</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000166"><span class="toc_ref">13.4</span> <span class="toc_entry">Tracing</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000167"><span class="toc_ref">13.5</span> <span class="toc_entry">Procedures</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000168"><span class="toc_ref">13.6</span> <span class="toc_entry">A. Anticipation</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000169"><span class="toc_ref">13.7</span> <span class="toc_entry">B. Causation</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000170"><span class="toc_ref">13.8</span> <span class="toc_entry">C. Effect</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000171"><span class="toc_ref">13.9</span> <span class="toc_entry">D. Tracing</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000172"><span class="toc_ref">13.10</span> <span class="toc_entry">ssig (3614)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000173"><span class="toc_ref">13.11</span> <span class="toc_entry">kill (3630)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000174"><span class="toc_ref">13.12</span> <span class="toc_entry">signal (3949)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000175"><span class="toc_ref">13.13</span> <span class="toc_entry">psignal (3963)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000176"><span class="toc_ref">13.14</span> <span class="toc_entry">issig (3991)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000177"><span class="toc_ref">13.15</span> <span class="toc_entry">psig (4043)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000178"><span class="toc_ref">13.16</span> <span class="toc_entry">core (4094)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000179"><span class="toc_ref">13.17</span> <span class="toc_entry">grow (4136)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000180"><span class="toc_ref">13.18</span> <span class="toc_entry">exit (3219)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000181"><span class="toc_ref">13.19</span> <span class="toc_entry">rexit (3205)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000182"><span class="toc_ref">13.20</span> <span class="toc_entry">wait (3270)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000183"><span class="toc_ref">13.21</span> <span class="toc_entry">Tracing</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000184"><span class="toc_ref">13.22</span> <span class="toc_entry">stop (4016)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000185"><span class="toc_ref">13.23</span> <span class="toc_entry">wait (3270) (continued)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000186"><span class="toc_ref">13.24</span> <span class="toc_entry">ptrace (4164)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000187"><span class="toc_ref">13.25</span> <span class="toc_entry">procxmt (4204)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0017.html"><span class="toc_ref">14</span> <span class="toc_entry">Program Swapping</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0017.html#a0000000188"><span class="toc_ref">14.1</span> <span class="toc_entry">Text Segments</span></a>
+</li>
+<li class="">
+<a href="sect0017.html#a0000000189"><span class="toc_ref">14.2</span> <span class="toc_entry">sched (1940)</span></a>
+</li>
+<li class="">
+<a href="sect0017.html#a0000000190"><span class="toc_ref">14.3</span> <span class="toc_entry">xswap (4368)</span></a>
+</li>
+<li class="">
+<a href="sect0017.html#a0000000191"><span class="toc_ref">14.4</span> <span class="toc_entry">xalloc (4433)</span></a>
+</li>
+<li class="">
+<a href="sect0017.html#a0000000192"><span class="toc_ref">14.5</span> <span class="toc_entry">xfree (4398)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0018.html"><span class="toc_ref">15</span> <span class="toc_entry">Introduction to Basic I/O</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0018.html#a0000000193"><span class="toc_ref">15.1</span> <span class="toc_entry">The File ‘buf.h’</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000194"><span class="toc_ref">15.2</span> <span class="toc_entry">devtab (4551)</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000195"><span class="toc_ref">15.3</span> <span class="toc_entry">The File ‘conf.h’</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000196"><span class="toc_ref">15.4</span> <span class="toc_entry">The File ‘conf.c’</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000197"><span class="toc_ref">15.5</span> <span class="toc_entry">System Generation</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000198"><span class="toc_ref">15.6</span> <span class="toc_entry">swap (5196)</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000199"><span class="toc_ref">15.7</span> <span class="toc_entry">Race Conditions</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000200"><span class="toc_ref">15.8</span> <span class="toc_entry">Reentrancy</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000201"><span class="toc_ref">15.9</span> <span class="toc_entry">For the Uninitiated</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000202"><span class="toc_ref">15.10</span> <span class="toc_entry">Additional Reading</span></a>
+</li>
+</ul>
+</li>
+<li class="active current">
+<a href="sect0019.html"><span class="toc_ref">16</span> <span class="toc_entry">The RK Disk Driver</span></a>
+<span class="expand-toc">▼</span>
+<ul class="sub-toc-1 active">
+<li class="">
+<a href="sect0019.html#a0000000203"><span class="toc_ref">16.1</span> <span class="toc_entry">The file ‘rk.c’</span></a>
+</li>
+<li class="">
+<a href="sect0019.html#a0000000204"><span class="toc_ref">16.2</span> <span class="toc_entry">rkstrategy (5389)</span></a>
+</li>
+<li class="">
+<a href="sect0019.html#a0000000205"><span class="toc_ref">16.3</span> <span class="toc_entry">rkaddr (5420)</span></a>
+</li>
+<li class="">
+<a href="sect0019.html#a0000000206"><span class="toc_ref">16.4</span> <span class="toc_entry">devstart (5096)</span></a>
+</li>
+<li class="">
+<a href="sect0019.html#a0000000207"><span class="toc_ref">16.5</span> <span class="toc_entry">rkintr (5451)</span></a>
+</li>
+<li class="">
+<a href="sect0019.html#a0000000208"><span class="toc_ref">16.6</span> <span class="toc_entry">iodone (5018)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0020.html"><span class="toc_ref">17</span> <span class="toc_entry">Buffer Manipulation</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0020.html#a0000000209"><span class="toc_ref">17.1</span> <span class="toc_entry">Flags</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000210"><span class="toc_ref">17.2</span> <span class="toc_entry">A Cache-like Memory</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000211"><span class="toc_ref">17.3</span> <span class="toc_entry">clrbuf (5038)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000212"><span class="toc_ref">17.4</span> <span class="toc_entry">incore (4899)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000213"><span class="toc_ref">17.5</span> <span class="toc_entry">getblk (4921)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000214"><span class="toc_ref">17.6</span> <span class="toc_entry">brelse (4869)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000215"><span class="toc_ref">17.7</span> <span class="toc_entry">binit (5055)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000216"><span class="toc_ref">17.8</span> <span class="toc_entry">bread (4754)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000217"><span class="toc_ref">17.9</span> <span class="toc_entry">breada (4773)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000218"><span class="toc_ref">17.10</span> <span class="toc_entry">bwrite (4809)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000219"><span class="toc_ref">17.11</span> <span class="toc_entry">bawrite (4856)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000220"><span class="toc_ref">17.12</span> <span class="toc_entry">bdwrite (4836)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000221"><span class="toc_ref">17.13</span> <span class="toc_entry">bflush (5229)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000222"><span class="toc_ref">17.14</span> <span class="toc_entry">physio (5259)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0021.html"><span class="toc_ref">18</span> <span class="toc_entry">File Access and Control</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0021.html#a0000000223"><span class="toc_ref">18.1</span> <span class="toc_entry">File Characteristics</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000224"><span class="toc_ref">18.2</span> <span class="toc_entry">System Calls</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000225"><span class="toc_ref">18.3</span> <span class="toc_entry">Control Tables</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000226"><span class="toc_ref">18.4</span> <span class="toc_entry">file (5507)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000227"><span class="toc_ref">18.5</span> <span class="toc_entry">inode (5659)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000228"><span class="toc_ref">18.6</span> <span class="toc_entry">Resources Required</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000229"><span class="toc_ref">18.7</span> <span class="toc_entry">Opening a File</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000230"><span class="toc_ref">18.8</span> <span class="toc_entry">creat (5781)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000231"><span class="toc_ref">18.9</span> <span class="toc_entry">openl (5804)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000232"><span class="toc_ref">18.10</span> <span class="toc_entry">open (5763)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000233"><span class="toc_ref">18.11</span> <span class="toc_entry">openl revisited</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000234"><span class="toc_ref">18.12</span> <span class="toc_entry">close (5846)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000235"><span class="toc_ref">18.13</span> <span class="toc_entry">closef (6643)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000236"><span class="toc_ref">18.14</span> <span class="toc_entry">iput (7344)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000237"><span class="toc_ref">18.15</span> <span class="toc_entry">Deletion of Files</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000238"><span class="toc_ref">18.16</span> <span class="toc_entry">Reading and Writing</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000239"><span class="toc_ref">18.17</span> <span class="toc_entry">rdwr (5731)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000240"><span class="toc_ref">18.18</span> <span class="toc_entry">readi (6221)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000241"><span class="toc_ref">18.19</span> <span class="toc_entry">writei</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000242"><span class="toc_ref">18.20</span> <span class="toc_entry">iomove (6364)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000243"><span class="toc_ref">18.21</span> <span class="toc_entry">bmap (6415)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000244"><span class="toc_ref">18.22</span> <span class="toc_entry">Leftovers</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0022.html"><span class="toc_ref">19</span> <span class="toc_entry">File Directories and Directory Files</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0022.html#a0000000245"><span class="toc_ref">19.1</span> <span class="toc_entry">The Directory Data Structure</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000246"><span class="toc_ref">19.2</span> <span class="toc_entry">Directory Files</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000247"><span class="toc_ref">19.3</span> <span class="toc_entry">namei (7518)</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000248"><span class="toc_ref">19.4</span> <span class="toc_entry">Some Comments</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000249"><span class="toc_ref">19.5</span> <span class="toc_entry">link (5909)</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000250"><span class="toc_ref">19.6</span> <span class="toc_entry">wdir (7477)</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000251"><span class="toc_ref">19.7</span> <span class="toc_entry">maknode (7455)</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000252"><span class="toc_ref">19.8</span> <span class="toc_entry">unlink (3510)</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000253"><span class="toc_ref">19.9</span> <span class="toc_entry">mknod (5952)</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000254"><span class="toc_ref">19.10</span> <span class="toc_entry">access (6746)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0023.html"><span class="toc_ref">20</span> <span class="toc_entry">File Systems</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0023.html#a0000000255"><span class="toc_ref">20.1</span> <span class="toc_entry">The ‘Super Block’ (5561)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000256"><span class="toc_ref">20.2</span> <span class="toc_entry">The ’mount’ table (0272)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000257"><span class="toc_ref">20.3</span> <span class="toc_entry">iinit (6922)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000258"><span class="toc_ref">20.4</span> <span class="toc_entry">Mounting</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000259"><span class="toc_ref">20.5</span> <span class="toc_entry">smount (6086)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000260"><span class="toc_ref">20.6</span> <span class="toc_entry">Notes</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000261"><span class="toc_ref">20.7</span> <span class="toc_entry">iget (7276)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000262"><span class="toc_ref">20.8</span> <span class="toc_entry">getfs (7167)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000263"><span class="toc_ref">20.9</span> <span class="toc_entry">update (7201)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000264"><span class="toc_ref">20.10</span> <span class="toc_entry">sumount (6144)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000265"><span class="toc_ref">20.11</span> <span class="toc_entry">Resource Allocation</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000266"><span class="toc_ref">20.12</span> <span class="toc_entry">alloc (6965)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000267"><span class="toc_ref">20.13</span> <span class="toc_entry">itrunc (7414)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000268"><span class="toc_ref">20.14</span> <span class="toc_entry">free (7000)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000269"><span class="toc_ref">20.15</span> <span class="toc_entry">iput (7344)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000270"><span class="toc_ref">20.16</span> <span class="toc_entry">ifree (7134)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000271"><span class="toc_ref">20.17</span> <span class="toc_entry">iupdat (7374)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0024.html"><span class="toc_ref">21</span> <span class="toc_entry">Pipes</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0024.html#a0000000272"><span class="toc_ref">21.1</span> <span class="toc_entry">pipe (7723)</span></a>
+</li>
+<li class="">
+<a href="sect0024.html#a0000000273"><span class="toc_ref">21.2</span> <span class="toc_entry">readp (7758)</span></a>
+</li>
+<li class="">
+<a href="sect0024.html#a0000000274"><span class="toc_ref">21.3</span> <span class="toc_entry">writep (7805)</span></a>
+</li>
+<li class="">
+<a href="sect0024.html#a0000000275"><span class="toc_ref">21.4</span> <span class="toc_entry">plock (7862)</span></a>
+</li>
+<li class="">
+<a href="sect0024.html#a0000000276"><span class="toc_ref">21.5</span> <span class="toc_entry">prele (7882)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0025.html"><span class="toc_ref">22</span> <span class="toc_entry">Character Oriented Special Files</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0025.html#a0000000277"><span class="toc_ref">22.1</span> <span class="toc_entry">LP11 Line Printer Driver</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000278"><span class="toc_ref">22.2</span> <span class="toc_entry">lpopen (8850)</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000279"><span class="toc_ref">22.3</span> <span class="toc_entry">Notes</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000280"><span class="toc_ref">22.4</span> <span class="toc_entry">lpoutput (8986)</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000281"><span class="toc_ref">22.5</span> <span class="toc_entry">lpstart (8967)</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000282"><span class="toc_ref">22.6</span> <span class="toc_entry">lpinit(8976)</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000283"><span class="toc_ref">22.7</span> <span class="toc_entry">lpwrite (8870)</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000284"><span class="toc_ref">22.8</span> <span class="toc_entry">Discussion</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000285"><span class="toc_ref">22.9</span> <span class="toc_entry">lpcanon (8879)</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000286"><span class="toc_ref">22.10</span> <span class="toc_entry">For idle readers: A suggestion</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000287"><span class="toc_ref">22.11</span> <span class="toc_entry">PC-11 Paper Tape Reader/Punch Driver</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0026.html"><span class="toc_ref">23</span> <span class="toc_entry">Character Handling</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0026.html#a0000000288"><span class="toc_ref">23.1</span> <span class="toc_entry">cinit (8234)</span></a>
+</li>
+<li class="">
+<a href="sect0026.html#a0000000289"><span class="toc_ref">23.2</span> <span class="toc_entry">getc (0930)</span></a>
+</li>
+<li class="">
+<a href="sect0026.html#a0000000290"><span class="toc_ref">23.3</span> <span class="toc_entry">putc (0967)</span></a>
+</li>
+<li class="">
+<a href="sect0026.html#a0000000291"><span class="toc_ref">23.4</span> <span class="toc_entry">Character Sets</span></a>
+</li>
+<li class="">
+<a href="sect0026.html#a0000000292"><span class="toc_ref">23.5</span> <span class="toc_entry">Control Characters</span></a>
+</li>
+<li class="">
+<a href="sect0026.html#a0000000293"><span class="toc_ref">23.6</span> <span class="toc_entry">Graphic Characters</span></a>
+</li>
+<li class="">
+<a href="sect0026.html#a0000000294"><span class="toc_ref">23.7</span> <span class="toc_entry">Graphic Character Sets</span></a>
+</li>
+<li class="">
+<a href="sect0026.html#a0000000295"><span class="toc_ref">23.8</span> <span class="toc_entry">maptab (8117)</span></a>
+</li>
+<li class="">
+<a href="sect0026.html#a0000000296"><span class="toc_ref">23.9</span> <span class="toc_entry">partab (7947)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0027.html"><span class="toc_ref">24</span> <span class="toc_entry">Interactive Terminals</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0027.html#a0000000297"><span class="toc_ref">24.1</span> <span class="toc_entry">The ’tty’ Structure (7926)</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000298"><span class="toc_ref">24.2</span> <span class="toc_entry"> Interactive Terminals</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000299"><span class="toc_ref">24.3</span> <span class="toc_entry">Initialisation</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000300"><span class="toc_ref">24.4</span> <span class="toc_entry">stty (8183)</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000301"><span class="toc_ref">24.5</span> <span class="toc_entry">sgtty (8201)</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000302"><span class="toc_ref">24.6</span> <span class="toc_entry">klsgtty (8090)</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000303"><span class="toc_ref">24.7</span> <span class="toc_entry">tysty (8577)</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000304"><span class="toc_ref">24.8</span> <span class="toc_entry">The DL11/KL11 Terminal Device Handler</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000305"><span class="toc_ref">24.9</span> <span class="toc_entry">Device Registers</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000306"><span class="toc_ref">24.10</span> <span class="toc_entry">UNIBUS Addresses</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000307"><span class="toc_ref">24.11</span> <span class="toc_entry">Software Considerations</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000308"><span class="toc_ref">24.12</span> <span class="toc_entry">Interrupt Vector Addresses</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000309"><span class="toc_ref">24.13</span> <span class="toc_entry">Source Code</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000310"><span class="toc_ref">24.14</span> <span class="toc_entry">klopen (8023)</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000311"><span class="toc_ref">24.15</span> <span class="toc_entry">klclose (8055)</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000312"><span class="toc_ref">24.16</span> <span class="toc_entry">klxint (8070)</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000313"><span class="toc_ref">24.17</span> <span class="toc_entry">klrint (8078)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0028.html"><span class="toc_ref">25</span> <span class="toc_entry">The File “tty.c”</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0028.html#a0000000314"><span class="toc_ref">25.1</span> <span class="toc_entry">flushtty (8252)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000315"><span class="toc_ref">25.2</span> <span class="toc_entry">wflushtty (8217)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000316"><span class="toc_ref">25.3</span> <span class="toc_entry">Character Input</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000317"><span class="toc_ref">25.4</span> <span class="toc_entry">ttread (8535)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000318"><span class="toc_ref">25.5</span> <span class="toc_entry">canon (8274)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000319"><span class="toc_ref">25.6</span> <span class="toc_entry">Notes</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000320"><span class="toc_ref">25.7</span> <span class="toc_entry">ttyinput (8333)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000321"><span class="toc_ref">25.8</span> <span class="toc_entry">Character Output – ttwrite (8550)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000322"><span class="toc_ref">25.9</span> <span class="toc_entry">ttstart</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000323"><span class="toc_ref">25.10</span> <span class="toc_entry">ttrstrt (8486)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000324"><span class="toc_ref">25.11</span> <span class="toc_entry">ttyoutput (8373)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000325"><span class="toc_ref">25.12</span> <span class="toc_entry">Terminals with a restricted character set</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000326"><span class="toc_ref">25.13</span> <span class="toc_entry">A. The test for ’TTLOWAT’ (Line 8074)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000327"><span class="toc_ref">25.14</span> <span class="toc_entry">B. Inactive Terminals</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000328"><span class="toc_ref">25.15</span> <span class="toc_entry">Well, that’s all, folks ...</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0029.html"><span class="toc_ref">26</span> <span class="toc_entry">Suggested Exercises</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0029.html#a0000000329"><span class="toc_ref">26.1</span> <span class="toc_entry">Section One</span></a>
+</li>
+<li class="">
+<a href="sect0029.html#a0000000330"><span class="toc_ref">26.2</span> <span class="toc_entry">Section Two</span></a>
+</li>
+<li class="">
+<a href="sect0029.html#a0000000331"><span class="toc_ref">26.3</span> <span class="toc_entry">Section Three</span></a>
+</li>
+<li class="">
+<a href="sect0029.html#a0000000332"><span class="toc_ref">26.4</span> <span class="toc_entry">Section Four</span></a>
+</li>
+<li class="">
+<a href="sect0029.html#a0000000333"><span class="toc_ref">26.5</span> <span class="toc_entry">General</span></a>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+<div class="content">
+<div class="content-wrapper">
+<div class="main-text">
+<h1 class="bilingual" id="a0000000020" title="16 The RK Disk Driver">16 Sterownik dysku RK</h1>
+<p class="bilingual" title="The RK disk storage system employs a removable disk cartridge containing a single disk, which is mounted inside a drive with moving read/write heads.">System dyskowej pamięci masowej RK wykorzystuje wymienną kasetę dyskową zawierającą pojedynczy dysk, która jest zamontowana wewnątrz napędu z ruchomymi głowicami odczytu/zapisu.</p>
+<p class="bilingual" title="The device designated RK11-D consists of a disk controller together with a single drive. Additional drives, designated RK05, up to a total of seven, may be added to a single RK11-D.">Urządzenie oznaczone jako RK11-D składa się z kontrolera dysku wraz z pojedynczym napędem. Do jednego RK11-D można dodać maksymalnie siedem dodatkowych napędów, oznaczonych jako RK05.</p>
+<p class="bilingual" title="A requirement for more than eight drives would require an additional controller with a different set of UNIBUS addresses. Also the code in the file “rk.c” would have to be modified to handle the case of two or more controllers. This case is most unlikely because requirements for large amounts of on-line disk storage will be more economically provided otherwise e.g. by the RP04 disk system.">Zapotrzebowanie na więcej niż osiem napędów wymagałoby dodatkowego sterownika z innym zestawem adresów UNIBUS. Również kod w pliku „rk.c” musiałby zostać zmodyfikowany, aby obsłużyć przypadek dwóch lub więcej kontrolerów. Ten przypadek jest mało prawdopodobny, ponieważ zapotrzebowanie na dużą ilość miejsca na dysku online będzie zapewnione w bardziej ekonomiczny sposób, w przeciwnym razie np. przez system dyskowy RP04.</p>
+<div class="centered"> <div class="tabbing">
+<object data="images/img-0005.svg" style="width: &amp;images/img-0005.svg-width;&amp;em;; height: &amp;images/img-0005.svg-height;&amp;em;;" type="image/svg+xml">
+<img alt="\begin{tabbing}  Cartridge \=  capacity: \=  1,228,800 words\\ \&gt;  (4800 512 byte records)\\ Surfaces/cartridge: \&gt;  \&gt;  2\\ Tracks/surface: \&gt;  \&gt; 200 (plus 3 spare)\\ Sectors/Track: \&gt;  \&gt;  12\\ Words/Sector: \&gt;  \&gt;  256\\ Recording density: \&gt;  \&gt;  2040 bpi maximum\\ Rotation speed: \&gt;  \&gt;  1500 rpm\\ Half revolution: \&gt;  \&gt;  20 msecs\\ Track positioning:\\ \&gt;  10 msecs (one track)\\ \&gt;  50 msecs (average)\\ \&gt;  85 msecs (worst case)\\ Interrupt Vector Address: 220\\ Priority Level: \&gt;  \&gt;  5\\ \end{tabbing}" class="tabbing gen" src="images/img-0005.png" style="width: &amp;images/img-0005.png-width;&amp;px;; height: &amp;images/img-0005.png-height;&amp;px;"/>
+</object>
+</div> </div>
+<table class="tabular">
+<tr>
+<td colspan="3" rowspan="" style="text-align:center">
+<p class="bilingual" title="Unibus Register Addresses"> <b class="bf">Adresy rejestracyjne Unibus</b></p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="Drive Status">Stan dysku</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> RKDS </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 777400 </p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="Error">Błąd</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> RKER </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 777402 </p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="Control Status">Stan kontroli</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> RKCS </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 777404 </p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="Word Count">Liczba słów</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> RKWC </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 777406 </p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="Current bus address">Aktualny adres autobusu</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> RKBA </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 777410 </p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="Disk address">Adres dysku</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> RKDA </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 777412 </p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="Data Buffer">Bufor danych</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> RKDB </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 777416 </p>
+</td>
+</tr>
+</table>
+<div class="centered"> Table 16.1 RK Vital Statistics </div>
+<p class="bilingual" title="The average total access time is 70 milllseconds. With multi-drive subsystems, seeking by one drive may be overlapped with reading or writing by another drive. However this feature is not used by UNIX because of bugs which existed at one time in the hardware controller.">Średni całkowity czas dostępu wynosi 70 milisekund. W przypadku podsystemów z wieloma dyskami wyszukiwanie na jednym dysku może nakładać się na odczyt lub zapis na innym dysku. Jednak ta funkcja nie jest używana w systemie UNIX z powodu błędów, które istniały kiedyś w kontrolerze sprzętowym.</p>
+<p class="bilingual" title="In initiating a data transfer, RKDA, RRBA and RKC are set, and then RKCS is set. Upon completion, status information is available in RKCS, RRER and RKDS. When an error occurs, UNIX simply calls “deverror” (2447) to display RKER and RKDS on the system console, without any attempt at analysis. An operation is repeated up to ten times before an error is reported by the device driver.">Podczas inicjowania przesyłania danych ustawiane są RKDA, RRBA i RKC, a następnie RKCS. Po zakończeniu informacje o statusie są dostępne w RKCS, RRER i RKDS. Gdy wystąpi błąd, UNIX po prostu wywołuje „deverror” (2447), aby wyświetlić RKER i RKDS na konsoli systemowej, bez jakiejkolwiek próby analizy. Operację powtarza się do dziesięciu razy, zanim sterownik urządzenia zgłosi błąd.</p>
+<p class="bilingual" title="The register formats which are described fully in the “PDP11 Peripherals Handbook” are reflected in the program code at several points. The following summaries suffice to describe the features used by UNIX:">Formaty rejestrów opisane w całości w „Podręczniku urządzeń peryferyjnych PDP11” znajdują odzwierciedlenie w kodzie programu w kilku miejscach. Poniższe podsumowania wystarczą do opisania funkcji używanych przez UNIX:</p>
+<table class="tabular">
+<tr>
+<td colspan="2" rowspan="" style="text-align:center">
+<p class="bilingual" title="Control Status Register (RKCS)"> <b class="bf">Rejestr stanu kontroli (RKCS)</b></p>
+</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:center">
+<p>bit </p>
+</td>
+<td colspan="1" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:center">
+<p class="bilingual" title="description">opis</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p>15 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="Set when any bit of RKER (the">Ustawia, kiedy dowolny bit RKER (</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="Error Register) is set;">Rejestr błędów) jest ustawiony;</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p>7 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="Set when the control is no">Ustawiane, gdy sterowanie jest nie</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="longer engaged in actively">już aktywnie zaangażowani</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="executing a function and is ready">wykonuje funkcję i jest gotowy</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="to accept a command;">przyjąć polecenie;</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p>6 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="When set, the control will issue">Po ustawieniu sterowanie zostanie wydane</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="an interrupt to vector address">przerwanie do adresu wektorowego</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="220 upon operation completion or">220 po zakończeniu operacji lub</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="error;">błąd;</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p>5–4 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="Memory Extension. The two most">Rozszerzenie pamięci. Najbardziej dwa</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="significant bits of the 13 bit">znaczące bity 13-bitowego</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="physical bus address. (The other">fizyczny adres magistrali. (Drugi</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="16 bits are recorded in RKBA.);">W RKBA zapisanych jest 16 bitów.);</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p>3–1 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="Function to be performed:">Funkcja do wykonania:</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="CONTROL RESET: 000">RESET STEROWANIA: 000</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="WRITE: 001">NAPISZ: 001</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="READ: 010">PRZECZYTAJ: 010</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="etc.,">itp.,</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p>0 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="Initiate the function designated">Zainicjuj wyznaczoną funkcję</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="by bits 1 to 3 when set. (write">bitami od 1 do 3, jeśli są ustawione. (pisać</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="only);">tylko);</p>
+</td>
+</tr>
+<tr>
+<td colspan="2" rowspan="" style="text-align:center; border-bottom-style:solid; border-bottom-color:black; border-bottom-width:1px">
+<p class="bilingual" title="Word Count Register (RKWC)"><b class="bf">Rejestr liczby słów (RKWC)</b></p>
+</td>
+</tr>
+</table>
+<p class="bilingual" title="Contains the twos complement of the number of words to be transferred.">Zawiera uzupełnienie dwójkowe liczby słów, które mają zostać przesłane.</p>
+<table class="tabular">
+<tr>
+<td colspan="2" rowspan="" style="text-align:center">
+<p class="bilingual" title="Disk Address Register (RKDA)"> <b class="bf">Rejestr adresów dysku (RKDA)</b></p>
+</td>
+</tr>
+<tr>
+<td colspan="1" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:center">
+<p>bit </p>
+</td>
+<td colspan="1" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:center">
+<p class="bilingual" title="description">opis</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="15–13">15–13</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="Drive number (0 to 7)">Numer dysku (0 do 7)</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p>12–5 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="Cylinder number (0 to 199)">Numer cylindra (0 do 199)</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p>4 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="Surface number (0,1)">Numer powierzchni (0,1)</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p>3-0 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="Sector address (0 to 11)">Adres sektora (0 do 11)</p>
+</td>
+</tr>
+</table>
+<h2 class="bilingual" id="a0000000203" title="16.1 The file ‘rk.c’">16.1 Plik „rk.c”</h2>
+<p class="bilingual" title="This file contains the code which is specific to the RK disk system, i.e. which is the RK “device driver”.">Plik ten zawiera kod specyficzny dla systemu dyskowego RK, czyli będący „sterownikiem urządzenia” RK.</p>
+<h2 class="bilingual" id="a0000000204" title="16.2 rkstrategy (5389)">16.2 strategia rk (5389)</h2>
+<p class="bilingual" title="The strategy routine is called, e.g. from “swap” (5212), to handle both read and write requests.">Procedura strategiczna nazywana jest m.in. z „swap” (5212), aby obsługiwać zarówno żądania odczytu, jak i zapisu.</p>
+<dl class="description">
+<dt><a class="line-ref" data-line="5397" href="../all.html#line5397" target="source">5397:</a></dt>
+<dd class="bilingual" title="The test and call on “mapalloc” here is a “no-op” except on the PDP11/70 system;"><p class="bilingual" title="Test i wywołanie „mapalloc” w tym przypadku nie wchodzi w grę, z wyjątkiem systemu PDP11/70;">Test i wywołanie „mapalloc” w tym przypadku, gdy nie ma zastosowania w grze, z wyjątkiem systemu PDP11/70;</p>
+</dd>
+<dt><a class="line-ref" data-line="5399" href="../all.html#line5399" target="source">5399:</a></dt>
+<dd class="bilingual" title="The code from here to line 5402 appears to be unnecessarily devious! See the discussion of “rkaddr” below. If the block number is too large, set the “B_ERROR” flag and report “completion”;"><p class="bilingual" title="Kod stąd do linii 5402 wydaje się być niepotrzebnie przebiegły! Zobacz dyskusję na temat „rkaddr” poniżej. Jeżeli numer bloku jest za duży, ustaw flagę „B_ERROR” i zgłoś „ukończenie”;">Kod stąd do linii 5402 wydaje się być niepotrzebny przebiegły! Zobacz szeroki na temat „rkaddr” poniżej. Jeśli numer bloku jest za duży, ustaw flagę „B_ERROR” i zgłoś „ukończenie”;</p>
+</dd>
+<dt><a class="line-ref" data-line="5407" href="../all.html#line5407" target="source">5407:</a></dt>
+<dd class="bilingual" title="Link the buffer into a FIFO list for the controller. The list is singly linked, uses the “av_forw” pointer of the “buf” structures, and has head and tail pointers in “rktab”. Interrupts from disk devices may not be allowed after the first step;"><p class="bilingual" title="Połącz bufor z listą FIFO dla kontrolera. Lista jest pojedynczo połączona, używa wskaźnika „av_forw” struktur „buf” i zawiera wskaźniki głowy i ogona w „rktab”. Przerwania z urządzeń dyskowych mogą być niedozwolone po pierwszym kroku;">Możliwość podłączenia bufora z listą FIFO dla kontrolera. Lista jest pojedynczo połączona, używa wskaźnika „av_forw” struktury „buf” i zawiera wskaźniki głowy i ogona w „rktab”. Przerwania z urządzeń dyskowych mogą być niedozwolone po pierwszym kroku;</p>
+</dd>
+<dt><a class="line-ref" data-line="5414" href="../all.html#line5414" target="source">5414:</a></dt>
+<dd class="bilingual" title="If the RK controller is not currently active, wake it up via a call on “rkstart” (5440), which checks that there is something to do (5444), flags the controller as busy (5446) and calls “devstart” (5447), passing as parameters: a pointer to the first enqueued buffer header; the address of the RKDA disk address register. (The value passed is in effect 0177412. See lines 5363, 5382.); a “disk address” computed by “rkaddr”; zero (not really important in our discussion, and may be ignored)."><p class="bilingual" title="Jeśli kontroler RK nie jest aktualnie aktywny, wybudź go wywołaniem „rkstart” (5440), które sprawdzi, czy jest coś do zrobienia (5444), oznaczy kontroler jako zajęty (5446) i wywoła „devstart” (5447), przekazując jako parametry:">Jeśli kontroler RK nie jest aktualnie aktywny, wybudź wywołanie „rkstart” (5440), które sprawdziło, czy jest coś do wykonania (5444), oznaczyło kontroler jako zajęty (5446) i wywołało „devstart” (5447), przekazując jako:</p>
+<ul class="itemize">
+<li class="bilingual" title="wskaźnik do pierwszego umieszczonego w kolejce nagłówka bufora;"><p class="bilingual" title="Wynik do pierwszego umieszczonego w kolejce nagłówka bufora;">Wynik do pierwszego umieszczonego w kolejce nagłówka bufora;</p>
+</li>
+<li class="bilingual" title="adres rejestru adresowego dysku RKDA. (Przekazana wartość obowiązuje jako 0177412. Zobacz linie 5363, 5382.);"><p class="bilingual" title="adres rejestru adresowego dysku RKDA. (Przekazana wartość jako 0177412. Zobacz linie 5363, 5382.);">adres rejestru adresowego dysku RKDA. (Przekazana wartość jako 0177412. Zobacz linie 5363, 5382.);</p>
+</li>
+<li class="bilingual" title="„adres dysku” obliczony przez „rkaddr”;"><p class="bilingual" title="„adres dysku” obliczony przez „rkaddr”;">„adres dysku” obliczony przez „rkaddr”;</p>
+</li>
+<li class="bilingual" title="zero (niezbyt ważne w naszej dyskusji i można je zignorować)."><p class="bilingual" title="zero (niezbyt ważne w naszej interpretacji i można je usunąć).">zero (niezbyt ważne w naszej interpretacji i można je usunąć).</p>
+</li>
+</ul>
+</dd>
+</dl>
+<h2 class="bilingual" id="a0000000205" title="16.3 rkaddr (5420)">16,3 rkaddr (5420)</h2>
+<p class="bilingual" title="The code in this procedure incorporates a special feature for files which extend over more than one disk drive. This feature is described in the UPM Section “RK(IV)”. Its usefulness seems to be restricted.">Kod w tej procedurze zawiera specjalną funkcję dla plików, które zajmują więcej niż jeden dysk. Ta funkcja jest opisana w sekcji UPM „RK(IV)”. Wydaje się, że jego użyteczność jest ograniczona.</p>
+<p class="bilingual" title="The value returned by “rkaddr” is formatted for direct transmission to the control register, RKDA.">Wartość zwrócona przez „rkaddr” jest formatowana w celu bezpośredniego przesłania do rejestru sterującego RKDA.</p>
+<h2 class="bilingual" id="a0000000206" title="16.4 devstart (5096)">16.4 programowanie (5096)</h2>
+<p class="bilingual" title="This procedure when called for the RK disk loads appropriate values into the registers RKDA, RKBA, RKWC and RKCS in succession. Only the last value needs to be computed at this stage.">Procedura ta po wywołaniu dysku RK ładuje kolejno odpowiednie wartości do rejestrów RKDA, RKBA, RKWC i RKCS. Na tym etapie należy obliczyć tylko ostatnią wartość.</p>
+<p class="bilingual" title="The calculation, though messy in appearance, is straight forward. Note that “hbcom” is zero and “rbp-\({\gt}\)b_xmem” contains the two high order bits of the physical core address. The loading of RKCS initialises the disk controller i.e. the operation is now entirely under the control of the hardware.">Obliczenia, choć pozornie niechlujne, są proste. Zauważ, że „hbcom” wynosi zero, a „rbp-\({\gt}\)b_xmem” zawiera dwa bity wyższego rzędu adresu rdzenia fizycznego. Ładowanie RKCS inicjuje kontroler dysku, co oznacza, że ​​operacja jest teraz całkowicie pod kontrolą sprzętu.</p>
+<p class="bilingual" title="“devstart” returns to “rkstart” (5448), which returns to “rkstrategy” (5416), which resets the processor priority and returns to “swap” (5213), which ...">„devstart” powraca do „rkstart” (5448), który powraca do „rkstrategy” (5416), co resetuje priorytet procesora i powraca do „swap” (5213), co…</p>
+<h2 class="bilingual" id="a0000000207" title="16.5 rkintr (5451)">16,5 rkintr (5451)</h2>
+<p class="bilingual" title="This procedure is invoked to handle the interrupts which occur when RK disk operations are completed.">Ta procedura jest wywoływana w celu obsługi przerwań, które pojawiają się po zakończeniu operacji na dysku RK.</p>
+<dl class="description">
+<dt><a class="line-ref" data-line="5455" href="../all.html#line5455" target="source">5455:</a></dt>
+<dd class="bilingual" title="Check for a false alarm!"><p class="bilingual" title="Sprawdź, czy nie ma fałszywego alarmu!">Sprawdź, czy nie ma niepokojącego alarmu!</p>
+</dd>
+<dt><a class="line-ref" data-line="5459" href="../all.html#line5459" target="source">5459:</a></dt>
+<dd class="bilingual" title="Inspect the error bit; if set ..."><p class="bilingual" title="Sprawdź bit błędu; jeśli ustawione...">Sprawdź bit alternatywny; jeśli rozważyć...</p>
+</dd>
+<dt><a class="line-ref" data-line="5460" href="../all.html#line5460" target="source">5460:</a></dt>
+<dd class="bilingual" title="Call “deverror” (2447) to display a message on the system console terminal;"><p class="bilingual" title="Wywołaj „deverror” (2447), aby wyświetlić komunikat na terminalu konsoli systemowej;">Wywołaj „deverror” (2447), aby komunikat na terminalu konsoli systemowej;</p>
+</dd>
+<dt><a class="line-ref" data-line="5461" href="../all.html#line5461" target="source">5461:</a></dt>
+<dd class="bilingual" title="Clear the internal registers of the disk controller and ..."><p class="bilingual" title="Wyczyść wewnętrzne rejestry kontrolera dysku i ...">Wyczyść wewnętrzne rejestry kontrolera dysku i ...</p>
+</dd>
+<dt><a class="line-ref" data-line="5462" href="../all.html#line5462" target="source">5462:</a></dt>
+<dd class="bilingual" title="Wait till this is completed (usually a few microseconds);"><p class="bilingual" title="Poczekaj, aż to się zakończy (zwykle kilka mikrosekund);">Poczekaj, aż do przechowywania (zwykle kilka mikrosekund);</p>
+</dd>
+<dt><a class="line-ref" data-line="5463" href="../all.html#line5463" target="source">5463:</a></dt>
+<dd class="bilingual" title="If the operation has been retried less than ten times, call “rkstart” to try again. Otherwise give up and report an error;"><p class="bilingual" title="Jeśli operację powtarzano mniej niż dziesięć razy, wywołaj „rkstart”, aby spróbować ponownie. W przeciwnym razie poddaj się i zgłoś błąd;">Jeśli powtórzono mniej niż wyrażenia, wywołaj „rkstart”, aby spróbować ponownie. W razie wypadku poddaj się i zgłoś błąd;</p>
+</dd>
+<dt><a class="line-ref" data-line="5469" href="../all.html#line5469" target="source">5469:</a></dt>
+<dd class="bilingual" title="Set the “retry” (!) count back to zero, remove the current operation from the “actf” list, and complete the operation by calling “iodone”;"><p class="bilingual" title="Ustaw licznik „retry” (!) z powrotem na zero, usuń bieżącą operację z listy „actf” i zakończ operację, wywołując „iodone”;">Ustaw licznik „retry” (!) z powrotem na zero, usuń z listy „actf” i zakończ, aby wystąpił „iodone”;</p>
+</dd>
+<dt><a class="line-ref" data-line="5472" href="../all.html#line5472" target="source">5472:</a></dt>
+<dd class="bilingual" title="“rkstart” is called unconditionally here. If the call is not necessary (because the “actf” list is empty) “rkstart” will return immediately (5444)."><p class="bilingual" title="„rkstart” jest tutaj wywoływane bezwarunkowo. Jeśli wywołanie nie jest konieczne (ponieważ lista „actf” jest pusta) „rkstart” natychmiast zwróci (5444).">„rkstart” jest tutaj wywoływane bezwarunkowo. Jeśli wywołanie nie jest konieczne (ponieważ lista „actf” jest pusta) „rkstart” natychmiast zwróci (5444).</p>
+</dd>
+</dl>
+<h2 class="bilingual" id="a0000000208" title="16.6 iodone (5018)">16,6 jodon (5018)</h2>
+<p class="bilingual" title="This routine is primarily concerned with the return of resources when a block i/o operation has completed. It:">Procedura ta dotyczy przede wszystkim zwrotu zasobów po zakończeniu operacji we/wy bloku. To:</p>
+<ul class="itemize">
+<li class="bilingual" title="frees up the Unibus map (for 11/70’s, if appropriate);"><p class="bilingual" title="zwalnia mapę Unibus (dla lat 11/70, jeśli to konieczne);">zwolnij mapę Unibus (dla lat 11/70, jeśli to konieczne);</p>
+</li>
+<li class="bilingual" title="sets the “B_DONE” flag;"><p class="bilingual" title="ustawia flagę „B_DONE”;">ustaw flagę „B_DONE”;</p>
+</li>
+<li class="bilingual" title="releases the buffer if the i/o was asynchronous, or else resets the “B_WANTED” flag and wakes up any process waiting for the i/o operation to complete."><p class="bilingual" title="zwalnia bufor, jeśli we/wy było asynchroniczne, lub resetuje flagę „B_WANTED” i budzi każdy proces oczekujący na zakończenie operacji we/wy.">zwolnij bufor, jeśli we/wy było asynchroniczne, lub resetuje flagę „B_WANTED” i budzi każdy proces oczekujący na podstawie operacji we/wy.</p>
+</li>
+</ul>
+</div> <!--main-text -->
+</div> <!-- content-wrapper -->
+</div> <!-- content -->
+</div> <!-- wrapper -->
+<nav class="prev_up_next">
+<a href="sect0018.html" title="Introduction to Basic I/O"><svg class="icon icon-arrow-left"><use xlink:href="symbol-defs.svg#icon-arrow-left"></use></svg>
+</a>
+<a href="index.html" title=""><svg class="icon icon-arrow-up"><use xlink:href="symbol-defs.svg#icon-arrow-up"></use></svg>
+</a>
+<a href="sect0020.html" title="Buffer Manipulation"><svg class="icon icon-arrow-right"><use xlink:href="symbol-defs.svg#icon-arrow-right"></use></svg>
+</a>
+</nav>
+<script src="js/jquery.min.js" type="text/javascript"></script>
+<script src="js/plastex.js" type="text/javascript"></script>
+<script src="js/svgxuse.js" type="text/javascript"></script>
+</body>
+</html>

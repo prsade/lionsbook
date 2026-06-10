@@ -1,0 +1,1595 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<script>
+  MathJax = { 
+    tex: {
+		    inlineMath: [['\\(','\\)']]
+	} }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" type="text/javascript">
+</script>
+<meta content="plasTeX" name="generator"/>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>: Fundamentals</title>
+<link href="sect0004.html" rel="next" title="Reading “C” Programs"/>
+<link href="sect0002.html" rel="prev" title="Introduction"/>
+<link href="index.html" rel="up" title=""/>
+<link href="styles/theme-white.css" rel="stylesheet"/>
+<style id="line-ref-style">.line-ref { color: #0066cc; text-decoration: none; font-weight: 500; }
+.line-ref:hover { text-decoration: underline; background-color: #f0f7ff; }
+</style></head>
+<body>
+<header>
+<svg class="icon icon-list-numbered" id="toc-toggle"><use xlink:href="symbol-defs.svg#icon-list-numbered"></use></svg>
+<h1 id="doc_title"><a href="index.html"></a></h1>
+</header>
+<div class="wrapper">
+<nav class="toc">
+<ul class="sub-toc-0">
+<li class="">
+<a href="sect0001.html"><span class="toc_ref"></span> <span class="toc_entry">Preface</span></a>
+</li>
+<li class="">
+<a href="sect0002.html"><span class="toc_ref">1</span> <span class="toc_entry">Introduction</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0002.html#a0000000031"><span class="toc_ref">1.1</span> <span class="toc_entry">The UNIX Operating System</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000032"><span class="toc_ref">1.2</span> <span class="toc_entry">Utilities</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000033"><span class="toc_ref">1.3</span> <span class="toc_entry">Other Documentation</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000034"><span class="toc_ref">1.4</span> <span class="toc_entry">UNIX Programmer’s Manual</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000035"><span class="toc_ref">1.5</span> <span class="toc_entry">UNIX Documents</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000036"><span class="toc_ref">1.6</span> <span class="toc_entry">UNIX Operating System Source Code</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000037"><span class="toc_ref">1.7</span> <span class="toc_entry">Source Code Selections</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000038"><span class="toc_ref">1.8</span> <span class="toc_entry">Source Code Files</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000039"><span class="toc_ref">1.9</span> <span class="toc_entry">Use of these notes</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000040"><span class="toc_ref">1.10</span> <span class="toc_entry">A Note on Programming Standards</span></a>
+</li>
+</ul>
+</li>
+<li class="active current">
+<a href="sect0003.html"><span class="toc_ref">2</span> <span class="toc_entry">Fundamentals</span></a>
+<span class="expand-toc">▼</span>
+<ul class="sub-toc-1 active">
+<li class="">
+<a href="sect0003.html#a0000000041"><span class="toc_ref">2.1</span> <span class="toc_entry">The Processor</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000042"><span class="toc_ref">2.2</span> <span class="toc_entry">Processor Status Word</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000043"><span class="toc_ref">2.3</span> <span class="toc_entry">General Registers</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000044"><span class="toc_ref">2.4</span> <span class="toc_entry">Instruction Set</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000045"><span class="toc_ref">2.5</span> <span class="toc_entry">Addressing Modes</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000046"><span class="toc_ref">2.6</span> <span class="toc_entry">Unix Assembler</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000047"><span class="toc_ref">2.7</span> <span class="toc_entry">Memory Management</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000048"><span class="toc_ref">2.8</span> <span class="toc_entry">Segmentation Registers.</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000049"><span class="toc_ref">2.9</span> <span class="toc_entry">Page Description Register</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000050"><span class="toc_ref">2.10</span> <span class="toc_entry">Memory Allocation</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000051"><span class="toc_ref">2.11</span> <span class="toc_entry">Memory Management Status Registers</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000052"><span class="toc_ref">2.12</span> <span class="toc_entry">“i” and “d” Spaces</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000053"><span class="toc_ref">2.13</span> <span class="toc_entry">Initial Conditions</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000054"><span class="toc_ref">2.14</span> <span class="toc_entry">Special Device Registers</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0004.html"><span class="toc_ref">3</span> <span class="toc_entry">Reading “C” Programs</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0004.html#a0000000055"><span class="toc_ref">3.1</span> <span class="toc_entry">Some Selected Examples</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000056"><span class="toc_ref">3.2</span> <span class="toc_entry">Example 1</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000057"><span class="toc_ref">3.3</span> <span class="toc_entry">Example 2</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000058"><span class="toc_ref">3.4</span> <span class="toc_entry">Example 3</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000059"><span class="toc_ref">3.5</span> <span class="toc_entry">Example 4</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000060"><span class="toc_ref">3.6</span> <span class="toc_entry">Example 5</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000061"><span class="toc_ref">3.7</span> <span class="toc_entry">Example 6</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000062"><span class="toc_ref">3.8</span> <span class="toc_entry">Example 7</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000063"><span class="toc_ref">3.9</span> <span class="toc_entry">Example 8</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000064"><span class="toc_ref">3.10</span> <span class="toc_entry">Example 9</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000065"><span class="toc_ref">3.11</span> <span class="toc_entry">Example 10</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000066"><span class="toc_ref">3.12</span> <span class="toc_entry">Example 11</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000067"><span class="toc_ref">3.13</span> <span class="toc_entry">Example 12</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000068"><span class="toc_ref">3.14</span> <span class="toc_entry">Example 13</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000069"><span class="toc_ref">3.15</span> <span class="toc_entry">Example 14</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000070"><span class="toc_ref">3.16</span> <span class="toc_entry">Example 15</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000071"><span class="toc_ref">3.17</span> <span class="toc_entry">Example 16</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000072"><span class="toc_ref">3.18</span> <span class="toc_entry">Example 17</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0005.html"><span class="toc_ref">4</span> <span class="toc_entry">An Overview</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0005.html#a0000000073"><span class="toc_ref">4.1</span> <span class="toc_entry">Variable Allocation</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000074"><span class="toc_ref">4.2</span> <span class="toc_entry">Global Variables</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000075"><span class="toc_ref">4.3</span> <span class="toc_entry">The ‘C’ Preprocessor</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000076"><span class="toc_ref">4.4</span> <span class="toc_entry">Section One</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000077"><span class="toc_ref">4.5</span> <span class="toc_entry">The First Group of ‘.h’ Files</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000078"><span class="toc_ref">4.6</span> <span class="toc_entry">Assembly Language Files</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000079"><span class="toc_ref">4.7</span> <span class="toc_entry">Other Files in Section One</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000080"><span class="toc_ref">4.8</span> <span class="toc_entry">Section Two</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000081"><span class="toc_ref">4.9</span> <span class="toc_entry">Section Three</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000082"><span class="toc_ref">4.10</span> <span class="toc_entry">Section Four</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000083"><span class="toc_ref">4.11</span> <span class="toc_entry">Section Five</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0006.html"><span class="toc_ref"></span> <span class="toc_entry">Section One</span></a>
+</li>
+<li class="">
+<a href="sect0007.html"><span class="toc_ref">5</span> <span class="toc_entry">Two Files</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0007.html#a0000000084"><span class="toc_ref">5.1</span> <span class="toc_entry">The File ‘malloc.c’</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000085"><span class="toc_ref">5.2</span> <span class="toc_entry">Rules for List Maintenance</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000086"><span class="toc_ref">5.3</span> <span class="toc_entry">malloc (2528)</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000087"><span class="toc_ref">5.4</span> <span class="toc_entry">mfree (2556)</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000088"><span class="toc_ref">5.5</span> <span class="toc_entry">In conclusion ...</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000089"><span class="toc_ref">5.6</span> <span class="toc_entry">The File ‘prf.c’</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000090"><span class="toc_ref">5.7</span> <span class="toc_entry">printf (2340)</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000091"><span class="toc_ref">5.8</span> <span class="toc_entry">printn (2369)</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000092"><span class="toc_ref">5.9</span> <span class="toc_entry">putchar (2386)</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000093"><span class="toc_ref">5.10</span> <span class="toc_entry">panic (2419)</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000094"><span class="toc_ref">5.11</span> <span class="toc_entry">prdev (2433), deverror (2447)</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000095"><span class="toc_ref">5.12</span> <span class="toc_entry">Included Files</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0008.html"><span class="toc_ref">6</span> <span class="toc_entry">Getting Started</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0008.html#a0000000096"><span class="toc_ref">6.1</span> <span class="toc_entry">Operator Actions</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000097"><span class="toc_ref">6.2</span> <span class="toc_entry">start (0612)</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000098"><span class="toc_ref">6.3</span> <span class="toc_entry">main (1550)</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000099"><span class="toc_ref">6.4</span> <span class="toc_entry">Processes</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000100"><span class="toc_ref">6.5</span> <span class="toc_entry">Initialisation of proc[0]</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000101"><span class="toc_ref">6.6</span> <span class="toc_entry">The story continues ...</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000102"><span class="toc_ref">6.7</span> <span class="toc_entry">sched (1940)</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000103"><span class="toc_ref">6.8</span> <span class="toc_entry">sleep (2066)</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000104"><span class="toc_ref">6.9</span> <span class="toc_entry">swtch (2178)</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000105"><span class="toc_ref">6.10</span> <span class="toc_entry">main revisited</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0009.html"><span class="toc_ref">7</span> <span class="toc_entry">Processes</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0009.html#a0000000106"><span class="toc_ref">7.1</span> <span class="toc_entry">The Process</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000107"><span class="toc_ref">7.2</span> <span class="toc_entry">The proc Structure (0358)</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000108"><span class="toc_ref">7.3</span> <span class="toc_entry">The user Structure (0413)</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000109"><span class="toc_ref">7.4</span> <span class="toc_entry">The Per Process Data Area</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000110"><span class="toc_ref">7.5</span> <span class="toc_entry">The Segments</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000111"><span class="toc_ref">7.6</span> <span class="toc_entry">Execution of an Image</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000112"><span class="toc_ref">7.7</span> <span class="toc_entry">Kernel Mode Execution</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000113"><span class="toc_ref">7.8</span> <span class="toc_entry">User Mode Execution</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000114"><span class="toc_ref">7.9</span> <span class="toc_entry">An Example</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000115"><span class="toc_ref">7.10</span> <span class="toc_entry">Setting the Segmentation Registers</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000116"><span class="toc_ref">7.11</span> <span class="toc_entry">estabur (1650)</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000117"><span class="toc_ref">7.12</span> <span class="toc_entry">sureg (1739)</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000118"><span class="toc_ref">7.13</span> <span class="toc_entry">newproc (1826)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0010.html"><span class="toc_ref">8</span> <span class="toc_entry">Process Management</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0010.html#a0000000119"><span class="toc_ref">8.1</span> <span class="toc_entry">Process Switching</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000120"><span class="toc_ref">8.2</span> <span class="toc_entry">Interrupts</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000121"><span class="toc_ref">8.3</span> <span class="toc_entry">Program Swapping</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000122"><span class="toc_ref">8.4</span> <span class="toc_entry">Jobs</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000123"><span class="toc_ref">8.5</span> <span class="toc_entry">Assembler Procedures</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000124"><span class="toc_ref">8.6</span> <span class="toc_entry">savu (0725)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000125"><span class="toc_ref">8.7</span> <span class="toc_entry">retu (0740)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000126"><span class="toc_ref">8.8</span> <span class="toc_entry">aretu (0734)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000127"><span class="toc_ref">8.9</span> <span class="toc_entry">swtch (2178)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000128"><span class="toc_ref">8.10</span> <span class="toc_entry">setpri (2156)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000129"><span class="toc_ref">8.11</span> <span class="toc_entry">sleep (2066)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000130"><span class="toc_ref">8.12</span> <span class="toc_entry">wakeup (2113)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000131"><span class="toc_ref">8.13</span> <span class="toc_entry">setrun (2134)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000132"><span class="toc_ref">8.14</span> <span class="toc_entry">expand (2268)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000133"><span class="toc_ref">8.15</span> <span class="toc_entry">swtch revisited</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000134"><span class="toc_ref">8.16</span> <span class="toc_entry">Critical Sections</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0011.html"><span class="toc_ref"></span> <span class="toc_entry">Section Two</span></a>
+</li>
+<li class="">
+<a href="sect0012.html"><span class="toc_ref">9</span> <span class="toc_entry">Hardware Interrupts and Traps</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0012.html#a0000000135"><span class="toc_ref">9.1</span> <span class="toc_entry">Hardware Interrupts</span></a>
+</li>
+<li class="">
+<a href="sect0012.html#a0000000136"><span class="toc_ref">9.2</span> <span class="toc_entry">The Interrupt Vector</span></a>
+</li>
+<li class="">
+<a href="sect0012.html#a0000000137"><span class="toc_ref">9.3</span> <span class="toc_entry">Interrupt Handlers</span></a>
+</li>
+<li class="">
+<a href="sect0012.html#a0000000138"><span class="toc_ref">9.4</span> <span class="toc_entry">Priorities</span></a>
+</li>
+<li class="">
+<a href="sect0012.html#a0000000139"><span class="toc_ref">9.5</span> <span class="toc_entry">Interrupt Priorities</span></a>
+</li>
+<li class="">
+<a href="sect0012.html#a0000000140"><span class="toc_ref">9.6</span> <span class="toc_entry">Rules for Interrupt Handlers</span></a>
+</li>
+<li class="">
+<a href="sect0012.html#a0000000141"><span class="toc_ref">9.7</span> <span class="toc_entry">Traps</span></a>
+</li>
+<li class="">
+<a href="sect0012.html#a0000000142"><span class="toc_ref">9.8</span> <span class="toc_entry">Assembly Language ‘trap’</span></a>
+</li>
+<li class="">
+<a href="sect0012.html#a0000000143"><span class="toc_ref">9.9</span> <span class="toc_entry">Return</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0013.html"><span class="toc_ref">10</span> <span class="toc_entry">The Assembler “Trap” Routine</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0013.html#a0000000144"><span class="toc_ref">10.1</span> <span class="toc_entry">Sources of Traps and Interrupts</span></a>
+</li>
+<li class="">
+<a href="sect0013.html#a0000000145"><span class="toc_ref">10.2</span> <span class="toc_entry">fuibyte (0814), fuiword (0844)</span></a>
+</li>
+<li class="">
+<a href="sect0013.html#a0000000146"><span class="toc_ref">10.3</span> <span class="toc_entry">Interrupts</span></a>
+</li>
+<li class="">
+<a href="sect0013.html#a0000000147"><span class="toc_ref">10.4</span> <span class="toc_entry">call (0776)</span></a>
+</li>
+<li class="">
+<a href="sect0013.html#a0000000148"><span class="toc_ref">10.5</span> <span class="toc_entry">User Program Traps</span></a>
+</li>
+<li class="">
+<a href="sect0013.html#a0000000149"><span class="toc_ref">10.6</span> <span class="toc_entry">The Kernel Stack</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0014.html"><span class="toc_ref">11</span> <span class="toc_entry">Clock Interrupts</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0014.html#a0000000150"><span class="toc_ref">11.1</span> <span class="toc_entry">clock (3725)</span></a>
+</li>
+<li class="">
+<a href="sect0014.html#a0000000151"><span class="toc_ref">11.2</span> <span class="toc_entry">timeout (3845)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0015.html"><span class="toc_ref">12</span> <span class="toc_entry">Traps and System Calls</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0015.html#a0000000152"><span class="toc_ref">12.1</span> <span class="toc_entry">trap (2693)</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000153"><span class="toc_ref">12.2</span> <span class="toc_entry">Kernel Mode Traps</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000154"><span class="toc_ref">12.3</span> <span class="toc_entry">User Mode Traps</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000155"><span class="toc_ref">12.4</span> <span class="toc_entry">System Calls</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000156"><span class="toc_ref">12.5</span> <span class="toc_entry">System Call Handlers</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000157"><span class="toc_ref">12.6</span> <span class="toc_entry">The File ‘sysl.c’</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000158"><span class="toc_ref">12.7</span> <span class="toc_entry">exec (3020)</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000159"><span class="toc_ref">12.8</span> <span class="toc_entry">fork (3322)</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000160"><span class="toc_ref">12.9</span> <span class="toc_entry">sbreak (3354)</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000161"><span class="toc_ref">12.10</span> <span class="toc_entry">The Files ‘sys2.c’ and ‘sys3.c’</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000162"><span class="toc_ref">12.11</span> <span class="toc_entry">The File ‘sys4.c’</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0016.html"><span class="toc_ref">13</span> <span class="toc_entry">Software Interrupts</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0016.html#a0000000163"><span class="toc_ref">13.1</span> <span class="toc_entry">Anticipation</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000164"><span class="toc_ref">13.2</span> <span class="toc_entry">Causation</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000165"><span class="toc_ref">13.3</span> <span class="toc_entry">Effect</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000166"><span class="toc_ref">13.4</span> <span class="toc_entry">Tracing</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000167"><span class="toc_ref">13.5</span> <span class="toc_entry">Procedures</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000168"><span class="toc_ref">13.6</span> <span class="toc_entry">A. Anticipation</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000169"><span class="toc_ref">13.7</span> <span class="toc_entry">B. Causation</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000170"><span class="toc_ref">13.8</span> <span class="toc_entry">C. Effect</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000171"><span class="toc_ref">13.9</span> <span class="toc_entry">D. Tracing</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000172"><span class="toc_ref">13.10</span> <span class="toc_entry">ssig (3614)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000173"><span class="toc_ref">13.11</span> <span class="toc_entry">kill (3630)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000174"><span class="toc_ref">13.12</span> <span class="toc_entry">signal (3949)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000175"><span class="toc_ref">13.13</span> <span class="toc_entry">psignal (3963)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000176"><span class="toc_ref">13.14</span> <span class="toc_entry">issig (3991)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000177"><span class="toc_ref">13.15</span> <span class="toc_entry">psig (4043)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000178"><span class="toc_ref">13.16</span> <span class="toc_entry">core (4094)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000179"><span class="toc_ref">13.17</span> <span class="toc_entry">grow (4136)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000180"><span class="toc_ref">13.18</span> <span class="toc_entry">exit (3219)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000181"><span class="toc_ref">13.19</span> <span class="toc_entry">rexit (3205)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000182"><span class="toc_ref">13.20</span> <span class="toc_entry">wait (3270)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000183"><span class="toc_ref">13.21</span> <span class="toc_entry">Tracing</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000184"><span class="toc_ref">13.22</span> <span class="toc_entry">stop (4016)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000185"><span class="toc_ref">13.23</span> <span class="toc_entry">wait (3270) (continued)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000186"><span class="toc_ref">13.24</span> <span class="toc_entry">ptrace (4164)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000187"><span class="toc_ref">13.25</span> <span class="toc_entry">procxmt (4204)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0017.html"><span class="toc_ref">14</span> <span class="toc_entry">Program Swapping</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0017.html#a0000000188"><span class="toc_ref">14.1</span> <span class="toc_entry">Text Segments</span></a>
+</li>
+<li class="">
+<a href="sect0017.html#a0000000189"><span class="toc_ref">14.2</span> <span class="toc_entry">sched (1940)</span></a>
+</li>
+<li class="">
+<a href="sect0017.html#a0000000190"><span class="toc_ref">14.3</span> <span class="toc_entry">xswap (4368)</span></a>
+</li>
+<li class="">
+<a href="sect0017.html#a0000000191"><span class="toc_ref">14.4</span> <span class="toc_entry">xalloc (4433)</span></a>
+</li>
+<li class="">
+<a href="sect0017.html#a0000000192"><span class="toc_ref">14.5</span> <span class="toc_entry">xfree (4398)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0018.html"><span class="toc_ref">15</span> <span class="toc_entry">Introduction to Basic I/O</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0018.html#a0000000193"><span class="toc_ref">15.1</span> <span class="toc_entry">The File ‘buf.h’</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000194"><span class="toc_ref">15.2</span> <span class="toc_entry">devtab (4551)</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000195"><span class="toc_ref">15.3</span> <span class="toc_entry">The File ‘conf.h’</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000196"><span class="toc_ref">15.4</span> <span class="toc_entry">The File ‘conf.c’</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000197"><span class="toc_ref">15.5</span> <span class="toc_entry">System Generation</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000198"><span class="toc_ref">15.6</span> <span class="toc_entry">swap (5196)</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000199"><span class="toc_ref">15.7</span> <span class="toc_entry">Race Conditions</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000200"><span class="toc_ref">15.8</span> <span class="toc_entry">Reentrancy</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000201"><span class="toc_ref">15.9</span> <span class="toc_entry">For the Uninitiated</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000202"><span class="toc_ref">15.10</span> <span class="toc_entry">Additional Reading</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0019.html"><span class="toc_ref">16</span> <span class="toc_entry">The RK Disk Driver</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0019.html#a0000000203"><span class="toc_ref">16.1</span> <span class="toc_entry">The file ‘rk.c’</span></a>
+</li>
+<li class="">
+<a href="sect0019.html#a0000000204"><span class="toc_ref">16.2</span> <span class="toc_entry">rkstrategy (5389)</span></a>
+</li>
+<li class="">
+<a href="sect0019.html#a0000000205"><span class="toc_ref">16.3</span> <span class="toc_entry">rkaddr (5420)</span></a>
+</li>
+<li class="">
+<a href="sect0019.html#a0000000206"><span class="toc_ref">16.4</span> <span class="toc_entry">devstart (5096)</span></a>
+</li>
+<li class="">
+<a href="sect0019.html#a0000000207"><span class="toc_ref">16.5</span> <span class="toc_entry">rkintr (5451)</span></a>
+</li>
+<li class="">
+<a href="sect0019.html#a0000000208"><span class="toc_ref">16.6</span> <span class="toc_entry">iodone (5018)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0020.html"><span class="toc_ref">17</span> <span class="toc_entry">Buffer Manipulation</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0020.html#a0000000209"><span class="toc_ref">17.1</span> <span class="toc_entry">Flags</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000210"><span class="toc_ref">17.2</span> <span class="toc_entry">A Cache-like Memory</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000211"><span class="toc_ref">17.3</span> <span class="toc_entry">clrbuf (5038)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000212"><span class="toc_ref">17.4</span> <span class="toc_entry">incore (4899)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000213"><span class="toc_ref">17.5</span> <span class="toc_entry">getblk (4921)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000214"><span class="toc_ref">17.6</span> <span class="toc_entry">brelse (4869)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000215"><span class="toc_ref">17.7</span> <span class="toc_entry">binit (5055)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000216"><span class="toc_ref">17.8</span> <span class="toc_entry">bread (4754)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000217"><span class="toc_ref">17.9</span> <span class="toc_entry">breada (4773)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000218"><span class="toc_ref">17.10</span> <span class="toc_entry">bwrite (4809)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000219"><span class="toc_ref">17.11</span> <span class="toc_entry">bawrite (4856)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000220"><span class="toc_ref">17.12</span> <span class="toc_entry">bdwrite (4836)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000221"><span class="toc_ref">17.13</span> <span class="toc_entry">bflush (5229)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000222"><span class="toc_ref">17.14</span> <span class="toc_entry">physio (5259)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0021.html"><span class="toc_ref">18</span> <span class="toc_entry">File Access and Control</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0021.html#a0000000223"><span class="toc_ref">18.1</span> <span class="toc_entry">File Characteristics</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000224"><span class="toc_ref">18.2</span> <span class="toc_entry">System Calls</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000225"><span class="toc_ref">18.3</span> <span class="toc_entry">Control Tables</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000226"><span class="toc_ref">18.4</span> <span class="toc_entry">file (5507)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000227"><span class="toc_ref">18.5</span> <span class="toc_entry">inode (5659)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000228"><span class="toc_ref">18.6</span> <span class="toc_entry">Resources Required</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000229"><span class="toc_ref">18.7</span> <span class="toc_entry">Opening a File</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000230"><span class="toc_ref">18.8</span> <span class="toc_entry">creat (5781)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000231"><span class="toc_ref">18.9</span> <span class="toc_entry">openl (5804)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000232"><span class="toc_ref">18.10</span> <span class="toc_entry">open (5763)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000233"><span class="toc_ref">18.11</span> <span class="toc_entry">openl revisited</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000234"><span class="toc_ref">18.12</span> <span class="toc_entry">close (5846)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000235"><span class="toc_ref">18.13</span> <span class="toc_entry">closef (6643)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000236"><span class="toc_ref">18.14</span> <span class="toc_entry">iput (7344)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000237"><span class="toc_ref">18.15</span> <span class="toc_entry">Deletion of Files</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000238"><span class="toc_ref">18.16</span> <span class="toc_entry">Reading and Writing</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000239"><span class="toc_ref">18.17</span> <span class="toc_entry">rdwr (5731)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000240"><span class="toc_ref">18.18</span> <span class="toc_entry">readi (6221)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000241"><span class="toc_ref">18.19</span> <span class="toc_entry">writei</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000242"><span class="toc_ref">18.20</span> <span class="toc_entry">iomove (6364)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000243"><span class="toc_ref">18.21</span> <span class="toc_entry">bmap (6415)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000244"><span class="toc_ref">18.22</span> <span class="toc_entry">Leftovers</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0022.html"><span class="toc_ref">19</span> <span class="toc_entry">File Directories and Directory Files</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0022.html#a0000000245"><span class="toc_ref">19.1</span> <span class="toc_entry">The Directory Data Structure</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000246"><span class="toc_ref">19.2</span> <span class="toc_entry">Directory Files</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000247"><span class="toc_ref">19.3</span> <span class="toc_entry">namei (7518)</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000248"><span class="toc_ref">19.4</span> <span class="toc_entry">Some Comments</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000249"><span class="toc_ref">19.5</span> <span class="toc_entry">link (5909)</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000250"><span class="toc_ref">19.6</span> <span class="toc_entry">wdir (7477)</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000251"><span class="toc_ref">19.7</span> <span class="toc_entry">maknode (7455)</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000252"><span class="toc_ref">19.8</span> <span class="toc_entry">unlink (3510)</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000253"><span class="toc_ref">19.9</span> <span class="toc_entry">mknod (5952)</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000254"><span class="toc_ref">19.10</span> <span class="toc_entry">access (6746)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0023.html"><span class="toc_ref">20</span> <span class="toc_entry">File Systems</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0023.html#a0000000255"><span class="toc_ref">20.1</span> <span class="toc_entry">The ‘Super Block’ (5561)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000256"><span class="toc_ref">20.2</span> <span class="toc_entry">The ’mount’ table (0272)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000257"><span class="toc_ref">20.3</span> <span class="toc_entry">iinit (6922)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000258"><span class="toc_ref">20.4</span> <span class="toc_entry">Mounting</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000259"><span class="toc_ref">20.5</span> <span class="toc_entry">smount (6086)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000260"><span class="toc_ref">20.6</span> <span class="toc_entry">Notes</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000261"><span class="toc_ref">20.7</span> <span class="toc_entry">iget (7276)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000262"><span class="toc_ref">20.8</span> <span class="toc_entry">getfs (7167)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000263"><span class="toc_ref">20.9</span> <span class="toc_entry">update (7201)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000264"><span class="toc_ref">20.10</span> <span class="toc_entry">sumount (6144)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000265"><span class="toc_ref">20.11</span> <span class="toc_entry">Resource Allocation</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000266"><span class="toc_ref">20.12</span> <span class="toc_entry">alloc (6965)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000267"><span class="toc_ref">20.13</span> <span class="toc_entry">itrunc (7414)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000268"><span class="toc_ref">20.14</span> <span class="toc_entry">free (7000)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000269"><span class="toc_ref">20.15</span> <span class="toc_entry">iput (7344)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000270"><span class="toc_ref">20.16</span> <span class="toc_entry">ifree (7134)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000271"><span class="toc_ref">20.17</span> <span class="toc_entry">iupdat (7374)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0024.html"><span class="toc_ref">21</span> <span class="toc_entry">Pipes</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0024.html#a0000000272"><span class="toc_ref">21.1</span> <span class="toc_entry">pipe (7723)</span></a>
+</li>
+<li class="">
+<a href="sect0024.html#a0000000273"><span class="toc_ref">21.2</span> <span class="toc_entry">readp (7758)</span></a>
+</li>
+<li class="">
+<a href="sect0024.html#a0000000274"><span class="toc_ref">21.3</span> <span class="toc_entry">writep (7805)</span></a>
+</li>
+<li class="">
+<a href="sect0024.html#a0000000275"><span class="toc_ref">21.4</span> <span class="toc_entry">plock (7862)</span></a>
+</li>
+<li class="">
+<a href="sect0024.html#a0000000276"><span class="toc_ref">21.5</span> <span class="toc_entry">prele (7882)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0025.html"><span class="toc_ref">22</span> <span class="toc_entry">Character Oriented Special Files</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0025.html#a0000000277"><span class="toc_ref">22.1</span> <span class="toc_entry">LP11 Line Printer Driver</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000278"><span class="toc_ref">22.2</span> <span class="toc_entry">lpopen (8850)</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000279"><span class="toc_ref">22.3</span> <span class="toc_entry">Notes</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000280"><span class="toc_ref">22.4</span> <span class="toc_entry">lpoutput (8986)</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000281"><span class="toc_ref">22.5</span> <span class="toc_entry">lpstart (8967)</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000282"><span class="toc_ref">22.6</span> <span class="toc_entry">lpinit(8976)</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000283"><span class="toc_ref">22.7</span> <span class="toc_entry">lpwrite (8870)</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000284"><span class="toc_ref">22.8</span> <span class="toc_entry">Discussion</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000285"><span class="toc_ref">22.9</span> <span class="toc_entry">lpcanon (8879)</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000286"><span class="toc_ref">22.10</span> <span class="toc_entry">For idle readers: A suggestion</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000287"><span class="toc_ref">22.11</span> <span class="toc_entry">PC-11 Paper Tape Reader/Punch Driver</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0026.html"><span class="toc_ref">23</span> <span class="toc_entry">Character Handling</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0026.html#a0000000288"><span class="toc_ref">23.1</span> <span class="toc_entry">cinit (8234)</span></a>
+</li>
+<li class="">
+<a href="sect0026.html#a0000000289"><span class="toc_ref">23.2</span> <span class="toc_entry">getc (0930)</span></a>
+</li>
+<li class="">
+<a href="sect0026.html#a0000000290"><span class="toc_ref">23.3</span> <span class="toc_entry">putc (0967)</span></a>
+</li>
+<li class="">
+<a href="sect0026.html#a0000000291"><span class="toc_ref">23.4</span> <span class="toc_entry">Character Sets</span></a>
+</li>
+<li class="">
+<a href="sect0026.html#a0000000292"><span class="toc_ref">23.5</span> <span class="toc_entry">Control Characters</span></a>
+</li>
+<li class="">
+<a href="sect0026.html#a0000000293"><span class="toc_ref">23.6</span> <span class="toc_entry">Graphic Characters</span></a>
+</li>
+<li class="">
+<a href="sect0026.html#a0000000294"><span class="toc_ref">23.7</span> <span class="toc_entry">Graphic Character Sets</span></a>
+</li>
+<li class="">
+<a href="sect0026.html#a0000000295"><span class="toc_ref">23.8</span> <span class="toc_entry">maptab (8117)</span></a>
+</li>
+<li class="">
+<a href="sect0026.html#a0000000296"><span class="toc_ref">23.9</span> <span class="toc_entry">partab (7947)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0027.html"><span class="toc_ref">24</span> <span class="toc_entry">Interactive Terminals</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0027.html#a0000000297"><span class="toc_ref">24.1</span> <span class="toc_entry">The ’tty’ Structure (7926)</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000298"><span class="toc_ref">24.2</span> <span class="toc_entry"> Interactive Terminals</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000299"><span class="toc_ref">24.3</span> <span class="toc_entry">Initialisation</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000300"><span class="toc_ref">24.4</span> <span class="toc_entry">stty (8183)</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000301"><span class="toc_ref">24.5</span> <span class="toc_entry">sgtty (8201)</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000302"><span class="toc_ref">24.6</span> <span class="toc_entry">klsgtty (8090)</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000303"><span class="toc_ref">24.7</span> <span class="toc_entry">tysty (8577)</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000304"><span class="toc_ref">24.8</span> <span class="toc_entry">The DL11/KL11 Terminal Device Handler</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000305"><span class="toc_ref">24.9</span> <span class="toc_entry">Device Registers</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000306"><span class="toc_ref">24.10</span> <span class="toc_entry">UNIBUS Addresses</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000307"><span class="toc_ref">24.11</span> <span class="toc_entry">Software Considerations</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000308"><span class="toc_ref">24.12</span> <span class="toc_entry">Interrupt Vector Addresses</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000309"><span class="toc_ref">24.13</span> <span class="toc_entry">Source Code</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000310"><span class="toc_ref">24.14</span> <span class="toc_entry">klopen (8023)</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000311"><span class="toc_ref">24.15</span> <span class="toc_entry">klclose (8055)</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000312"><span class="toc_ref">24.16</span> <span class="toc_entry">klxint (8070)</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000313"><span class="toc_ref">24.17</span> <span class="toc_entry">klrint (8078)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0028.html"><span class="toc_ref">25</span> <span class="toc_entry">The File “tty.c”</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0028.html#a0000000314"><span class="toc_ref">25.1</span> <span class="toc_entry">flushtty (8252)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000315"><span class="toc_ref">25.2</span> <span class="toc_entry">wflushtty (8217)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000316"><span class="toc_ref">25.3</span> <span class="toc_entry">Character Input</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000317"><span class="toc_ref">25.4</span> <span class="toc_entry">ttread (8535)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000318"><span class="toc_ref">25.5</span> <span class="toc_entry">canon (8274)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000319"><span class="toc_ref">25.6</span> <span class="toc_entry">Notes</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000320"><span class="toc_ref">25.7</span> <span class="toc_entry">ttyinput (8333)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000321"><span class="toc_ref">25.8</span> <span class="toc_entry">Character Output – ttwrite (8550)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000322"><span class="toc_ref">25.9</span> <span class="toc_entry">ttstart</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000323"><span class="toc_ref">25.10</span> <span class="toc_entry">ttrstrt (8486)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000324"><span class="toc_ref">25.11</span> <span class="toc_entry">ttyoutput (8373)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000325"><span class="toc_ref">25.12</span> <span class="toc_entry">Terminals with a restricted character set</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000326"><span class="toc_ref">25.13</span> <span class="toc_entry">A. The test for ’TTLOWAT’ (Line 8074)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000327"><span class="toc_ref">25.14</span> <span class="toc_entry">B. Inactive Terminals</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000328"><span class="toc_ref">25.15</span> <span class="toc_entry">Well, that’s all, folks ...</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0029.html"><span class="toc_ref">26</span> <span class="toc_entry">Suggested Exercises</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0029.html#a0000000329"><span class="toc_ref">26.1</span> <span class="toc_entry">Section One</span></a>
+</li>
+<li class="">
+<a href="sect0029.html#a0000000330"><span class="toc_ref">26.2</span> <span class="toc_entry">Section Two</span></a>
+</li>
+<li class="">
+<a href="sect0029.html#a0000000331"><span class="toc_ref">26.3</span> <span class="toc_entry">Section Three</span></a>
+</li>
+<li class="">
+<a href="sect0029.html#a0000000332"><span class="toc_ref">26.4</span> <span class="toc_entry">Section Four</span></a>
+</li>
+<li class="">
+<a href="sect0029.html#a0000000333"><span class="toc_ref">26.5</span> <span class="toc_entry">General</span></a>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+<div class="content">
+<div class="content-wrapper">
+<div class="main-text">
+<h1 class="bilingual" id="a0000000004" title="2 Fundamentals">2 Podstawy</h1>
+<p class="bilingual" title="UNIX runs on the larger models of the PDP11 series of computers manufactured by Digital Equipment Corporation. This chapter provides a brief summary of certain selected features of these computers with particular reference to the PDP11/40.">UNIX działa na większych modelach komputerów z serii PDP11 produkowanych przez firmę Digital Equipment Corporation. W tym rozdziale przedstawiono krótkie podsumowanie niektórych wybranych funkcji tych komputerów, ze szczególnym uwzględnieniem PDP11/40.</p>
+<p class="bilingual" title="If the reader has not previously made the acquaintance of the PDP11 series then he is directed forthwith to the “PDP11 Processor Handbook”, published by DEC.">Jeśli czytelnik nie miał wcześniej styczności z serią PDP11, zostaje niezwłocznie przekierowany do „Podręcznika procesora PDP11”, wydanego przez DEC.</p>
+<p class="bilingual" title="A PDP11 computer consists of a processor (also called a CPU connected to one or more memory storage units and peripheral controllers via a bidirectional parallel communication line called the “Unibus”.">Komputer PDP11 składa się z procesora (zwanego także procesorem) podłączonego do jednej lub większej liczby jednostek pamięci i kontrolerów peryferyjnych za pośrednictwem dwukierunkowej równoległej linii komunikacyjnej zwanej „Unibusem”.</p>
+<h2 class="bilingual" id="a0000000041" title="2.1 The Processor">2.1 Procesor</h2>
+<p class="bilingual" title="The processor, which is designed around a sixteen bit word length for instructions, data and program addresses, incorporates a number of high speed registers.">Procesor, zaprojektowany z myślą o długości słowa szesnastobitowego dla instrukcji, danych i adresów programów, zawiera szereg szybkich rejestrów.</p>
+<h2 class="bilingual" id="a0000000042" title="2.2 Processor Status Word">2.2 Słowo stanu procesora</h2>
+<p class="bilingual" title="This sixteen bit register has subfields which are interpreted as follows:">Ten szesnastobitowy rejestr ma podpola, które są interpretowane w następujący sposób:</p>
+<table class="tabular">
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p><b class="bf">bits</b> </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="description"> <b class="bf">opis</b> </p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="14,15">14,15</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="current mode (00 = kernel;)">bieżący tryb (00 = jądro;)</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="12,13">12,13</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="previous mode (11 = user;)">poprzedni tryb (11 = użytkownik;)</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="5,6,7">5,6,7</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="processor priority (range 0..7)">priorytet procesora (zakres 0..7)</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p>4 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="trap bit">pułapka</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p>3 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="N, set if the previous">N, ustaw, jeśli poprzedni</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="result was negative">wynik był negatywny</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p>2 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="Z, set if the previous">Z, ustaw jeśli poprzedni</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="result was zero">wynik był zerowy</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p>1 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="V, set if the previous">V, ustaw, jeśli poprzedni</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="result gave an overflow">wynik spowodował przepełnienie</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p>0 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="C, set if the previous">C, ustaw, jeśli poprzedni</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="operation gave a carry">operacja dała skutek</p>
+</td>
+</tr>
+</table>
+<p class="bilingual" title="The processor can operate in two different modes: kernel and user. Kernel mode is the more privileged of the two and is reserved by the operating system for its own use. The choice of mode determines:">Procesor może pracować w dwóch różnych trybach: jądra i użytkownika. Tryb jądra jest bardziej uprzywilejowany i jest zarezerwowany przez system operacyjny do własnego użytku. Wybór trybu określa:</p>
+<ul class="itemize">
+<li class="bilingual" title="The set of memory management segmentation registers which is used to translate program virtual addresses to physical addresses;"><p class="bilingual" title="Zbiór rejestrów segmentacji zarządzania pamięcią, który służy do translacji adresów wirtualnych programu na adresy fizyczne;">Zbiór rejestrów segmentacji pamięci, który służy do translacji adresów wirtualnych programu na adres;</p>
+</li>
+<li class="bilingual" title="The actual register used as r6, the “stack pointer”;"><p class="bilingual" title="Rzeczywisty rejestr używany jako r6, „wskaźnik stosu”;">Rzeczywisty rejestr używany jako r6, „wskaźnik stosu”;</p>
+</li>
+<li class="bilingual" title="Whether certain instructions such as “halt” will be obeyed."><p class="bilingual" title="Czy określone instrukcje, takie jak „zatrzymaj”, będą przestrzegane.">Czytniki instrukcji, takie jak „zatrzymaj”, należy przestrzegać.</p>
+</li>
+</ul>
+<h2 class="bilingual" id="a0000000043" title="2.3 General Registers">2.3 Rejestry ogólne</h2>
+<p class="bilingual" title="The processor incorporates a number of sixteen bit registers of which eight are accessible at any time as “general registers”. These are known as r0, r1, r2, r3, r4, r5, r6 and r7.">Procesor zawiera szesnaście rejestrów bitowych, z których osiem jest dostępnych w dowolnym momencie jako „rejestry ogólne”. Są one znane jako r0, r1, r2, r3, r4, r5, r6 i r7.</p>
+<p class="bilingual" title="The first six of the general registers are available for use as accumulators, address pointers or index registers. The convention in UNIX for the use of these registers is as follows:">Pierwsze sześć rejestrów ogólnych jest dostępnych do wykorzystania jako akumulatory, wskaźniki adresowe lub rejestry indeksowe. Konwencja w systemie UNIX dotycząca korzystania z tych rejestrów jest następująca:</p>
+<dl class="description">
+<dt class="bilingual" title="r0, r1">r0, r1</dt>
+<dd class="bilingual" title="are used as temporary accumulators during expression evaluation, to return results from a procedure, and in some cases to communicate actual parameters during a procedure call;"><p class="bilingual" title="są używane jako tymczasowe akumulatory podczas oceny wyrażeń, do zwracania wyników procedury, a w niektórych przypadkach do przekazywania rzeczywistych parametrów podczas wywołania procedury;">są stosowane jako tymczasowe akumulatory podczas oceny, do zwracania wyników procedur, a także do przestrzegania parametrów podczas stosowania procedury;</p>
+</dd>
+<dt class="bilingual" title="r2, r3, r4">r2, r3, r4</dt>
+<dd class="bilingual" title="are used for local variables during procedure execution. Their values are almost always stored upon procedure entry, and restored upon procedure exit;"><p class="bilingual" title="są używane jako zmienne lokalne podczas wykonywania procedury. Ich wartości są prawie zawsze przechowywane przy wejściu do procedury i przywracane po wyjściu z procedury;">są użytkownikami lokalnymi podczas wykonywania procedur. Ich wartości są prawie zawsze dostępne przy wejściu do procedury i przywracaniu po włączeniu procedury;</p>
+</dd>
+<dt>r5</dt>
+<dd class="bilingual" title="is used as the head pointer to a “dynamic chain” of procedure activation records stored in the current stack. It is referred to as the “environment pointer”."><p class="bilingual" title="jest używany jako wskaźnik nagłówka do „dynamicznego łańcucha” rekordów aktywacji procedur przechowywanych na bieżącym stosie. Nazywa się go „wskaźnikiem środowiska”.">jest używany jako wskaźnik nagłówka do „dynamicznego użycia” rekordów ochronnych procedury przechowywanej na stosie. Nazywa się go „wskaźnikiem środowiska”.</p>
+</dd>
+</dl>
+<p class="bilingual" title="The last two of the “general registers” do have a special significance and are to all intents, “special purpose”:">Ostatnie dwa z „rejestrów ogólnych” mają szczególne znaczenie i są w zasadzie „specjalnym przeznaczeniem”:</p>
+<dl class="description">
+<dt>r6</dt>
+<dd class="bilingual" title="(also known as “sp”) is used as the stack pointer. The PDP11/40 processor incorporates two separate registers which may be used as “sp”, depending on whether the processor is in kernel or user mode. No other one of the general registers is duplicated in this way;"><p class="bilingual" title="(znany również jako „sp”) jest używany jako wskaźnik stosu. Procesor PDP11/40 zawiera dwa oddzielne rejestry, których można używać jako „sp”, w zależności od tego, czy procesor znajduje się w trybie jądra, czy użytkownika. Żaden inny z rejestrów ogólnych nie jest powielany w ten sposób;">(znany również jako „sp”) jest używany jako wskaźnik stosu. Procesor PDP11/40 zawiera dwa dane rejestry, które można uwzględnić jako „sp”, skutki od tego, czy procesor pojawia się w wyniku ataku, czy użytkownika. Żaden inny z rejestrów ogólnych nie jest powielany w ten sposób;</p>
+</dd>
+<dt>r7</dt>
+<dd class="bilingual" title="(also known as “pc”) is used as the program instruction address register."><p class="bilingual" title="(znany również jako „pc”) jest używany jako rejestr adresowy instrukcji programu.">(znany również jako „pc”) jest używany jako rejestr adresowy programu.</p>
+</dd>
+</dl>
+<h2 class="bilingual" id="a0000000044" title="2.4 Instruction Set">2.4 Zestaw instrukcji</h2>
+<p class="bilingual" title="The PDP11 instruction set includes double, single and zero operand instructions. Instruction length is usually one word, with some instructions being extended to two or three words with additional addressing information.">Zestaw instrukcji PDP11 zawiera instrukcje podwójne, pojedyncze i zerowe. Długość instrukcji wynosi zwykle jedno słowo, a niektóre instrukcje są wydłużane do dwóch lub trzech słów z dodatkowymi informacjami adresowymi.</p>
+<p class="bilingual" title="With single operand instructions, the operand is usually called the “destination”; with double operand instructions, the two operands are called the “source” and “destination”. The various modes of addressing are described later.">W przypadku instrukcji jednoargumentowych, operand ten nazywany jest zwykle „miejscem docelowym”; w przypadku instrukcji z podwójnym argumentem te dwa operandy nazywane są „źródłem” i „docelowym”. Różne sposoby adresowania opisano później.</p>
+<p class="bilingual" title="The following instructions have been used in the file “m40.s” i.e. the file of assembly language support routines for use with the 11/40 processor. Note that N, Z, V and C are the condition codes i.e. bits in the processor status word (“ps”), and that these are set as side effects of many instructions besides just “bit”, “cmp” and “tst” (whose stated function is to set the condition codes).">W pliku „m40.s” zastosowano poniższe instrukcje tj. plik procedur obsługi języka asemblera do użytku z procesorem 11/40. Należy pamiętać, że N, Z, V i C to kody stanu, tj. bity w słowie statusowym procesora („ps”) i że są one ustawiane jako skutki uboczne wielu instrukcji, oprócz samych „bit”, „cmp” i „tst” (których funkcją jest ustawianie kodów warunków).</p>
+<dl class="description">
+<dt>adc</dt>
+<dd class="bilingual" title="Add the contents of the C bit to the destination;"><p class="bilingual" title="Dodaj zawartość bitu C do miejsca docelowego;">Dodaj zawartość bitu C do miejsc docelowych;</p>
+</dd>
+<dt>add</dt>
+<dd class="bilingual" title="Add the source to the destination;"><p class="bilingual" title="Dodaj źródło do miejsca docelowego;">Dodaj źródło do miejsca docelowego;</p>
+</dd>
+<dt>ash</dt>
+<dd class="bilingual" title="Shift the contents of the defined register left the number of times specified by the shift count. (A negative value implies a right shift.);"><p class="bilingual" title="Przesuń zawartość zdefiniowanego rejestru w lewo tyle razy, ile wynosi liczba przesunięć. (Wartość ujemna oznacza przesunięcie w prawo.);">Przesuń zawartość rejestru w lewo tyle razy, ile wynosi liczba przesunięć. (Wartość ujemna oznacza przesunięcie w prawo.);</p>
+</dd>
+<dt>ashc</dt>
+<dd class="bilingual" title="Similar to “ash” except that two registers are involved;"><p class="bilingual" title="Podobny do „popiołu”, z tą różnicą, że w grę wchodzą dwa rejestry;">Podobne do „popiołu”, z tą różnicą, że w grze wprowadzającej dwa rejestry;</p>
+</dd>
+<dt>asl</dt>
+<dd class="bilingual" title="Shift all bits one place to the left. Bit 0 becomes 0 and bit 15 is loaded into C;"><p class="bilingual" title="Przesuń wszystkie bity o jedno miejsce w lewo. Bit 0 przyjmuje wartość 0, a bit 15 jest ładowany do C;">Przesuń wszystkie bity o jedno miejsce w lewo. Bit 0 przyjmuje wartość 0, bit 15 jest ładowany do C;</p>
+</dd>
+<dt>asr</dt>
+<dd class="bilingual" title="Shift all bits one place to the right. Bit 15 is replicated and bit 0 is loaded into C;"><p class="bilingual" title="Przesuń wszystkie bity o jedno miejsce w prawo. Bit 15 jest replikowany, a bit 0 jest ładowany do C;">Przesuń wszystkie bity o jedno miejsce w prawo. Bit 15 jest replikowany, bit 0 jest ładowany do C;</p>
+</dd>
+<dt>beq</dt>
+<dd class="bilingual" title="Branch if eaual, i.e. if Z = l;"><p class="bilingual" title="Oddział jeśli eaual, tj. jeśli Z = l;">Oddział jeśli eual, tj. jeśli Z = l;</p>
+</dd>
+<dt>bge</dt>
+<dd class="bilingual" title="Branch if greater than or equal to, i.e. if N = V;"><p class="bilingual" title="Oddział, jeśli jest większy lub równy, tj. jeśli N = V;">Oddział, jeśli jest większy lub równy, tj. jeśli<br/>N = V;</p>
+</dd>
+<dt>bhi</dt>
+<dd class="bilingual" title="Branch if higher, i.e if C = 0 and Z = 0;"><p class="bilingual" title="Rozgałęzienie, jeśli jest wyższe, tj. jeśli C = 0 i Z = 0;">Rozgałęzienie, jeśli jest wysokie, tj. jeśli C = 0 i Z = 0;</p>
+</dd>
+<dt>bhis</dt>
+<dd class="bilingual" title="Branch if higher or the same, i.e. if C = 0;"><p class="bilingual" title="Rozgałęzienie, jeśli jest wyższe lub takie samo, tj. jeśli C = 0;">Rozgałęzienie, jeśli jest wysokie lub takie samo, tj. jeśli C = 0;</p>
+</dd>
+<dt>bic</dt>
+<dd class="bilingual" title="Clear each bit to zero in the destination that corresponds to a non-zero bit in the source;"><p class="bilingual" title="Wyczyść każdy bit do zera w miejscu docelowym, który odpowiada niezerowemu bitowi w źródle;">Wyczyść każdy bit do zera w miejscu wystąpienia, który odpowiada niezerowemu bitowi w źródle;</p>
+</dd>
+<dt>bis</dt>
+<dd class="bilingual" title="Perform an “inclusive or” of source and destination and store the result in the destination;"><p class="bilingual" title="Wykonaj „włącznie lub” źródła i miejsca docelowego i zapisz wynik w miejscu docelowym;">Wykonaj „włącznie lub” źródła i miejsca docelowego i zapisz wynik w miejscu docelowym;</p>
+</dd>
+<dt>bit</dt>
+<dd class="bilingual" title="Perform a logical “and” of the source and destination to set the condition codes;"><p class="bilingual" title="Wykonaj logiczne „i” źródła i miejsca docelowego, aby ustawić kody warunków;">Wykonaj logicznie „i” źródła i miejsca docelowego, aby ustawić kody warunków;</p>
+</dd>
+<dt>ble</dt>
+<dd class="bilingual" title="Branch if greater than or equal to, i.e if Z = 1 or N = V;"><p class="bilingual" title="Gałąź, jeśli jest większa lub równa, tj. jeśli Z = 1 lub N = V;">Gałąź, jeśli jest większy lub równy, tj. jeśli Z = 1 lub N = V;</p>
+</dd>
+<dt>blo</dt>
+<dd class="bilingual" title="Branch if lower (than zero), if C = l;"><p class="bilingual" title="Rozgałęzienie, jeśli jest mniejsze (od zera), jeśli C = l;">Rozgałęzienie, jeśli jest mniejsze (od zera), jeśli C = l;</p>
+</dd>
+<dt>bne</dt>
+<dd class="bilingual" title="Branch if not equal (to zero), i.e. if Z = 0;"><p class="bilingual" title="Rozgałęzienie, jeśli nie jest równe (zero), tj. jeśli Z = 0;">Rozgałęzienie, jeśli nie jest równe (zero), tj. jeśli Z = 0;</p>
+</dd>
+<dt>br</dt>
+<dd class="bilingual" title="Branch to a location within the range (. -128, . +127) where “.” is the current location;"><p class="bilingual" title="Oddział do lokalizacji w zakresie (. -128, . +127) gdzie „.” to bieżąca lokalizacja;">Oddział do lokalizacji w zakresie (. –128,<br/>. +127) gdzie „.” do bieżąca lokalizacja;</p>
+</dd>
+<dt>clc</dt>
+<dd class="bilingual" title="Clear C;"><p class="bilingual" title="Wyczyść C;">Wyczyść C;</p>
+</dd>
+<dt>clr</dt>
+<dd class="bilingual" title="Clear destination to zero;"><p class="bilingual" title="Wyczyść miejsce docelowe do zera;">Wyczyść miejsce docelowe do zera;</p>
+</dd>
+<dt>cmp</dt>
+<dd class="bilingual" title="Compare the source and destination to set the condition codes. N is set if the source value is less than the destination value;"><p class="bilingual" title="Porównaj źródło i miejsce docelowe, aby ustawić kody stanu. N jest ustawiane, jeśli wartość źródłowa jest mniejsza niż wartość docelowa;">Porównaj źródło i miejsce docelowe, aby ustawić kody stanu. N jest ustawiane, jeśli wartość źródła jest dostępna niż wartość docelowa;</p>
+</dd>
+<dt>dec</dt>
+<dd class="bilingual" title="Subtract one from the contents of the destination;"><p class="bilingual" title="Odejmij jeden od zawartości miejsca docelowego;">Odejmij jeden od zawartości miejsca docelowego;</p>
+</dd>
+<dt>div</dt>
+<dd class="bilingual" title="The 32 bit two’s complement integer stored in rn and r(n+l) (where n is even) is divided by the source operand. The quotient is left in rn, and the remainder in r(n+l);"><p class="bilingual" title="32-bitowa liczba całkowita z uzupełnieniem do dwójki przechowywana w rn i r(n+l) (gdzie n jest parzyste) jest dzielona przez operand źródłowy. Iloraz pozostawia się w rn, a resztę w r(n+l);">32-bitowa liczba całkowita z dwójki przechowywana w rn i r(n+l) (gdzie n jest parzyste) jest dzielona przez operand źródłowy. Iloraz powstał w rn, a pozostałości w r(n+l);</p>
+</dd>
+<dt>inc</dt>
+<dd class="bilingual" title="Add one to the contents of the destination;"><p class="bilingual" title="Dodaj jeden do zawartości miejsca docelowego;">Dodaj jeden do zawartości miejsc docelowych;</p>
+</dd>
+<dt>jmp</dt>
+<dd class="bilingual" title="Jump to the destination;"><p class="bilingual" title="Skocz do celu;">Skocz do celu;</p>
+</dd>
+<dt>jsr</dt>
+<dd class="bilingual" title="Jump to subroutine. Register values are shuffled as follows: pc, rn, –(sp) = dest., pc, rn"><p class="bilingual" title="Przejdź do podprogramu. Wartości rejestrów są tasowane w następujący sposób:">Przejdź do podprogramu. Rejestry wartości są tasowane w sposób:</p>
+<p class="bilingual" title="szt., rn, –(sp) = docel., szt., rn">szt., rn, –(sp) = docel., szt., rn</p>
+</dd>
+<dt>mfpi</dt>
+<dd class="bilingual" title="Push onto the current stack the value of the designated word in the “previous” address space;"><p class="bilingual" title="Wciśnij na bieżący stos wartość wyznaczonego słowa z „poprzedniej” przestrzeni adresowej;">Wchodzi w posiadanie wartości słowa z „poprzedniej” przestrzeni adresowej;</p>
+</dd>
+<dt>mov</dt>
+<dd class="bilingual" title="Copy the source value to the destination;"><p class="bilingual" title="Skopiuj wartość źródłową do miejsca docelowego;">Skopiuj wartość źródłową do miejsca docelowego;</p>
+</dd>
+<dt>mtpi</dt>
+<dd class="bilingual" title="Pop the current stack and store the value in the designated word in the “previous” address space;"><p class="bilingual" title="Otwórz bieżący stos i zapisz wartość w wyznaczonym słowie w „poprzedniej” przestrzeni adresowej;">Otwórz dostęp i zapisz wartość w słowie słowie w „poprzedniej” przestrzeni adresowej;</p>
+</dd>
+<dt>mul</dt>
+<dd class="bilingual" title="Multiply the contents of rn and the source. If n is even, the product is left in rn and r(n+l);"><p class="bilingual" title="Pomnóż zawartość rn i źródło. Jeśli n jest parzyste, iloczyn pozostaje w rn i r(n+l);">Pomnóż zawartość rn i źródło. Jeśli n jest parzyste, iloczyn pozostaje w rn i r(n+l);</p>
+</dd>
+<dt class="bilingual" title="reset">nastawić</dt>
+<dd class="bilingual" title="Set the INIT line on the Unibus for 10 milliseconds. This will have the effect of reinitialising all the device controllers;"><p class="bilingual" title="Ustaw linię INIT na Unibusie na 10 milisekund. Spowoduje to ponowną inicjalizację wszystkich kontrolerów urządzeń;">Ustawia prędkość INIT na Unibusie na 10 milisekund. Spowoduje to usunięcie inicjalizacji wszystkich kontrolerów urządzeń;</p>
+</dd>
+<dt>ror</dt>
+<dd class="bilingual" title="Rotate all bits of the destination one place to the right. Bit 0 is loaded into C, and the previous value of C is loaded into bit 15;"><p class="bilingual" title="Obróć wszystkie bity miejsca docelowego o jedno miejsce w prawo. Bit 0 jest ładowany do C, a poprzednia wartość C jest ładowana do bitu 15;">Obróć wszystkie bity miejsca docelowego o jedno miejsce w prawo. Bit 0 jest ładowany do C, a poprzednia wartość C jest ładowana do bitu 15;</p>
+</dd>
+<dt>rts</dt>
+<dd class="bilingual" title="Return from subroutine. Reload pc from rn, and reload rn from the stack;"><p class="bilingual" title="Powrót z podprogramu. Załaduj ponownie komputer z rn i ponownie załaduj rn ze stosu;">Powrót z podprogramu. Załaduj ponownie komputer z rn i ponownie załaduj rn ze stosu;</p>
+</dd>
+<dt>rtt</dt>
+<dd class="bilingual" title="Return from interrupt or trap. Reload both pc and ps from the stack;"><p class="bilingual" title="Powrót z przerwania lub pułapki. Załaduj ponownie komputer i ps ze stosu;">Powrót z przerwania lub pułapek. Załaduj ponownie komputer i ps ze stosu;</p>
+</dd>
+<dt>sbc</dt>
+<dd class="bilingual" title="Subtract the carry bit from the destination;"><p class="bilingual" title="Odejmij bit przeniesienia od miejsca docelowego;">Odejmij trochę miejsca docelowego;</p>
+</dd>
+<dt>sob</dt>
+<dd class="bilingual" title="Subtract one from the designated register. If the result is not zero, branch back “offset” words;"><p class="bilingual" title="Odejmij jeden od wyznaczonego rejestru. Jeśli wynik nie wynosi zero, odgałęzij słowa „offsetowe”;">Odejmij jeden z krajowych rejestrów. Jeśli wynik nie wynosi zero, odgałęzij słowa „offsetowe”;</p>
+</dd>
+<dt>sub</dt>
+<dd class="bilingual" title="Subtract the source from the destination;"><p class="bilingual" title="Odejmij źródło od celu;">Odejmij źródło od celu;</p>
+</dd>
+<dt>swab</dt>
+<dd class="bilingual" title="Exchange the high and low order bytes in the destination;"><p class="bilingual" title="Zamień bajty o najwyższym i najniższym znaczeniu w miejscu docelowym;">Zamień bajty o następstwa i znaczenie w miejscu usunięcia;</p>
+</dd>
+<dt>tst</dt>
+<dd class="bilingual" title="Set the condition codes, N and Z, according to the contents of the destination;"><p class="bilingual" title="Ustaw kody stanu N i Z zgodnie z zawartością miejsca docelowego;">Ustaw kody stanu N i Z zgodnie z zawartością miejsca docelowego;</p>
+</dd>
+<dt>wait</dt>
+<dd class="bilingual" title="Idle the processor and release the Unibus until a hardware interrupt occurs."><p class="bilingual" title="Wyłącz procesor i zwolnij Unibus do momentu wystąpienia przerwania sprzętowego.">Wyłącz procesor i zwolnij Unibus do momentu wystąpienia przerwania sprzętowego.</p>
+</dd>
+</dl>
+<p class="bilingual" title="The “byte” version of the following instructions are used in the file “m40.s”, as well as the “word” versions described above:">W pliku „m40.s” zastosowano „bajtową” wersję poniższych instrukcji, a także opisane powyżej wersje „słowo”:</p>
+<div class="tabbing">
+<object data="images/img-0003.svg" style="width: &amp;images/img-0003.svg-width;&amp;em;; height: &amp;images/img-0003.svg-height;&amp;em;;" type="image/svg+xml">
+<img alt="\begin{tabbing} \hspace{2cm} \=  bis \hspace{2cm} \=  inc \\ \&gt;  clr \&gt;  mov \\ \&gt;  cmp \&gt;  tst \\ \end{tabbing}" class="tabbing gen" src="images/img-0003.png" style="width: &amp;images/img-0003.png-width;&amp;px;; height: &amp;images/img-0003.png-height;&amp;px;"/>
+</object>
+</div>
+<h2 class="bilingual" id="a0000000045" title="2.5 Addressing Modes">2.5 Tryby adresowania</h2>
+<p class="bilingual" title="Much of the novelty and complexity of the PDP11 instruction set lies in the variety of addressing modes which may be used for defining the source and destination operands.">Duża część nowości i złożoności zestawu instrukcji PDP11 polega na różnorodności trybów adresowania, które można wykorzystać do zdefiniowania operandów źródłowych i docelowych.</p>
+<p class="bilingual" title="The addressing modes which are used in “m40.s” are described below.">Poniżej opisano tryby adresowania stosowane w „m40.s”.</p>
+<dl class="description">
+<dt class="bilingual" title="Register Mode:">Tryb rejestracji:</dt>
+<dd class="bilingual" title="The operand resides in one of the general registers, e.g. clr r0
+    mov rl,r0
+    add r4,r2 In the following modes, the designated register contains an address value which is used to locate the operand."><p class="bilingual" title="Operand znajduje się w jednym z rejestrów ogólnych, np.">Operand znajduje się w jednym z rejestrów ogólnych, np.</p>
+<pre class="verbatim">
+    clr r0
+    mov rl,r0
+    add r4,r2
+</pre>
+<p class="bilingual" title="W poniższych trybach wyznaczony rejestr zawiera wartość adresu, która służy do zlokalizowania argumentu.">W trybie wyznaczony rejestr zawiera wartość adresu, która służy do przechowywania argumentów.</p>
+</dd>
+<dt class="bilingual" title="Register Deferred Mode:">Zarejestruj tryb odroczony:</dt>
+<dd class="bilingual" title="The register contains the address of the operand, e.g. inc (rl)
+    asr (sp)
+    add (r2),rl"><p class="bilingual" title="Rejestr zawiera adres operandu, np.">Rejestr zawiera adres operacyjny, np.</p>
+<pre class="verbatim">
+    inc (rl)
+    asr (sp)
+    add (r2),rl
+</pre>
+</dd>
+<dt class="bilingual" title="Autoincrement Mode:">Tryb automatycznego zwiększania:</dt>
+<dd class="bilingual" title="The register contains the address of the operand. As a side effect, the register is incremented after the operation, e.g. clr  (rl)+
+    mfpi (r0)+
+    mov  (r1)+,r0
+    mov  r2,(r0)+
+    cmp (sp)+,(sp)+"><p class="bilingual" title="Rejestr zawiera adres operandu. Skutkiem ubocznym jest inkrementacja rejestru po operacji, np.:">Rejestr zawiera adres operacyjny. Skutkiem ubocznym jest inkrementacja rejestru po operacji, np.:</p>
+<pre class="verbatim">
+    clr  (rl)+
+    mfpi (r0)+
+    mov  (r1)+,r0
+    mov  r2,(r0)+
+    cmp (sp)+,(sp)+
+</pre>
+</dd>
+<dt class="bilingual" title="Autodecrement Mode:">Tryb automatycznego zmniejszania:</dt>
+<dd class="bilingual" title="The register is decremented and then operand, e.g. inc -(r0)
+    mov -(r1),r2
+    mov (r0)+,-(sp)
+    clr -(sp)"><p class="bilingual" title="Rejestr jest dekrementowany, a następnie operand, np.">Rejestr jest dekrementowany, następnie operand, np.</p>
+<pre class="verbatim">
+    inc -(r0)
+    mov -(r1),r2
+    mov (r0)+,-(sp)
+    clr -(sp)
+</pre>
+</dd>
+<dt class="bilingual" title="Index Mode:">Tryb indeksu:</dt>
+<dd class="bilingual" title="The register contains a value which is added to a sixteen bit word following the instruction to form the operand address, e.g. clr  2(r0)
+    movb 6(sp),(sp)
+    movb _reloc(r0),r0
+    mov  -10(r2),(rl) Depending on your viewpoint, in this mode the register is either an index register or a base register. The latter case actually predominates in “m40.s”. The third example above is actually one of the few uses of a register as an index register. (Note that “_reloc” is an acceptable variable name.) There are two addressing modes whose use is limited to the following two examples: jsr pc,(r0)+
+    jmp *0f(r0) The first example involves the use of the “ autoincrement deferred ” mode. (This occurs in the routine “call” on lines 0785, 0799.) The address of a routine intended for execution is to be found in the word addressed by r0, i.e. two levels of indirection are involved. The fact that r0 is incremented as a side effect is not relevant in this usage. The second example (which occurs on lines 1055, 1066) is an instance of the “ index deferred ” mode. The destination of the “jump” is the content of the word whose address is labelled by “0f” plus the value of r0 (a small positive integer). This is a standard way to implement a multi-way switch. The following two modes use the program counter as the designated register to achieve certain special effects."><p class="bilingual" title="Rejestr zawiera wartość, która jest dodawana do szesnastobitowego słowa po instrukcji utworzenia adresu operandu, np.:">Rejestr zawiera wartość, która jest dodawana do szesnastobitowego słowa po wpisaniu adresu operacyjnego, np.:</p>
+<pre class="verbatim">
+    clr  2(r0)
+    movb 6(sp),(sp)
+    movb _reloc(r0),r0
+    mov  -10(r2),(rl)
+</pre>
+<p class="bilingual" title="W zależności od punktu widzenia, w tym trybie rejestr jest albo rejestrem indeksowym, albo rejestrem podstawowym. Ten drugi przypadek faktycznie dominuje w „m40.s”. Trzeci przykład powyżej jest właściwie jednym z niewielu zastosowań rejestru jako rejestru indeksowego. (Zauważ, że „_reloc” jest akceptowalną nazwą zmiennej.)">W zależności od punktu widzenia, w tym rejestrze jest albo rejestrem indeksowym, albo rejestrem kontrolnym. Dziesięć drugich przypadków faktycznie dominuje w „m40.s”. Trzeci przykład jest jednym z zastosowań rejestru jako rejestru indeksowego. (Zauważ, że „_reloc” jest akceptowalną nazwą zmienną.)</p>
+<p class="bilingual" title="Istnieją dwa tryby adresowania, których użycie ogranicza się do dwóch poniższych przykładów:">Dwa sposoby adresowania, które ograniczają się do dwóch dostępnych:</p>
+<pre class="verbatim">
+    jsr pc,(r0)+
+    jmp *0f(r0)
+</pre>
+<p class="bilingual" title='Pierwszy przykład dotyczy użycia „ autoinkrementacja odroczona ". (Ma to miejsce w procedurze „call" w liniach 0785, 0799.) Adres procedury przeznaczonej do wykonania można znaleźć w słowie adresowanym przez r0, tj. zaangażowane są dwa poziomy pośredniości. Fakt, że r0 jest zwiększane jako efekt uboczny, nie ma w tym zastosowaniu znaczenia.'>Pierwszy przykład zastosowania „<i class="it">autoinkrementacja odroczona</i>". (Ma miejsce w procedurze „call” w linii 0785, 0799.) Adres procedury przeznaczony do wykonania można znaleźć w słowie adresowanym przez r0, tj. zaangażowane są dwa poziome pośredniości. Fakt, że r0 jest zwiększonym skutkiem, nie ma w tym zastosowania.</p>
+<p class="bilingual" title="Drugi przykład (który występuje w liniach 1055, 1066) to instancja „ indeks odroczony Celem „skoku” jest treść słowa, którego adres jest oznaczony jako „0f” plus wartość r0 (mała dodatnia liczba całkowita). Jest to standardowy sposób implementacji przełącznika wielokierunkowego.">Drugi przykład (który uruchomił w liniach 1055, 1066) na instancję „<i class="it">indeks odroczony</i>Celem „skoku” jest treść słowa, którego adres jest oznaczony jako „0f”<i class="it">plus</i>wartość r0 (mała dodatnia liczba całkowita). Jest to standardowy sposób implementacji urządzenia wielokierunkowego.</p>
+<p class="bilingual" title="Poniższe dwa tryby wykorzystują licznik programu jako wyznaczony rejestr w celu uzyskania określonych efektów specjalnych.">Dwa tryby licznika programu jako wyznaczony rejestr w celu uzyskania efektów specjalnych.</p>
+</dd>
+<dt class="bilingual" title="Immediate Mode:">Tryb natychmiastowy:</dt>
+<dd class="bilingual" title="This is the pc autoincrement mode. The operand is thus extracted from the program string, i.e. it becomes an immediate operand, e.g. add $2,r0
+    add $2,(rl)
+    bic $17,r0
+    mov $KISA0,r0
+    mov $77406,(rl)+"><p class="bilingual" title="To jest tryb automatycznego przyrostu komputera. W ten sposób operand jest wyodrębniany z łańcucha programu, tzn. staje się operandem bezpośrednim, np.:">To jest tryb automatyczny przedłużający komputer. W ten sposób jest wyodrębniony z programu, tzn. staje się operandem zapasowym, np.:</p>
+<pre class="verbatim">
+    add $2,r0
+    add $2,(rl)
+    bic $17,r0
+    mov $KISA0,r0
+    mov $77406,(rl)+
+</pre>
+</dd>
+<dt class="bilingual" title="Relative Mode:">Tryb względny:</dt>
+<dd class="bilingual" title="This is the pc index mode. The address relative to the current program counter value is extracted from the program string and added to the pc value to form the absolute address of the operand, e.g. bic $340,PS
+    bit $l,SSR0
+    inc SSR0
+    mov (sp),KISA6"><p class="bilingual" title="To jest tryb indeksowania komputera. Adres odnoszący się do aktualnej wartości licznika programu jest wyodrębniany z ciągu programu i dodawany do wartości pc w celu utworzenia adresu bezwzględnego argumentu, np.">To jest tryb indeksowania komputera. Adres występujący w aktualnym liczniku wartości programu jest wyodrębniony z ciągu programu i dodawany do wartości pc w celu adresu bezwzględnego argumentu, np.</p>
+<pre class="verbatim">
+    bic $340,PS
+    bit $l,SSR0
+    inc SSR0
+    mov (sp),KISA6
+</pre>
+</dd>
+</dl>
+<p class="bilingual" title="It may be noted that each of the modes “index”, “index deferred”, “immediate” and “relative” extends the instruction size by one word.">Można zauważyć, że każdy z trybów „indeksowy”, „indeksowy odroczony”, „natychmiastowy” i „względny” zwiększa rozmiar instrukcji o jedno słowo.</p>
+<p class="bilingual" title="The existence of the “autoincrement” and “autodecrement” modes, together with the special attributes of r6, make it conveniently possible to store many operands in a stack, or LIFO list, which grows downwards in memory. There are a number of advantages which flow from this: code string lengths are shorter and it is easier to write position independent code.">Istnienie trybów „autoinkrementacji” i „autodekrementacji”, wraz ze specjalnymi atrybutami r6, umożliwia wygodne przechowywanie wielu operandów na stosie lub liście LIFO, która rośnie w dół pamięci. Wynika z tego szereg korzyści: długość ciągów kodowych jest krótsza i łatwiej jest pisać kod niezależny od pozycji.</p>
+<h2 class="bilingual" id="a0000000046" title="2.6 Unix Assembler">2.6 Asembler Uniksa</h2>
+<p class="bilingual" title="The UNIX assembler is a two pass assembler without macro facilities. A full description may be found in the “UNIX Assembler Reference Manual” which is contained in the “UNIX Documents”">Asembler UNIX jest asemblerem dwuprzebiegowym bez funkcji makr. Pełny opis można znaleźć w „Podręczniku referencyjnym asemblera UNIX”, który jest zawarty w „Dokumentach UNIX”</p>
+<p class="bilingual" title="The following brief notes should be of some assistance:">Poniższe krótkie notatki powinny być pomocne:</p>
+<dl class="description">
+<dt>(a)</dt>
+<dd class="bilingual" title="a string of digits may define a constant number. This is assumed to be an octal number unless the string is terminated by a period (“.”), when it is interpreted as a decimal number."><p class="bilingual" title="ciąg cyfr może definiować stałą liczbę. Zakłada się, że jest to liczba ósemkowa, chyba że ciąg znaków jest zakończony kropką („.”), gdy jest interpretowany jako liczba dziesiętna.">ciąg cyfrowy może definiować terytoria. Zakłada się, że jest to liczba ósemkowa, chyba że ciąg znaków jest zakończony kropką („.”), gdy jest interpretowany jako liczba dziesiętna.</p>
+</dd>
+<dt>(b)</dt>
+<dd class="bilingual" title="The character “/” is used to signify that the rest of the line is a comment;"><p class="bilingual" title="Znak „/” oznacza, że ​​pozostała część linii jest komentarzem;">Znak „/” oznacza, że ​​część linii jest komentarzem;</p>
+</dd>
+<dt>(c)</dt>
+<dd class="bilingual" title="If two or more statements occur on the same line, they must be separated by semicolons;"><p class="bilingual" title="Jeżeli w tym samym wierszu występują dwie lub więcej instrukcji, należy je oddzielić średnikami;">Jeśli w tym samym wierszu znajdują się dwie lub więcej treści, należy je podzielić na średnie;</p>
+</dd>
+<dt>(d)</dt>
+<dd class="bilingual" title="The character “.” is used to denote the current location;"><p class="bilingual" title="Znak „.” służy do oznaczenia bieżącej lokalizacji;">Znak „.” przeznaczone do wskazań bieżących lokalizacji;</p>
+</dd>
+<dt>(e)</dt>
+<dd class="bilingual" title="UNIX assembler uses the characters $ and “*” where the DEC assemblers use “#” and “@” respectively."><p class="bilingual" title="Asembler UNIX używa znaków $ i „*”, podczas gdy asemblery DEC używają odpowiednio „#” i „@”.">Asembler UNIX używa znaków $ i „*”, podczas gdy asemblery DEC używa odpowiednio „#” i „@”.</p>
+</dd>
+<dt>(f)</dt>
+<dd class="bilingual" title="An identifier consists of a set of alphanumeric characters (including the underscore). Only the first eight characters are significant and the first may not be numeric;"><p class="bilingual" title="Identyfikator składa się z zestawu znaków alfanumerycznych (w tym znaku podkreślenia). Znaczące jest tylko pierwszych osiem znaków i pierwszy nie może być cyfrą;">Identyfikator składa się z zestawu znaków alfanumerycznych (w tym znaku podkreślenia). Znaczące jest tylko pierwsze osiem znaków i pierwsze nie mogą być cyfrą;</p>
+</dd>
+<dt>(g)</dt>
+<dd class="bilingual" title="Names which occur in “C” programs for variables which are to be known globally, are modified by the addition of a prefix consisting of a single underscore. Thus for example the variable “_regloc” which occurs on line 1025 in the assembly language file, “m40.s”, refers to the same variable as “regloc” at line 2677 of the file, “trap.c”;"><p class="bilingual" title="Nazwy występujące w programach „C” dla zmiennych, które mają być znane globalnie, modyfikuje się poprzez dodanie przedrostka składającego się z pojedynczego podkreślenia. I tak na przykład zmienna „_regloc”, która występuje w linii 1025 pliku języka asemblera „m40.s”, odnosi się do tej samej zmiennej, co „regloc” w linii 2677 pliku „trap.c”;">Nazwy funkcji w programach „C” dla zmiennych, które mają być znane globalnie, modyfikując się poprzez użycie przedrostka wyjściowego z ujawnieniem. I tak na przykład zmienną „_regloc”, która działa w linii 1025 pliku języka asemblera „m40.s”, odnosi się do tej samej zmiennej, co „regloc” w linii 2677 pliku „trap.c”;</p>
+</dd>
+<dt>(h)</dt>
+<dd class="bilingual" title="There are two kinds of statement labels: name labels and numeric labels. The latter consist of a single digit followed by a colon, and need not be unique. A reference to “nf” where “n” is a digit, refers to the first occurrence of the label “n:” found by searching forward. A reference to “nb” is similar except that the search is conducted in the backwards direction;"><p class="bilingual" title="Istnieją dwa rodzaje etykiet instrukcji: etykiety nazw i etykiety numeryczne. Te ostatnie składają się z pojedynczej cyfry, po której następuje dwukropek i nie muszą być unikalne. Odniesienie do „nf”, gdzie „n” jest cyfrą, odnosi się do pierwszego wystąpienia etykiety „n:” znalezionej podczas wyszukiwania do przodu.">jednorazowe dwie etykiety: etykiety nazw i etykiety numeryczne. Te ostatnie informacje są dostępne w wersji cyfrowej, która nie jest dostępna w wersji elektronicznej. Odniesienie do „nf”, gdzie „n” jest cyfrą, odwołanie się do pierwszego stosowania dyrektyw „n:” znalezione podczas wyszukiwania do przodu.</p>
+<p class="bilingual" title="Odniesienie do „nb” jest podobne, z tą różnicą, że wyszukiwanie odbywa się w kierunku wstecz;">Odniesienie do „nb” jest alternatywne, że wyszukiwanie odbywa się w wstecz;</p>
+</dd>
+<dt>(i)</dt>
+<dd class="bilingual" title="An assignment statement of the form identifier = expression associates a value and type with the identifier. In the example . = 60 ^ . the operator ’ ^ ’ delivers the value of the first operand and the type of the second operand (in this case, “location”);"><p class="bilingual" title="Oświadczenie o przypisaniu formularza">Oświadczenie o przypisaniu warunku</p>
+<div class="centered">identyfikator = wyrażenie</div>
+<p class="bilingual" title="kojarzy jakąś wartość I wpisz z identyfikatorem. W przykładzie">znanej wartości<b class="bf">I</b>wpisz z identyfikatorem. W pozostał</p>
+<div class="centered">. = 60<code class="verbatim">^</code>. </div>
+<p class="bilingual" title="operator” ^ ’ dostarcza wartość pierwszego operandu i typ drugiego operandu (w tym przypadku „lokalizacja”);">operator"<code class="verbatim">^</code>’ otrzymasz pierwszą wartość operandu i typ drugiego operandu (w tym przypadku „lokalizacja”);</p>
+</dd>
+<dt>(j)</dt>
+<dd class="bilingual" title="The string quote symbols are “\({\lt}\)” and “\({\gt}\)”."><p class="bilingual" title="Symbole cudzysłowu w ciągu znaków to „\({\lt}\)” i „\({\gt}\)”.">Symbole cudzysłowu w ciągu znaków do „\({\lt}\)” i „\({\gt}\)”.</p>
+</dd>
+<dt>(k)</dt>
+<dd class="bilingual" title="Statements of the form .globl x, y, z serve to make the names “x”, “y” and “z” external;"><p class="bilingual" title="Stwierdzenia formularza">Stwierdzenie warunku</p>
+<div class="centered">.globl x, y, z</div>
+<p class="bilingual" title="służą do uzewnętrznienia nazw „x”, „y” i „z”;">służy do uzewnętrznienia nazw „x”, „y” i „z”;</p>
+</dd>
+<dt>(l)</dt>
+<dd class="bilingual" title="The names “_edata” and “_end” are loader pseudo variables which the define the size of the data segment, and the data segment plus the bss segment respectively."><p class="bilingual" title="Nazwy „_edata” i „_end” są pseudozmiennymi modułu ładującego, które definiują odpowiednio rozmiar segmentu danych oraz segmentu danych i segmentu bss.">Nazwy „_edata” i „_end” są pseudozmiennymi modułami ładującymi, które definiują odpowiednio rozmiar segmentu danych oraz segmentu danych i segmentu bss.</p>
+</dd>
+</dl>
+<h2 class="bilingual" id="a0000000047" title="2.7 Memory Management">2.7 Memory Management</h2>
+<p class="bilingual" title="Programs running on the PDP11 may address directly up to 64K bytes (32K words) of storage. This is consistent with an address size of sixteen bits. Since it is economical and not unreasonable to do so the larger PDP11 models may be equipped with larger amounts of memory (up to 256K bytes for the PDP11/40) plus a mechanism for converting sixteen bit virtual (program) addresses into physical addresses of eighteen bits or more. The mechanism, which is known as the memory management unit, is simpler on the PDP11/40 than on the 11/45 or the 11/70.">Programy działające na PDP11 mogą adresować bezpośrednio do 64 KB (32 000 słów) pamięci. Jest to zgodne z rozmiarem adresu wynoszącym szesnaście bitów. Ponieważ jest to ekonomiczne i rozsądne, większe modele PDP11 mogą być wyposażone w większą ilość pamięci (do 256 KB dla PDP11/40) plus mechanizm konwersji szesnastu bitów<i class="it">faktyczny</i>(program) adresuje do<i class="it">fizyczny</i>adresy składające się z osiemnastu bitów lub więcej. Mechanizm, zwany jednostką zarządzania pamięcią, jest prostszy w PDP11/40 niż w 11/45 czy 11/70.</p>
+<p class="bilingual" title="On the PDP11/40 the memory management unit consists of two sets of registers for mapping virtual addresses to physical addresses. These are known as “active page registers” or “segmentation registers”. One set is used when the processor is in user mode and the other set, in kernel mode. Changing the contents of these registers changes the details of these mappings. The ability to make these changes is a privilege that the operating system keeps firmly to itself.">W PDP11/40 jednostka zarządzająca pamięcią składa się z dwóch zestawów rejestrów do mapowania adresów wirtualnych na adresy fizyczne. Są one znane jako „rejestry aktywnej strony” lub „rejestry segmentacyjne”. Jeden zestaw jest używany, gdy procesor znajduje się w trybie użytkownika, a drugi w trybie jądra. Zmiana zawartości tych rejestrów powoduje zmianę szczegółów tych odwzorowań. Możliwość wprowadzania tych zmian jest przywilejem, który system operacyjny zachowuje dla siebie.</p>
+<h2 class="bilingual" id="a0000000048" title="2.8 Segmentation Registers.">2.8 Rejestry segmentacyjne.</h2>
+<p class="bilingual" title="Each set of segmentation registers is composed of eight pairs, each consisting of a “ page address register ” (PAR) and a “ description register ” (PDR).">Każdy zestaw rejestrów segmentacyjnych składa się z ośmiu par, z których każda składa się z „<i class="it">rejestr adresów stron</i>” (PAR) i „<i class="it">rejestr opisu</i>” (PDR).</p>
+<p class="bilingual" title="Each pair of registers controls the mapping of one page i.e. one eighth part of the virtual address space which 8K bytes (4K words).">Każda para rejestrów kontroluje mapowanie jednego<i class="it">strona</i>tj. jedna ósma części wirtualnej przestrzeni adresowej, która wynosi 8 KB bajtów (4 KB słów).</p>
+<p class="bilingual" title="Each page may be regarded as an aggregate of 128 blocks, each of 64 bytes (32 words). This latter size is the “grain size” for the memory mapping function, and as a practical consequence, it is also the “grain size” for memory allocation.">Każdą stronę można traktować jako zbiór 128 bloków, każdy po 64 bajty (32 słowa). Ten ostatni rozmiar to „wielkość ziarna” funkcji mapowania pamięci, a w praktyce jest to także „wielkość ziarna” alokacji pamięci.</p>
+<p class="bilingual" title="Any virtual address belongs to one page or other. The corresponding physical address is generated by adding the relative address within the page to the contents of the corresponding PAR to form an extended address (18 bits on the PDP11/40 and 11/45; 22 bits on the 11/70).">Każdy adres wirtualny należy do tej czy innej strony. Odpowiedni adres fizyczny jest generowany przez dodanie adresu względnego na stronie do zawartości odpowiedniego PAR w celu utworzenia adresu rozszerzonego (18 bitów w PDP11/40 i 11/45; 22 bity w 11/70).</p>
+<p class="bilingual" title="Thus each page address register acts as a relocation register for one page.">Zatem każdy rejestr adresu strony działa jako rejestr relokacji dla jednej strony.</p>
+<p class="bilingual" title="Each page can be divided on a 32 word boundary into two parts, an upper part and lower part. Each such part has a size which is a multiple of 32 words. In particular one part may be null, in which case the other part coincides with the whole page.">Każdą stronę można podzielić na 32 słowa na dwie części, górną i dolną. Każda taka część ma rozmiar będący wielokrotnością 32 słów. W szczególności jedna część może być pusta i wówczas druga część pokrywa się z całą stroną.</p>
+<p class="bilingual" title="One of the two parts is deemed to contain valid virtual addresses. Addresses in the remaining part are declared invalid. Any attempt to reference an invalid address will be trapped by the hardware. The advantage of this scheme is that space in the physical memory need only be allocated for the valid r)art of a page.">Uznaje się, że jedna z dwóch części zawiera prawidłowe adresy wirtualne. Adresy w pozostałej części są uznawane za nieważne. Każda próba odniesienia się do nieprawidłowego adresu zostanie zablokowana przez sprzęt. Zaletą tego schematu jest to, że miejsce w pamięci fizycznej musi być przydzielone tylko dla prawidłowej grafiki strony.</p>
+<h2 class="bilingual" id="a0000000049" title="2.9 Page Description Register">2.9 Strona Opis Rejestr</h2>
+<p class="bilingual" title="The page description register defines:">Rejestr opisu strony definiuje:</p>
+<dl class="description">
+<dt>(a)</dt>
+<dd class="bilingual" title="the size of the lower part of the page. (The number stored is actually the number of 32 word blocks less one);"><p class="bilingual" title="rozmiar dolnej części strony. (Zapisana liczba to w rzeczywistości liczba 32 bloków słów pomniejszona o jeden);">rozmiar części strony. (Zapisana liczba w rzeczywistości liczba 32 bloków słów pomniejszona o jeden);</p>
+</dd>
+<dt>(b)</dt>
+<dd class="bilingual" title="a bit which is set when the upper part is the valid part. (Also known as the “expansion direction” bit);"><p class="bilingual" title="bit, który jest ustawiany, gdy górna część jest ważną częścią. (Znany również jako bit „kierunku rozszerzania”);">bit, który jest ustawiony, gdy główna część jest częścią składową. (Znany również jako bit „kierunku rozszerzania”);</p>
+</dd>
+<dt>(c)</dt>
+<dd class="bilingual" title="access mode bits defining “no access” or “read only access” or “read/write access”."><p class="bilingual" title="bity trybu dostępu definiujące „brak dostępu”, „dostęp tylko do odczytu” lub „dostęp do odczytu/zapisu”.">bity trybu dostępu definiujące „brak dostępu”, „dostęp tylko do odczytu” lub „dostęp do odczytu/zapisu”.</p>
+</dd>
+</dl>
+<p class="bilingual" title="Note that if the valid part is null, this fact must be shown by setting the access bits to “no access”.">Należy pamiętać, że jeśli ważna część ma wartość null, fakt ten należy wykazać, ustawiając bity dostępu na „no access”.</p>
+<h2 class="bilingual" id="a0000000050" title="2.10 Memory Allocation">2.10 Alokacja pamięci</h2>
+<p class="bilingual" title="The hardware does not dictate the way areas in physical memory which correspond to the valid parts of pages should be allocated (except to the extent that they must begin and end on a 32 word boundary). These areas may be allocated in any order and may overlap to any extent.">Sprzęt nie narzuca sposobu alokacji obszarów pamięci fizycznej, które odpowiadają prawidłowym częściom stron (z wyjątkiem zakresu, w którym muszą zaczynać się i kończyć na granicy 32 słów). Obszary te mogą być przydzielane w dowolnej kolejności i mogą nakładać się na siebie w dowolnym stopniu.</p>
+<p class="bilingual" title="In practice the allocation of areas of physical memory is much more disciplined as we shall see in Chapter Seven. Areas for pages which are related are most often allocated contiguously and in the order of their page numbers, so that all the segment areas associated with a single program are contained within one or at most two large areas of physical memory.">W praktyce alokacja obszarów pamięci fizycznej jest znacznie bardziej zdyscyplinowana, jak zobaczymy w rozdziale siódmym. Obszary stron powiązanych są najczęściej przydzielane w sposób ciągły i w kolejności numerów stron, tak że wszystkie obszary segmentów powiązane z pojedynczym programem znajdują się w jednym lub co najwyżej dwóch dużych obszarach pamięci fizycznej.</p>
+<h2 class="bilingual" id="a0000000051" title="2.11 Memory Management Status Registers">2.11 Rejestry stanu zarządzania pamięcią</h2>
+<p class="bilingual" title="In addition to the segmentation registers, on the PDP11/40 there are two memory management status registers:">Oprócz rejestrów segmentacyjnych, w PDP11/40 znajdują się dwa rejestry stanu zarządzania pamięcią:</p>
+<dl class="description">
+<dt>SR0</dt>
+<dd class="bilingual" title="contains abort error flags and other essential information for the operating system. In particular memory management is enabled when bit 0 of SR0 is on;"><p class="bilingual" title="zawiera flagi błędów przerwania i inne istotne informacje dla systemu operacyjnego. W szczególności zarządzanie pamięcią jest włączone, gdy bit 0 SR0 jest włączony;">Zawiera flagi błędów przerwania i inne istotne informacje dla systemu operacyjnego. W przypadku zarządzania pamięcią jest wyłączone, gdy bit 0 SR0 jest wyłączony;</p>
+</dd>
+<dt>SR2</dt>
+<dd class="bilingual" title="is loaded with the 16 bit virtual address at the beginning of each instruction fetch."><p class="bilingual" title="jest ładowany 16-bitowym adresem wirtualnym na początku każdego pobrania instrukcji.">jest ładowanym 16-bitowym adresem wirtualnym na początku każdego pobrania.</p>
+</dd>
+</dl>
+<h2 class="bilingual" id="a0000000052" title="2.12 “i” and “d” Spaces">2.12 Spacje „i” i „d”.</h2>
+<p class="bilingual" title="In the PDP11/45 and 11/70 systems, there are additional sets of segmentation registers. Addresses created using the pc register (r7) are said to belong to “i” space, and are translated by a different set of segmentation registers from those used for the remaining addresses which are said to belong to “d” space.">W systemach PDP11/45 i 11/70 występują dodatkowe zestawy rejestrów segmentacyjnych. Mówi się, że adresy utworzone przy użyciu rejestru pc (r7) należą do przestrzeni „i” i są tłumaczone przez inny zestaw rejestrów segmentacyjnych niż te używane dla pozostałych adresów, o których mówi się, że należą do przestrzeni „d”.</p>
+<p class="bilingual" title="The advantage of this arrangement is that both “i” and “d” spaces may occupy up to 32K words, thus allowing the maximum space which can be allocated to a program to be increased to twice the space available on the PDP11/40.">Zaletą tego rozwiązania jest to, że zarówno spacje „i”, jak i „d” mogą zajmować do 32 tys. słów, co pozwala na zwiększenie maksymalnej przestrzeni, jaką można przydzielić programowi, do dwukrotności przestrzeni dostępnej w PDP11/40.</p>
+<h2 class="bilingual" id="a0000000053" title="2.13 Initial Conditions">2.13 Warunki początkowe</h2>
+<p class="bilingual" title="When the system is first started after all the devices on the Unibus have been reinitialised, the memory management unit is disabled and the processor is in kernel mode.">Kiedy system jest uruchamiany po raz pierwszy po ponownej inicjalizacji wszystkich urządzeń w Unibusie, jednostka zarządzająca pamięcią jest wyłączona, a procesor znajduje się w trybie jądra.</p>
+<p class="bilingual" title="Under these circumstances, virtual (byte) addresses in the range 0 to 56K are mapped into identically valued physical addresses. However the highest page of the virtual address space is mapped into the highest page of the physical address space, i.e. on the PDP11/40 or 11/45, addresses in the range">W tych okolicznościach adresy wirtualne (bajty) w zakresie od 0 do 56 KB są mapowane na adresy fizyczne o identycznych wartościach. Jednakże najwyższa strona wirtualnej przestrzeni adresowej jest mapowana na najwyższą stronę fizycznej przestrzeni adresowej, tj. w PDP11/40 lub 11/45 adresy z zakresu</p>
+<div class="centered">0160000 to 0177777 </div>
+<p class="bilingual" title="are mapped into the range">są mapowane do zakresu</p>
+<div class="centered">0760000 to 0777777 </div>
+<h2 class="bilingual" id="a0000000054" title="2.14 Special Device Registers">2.14 Rejestry urządzeń specjalnych</h2>
+<p class="bilingual" title="The high page of physical memory is reserved for various special registers associated with the processor and the peripheral devices. By sacrificing one page of memory space in this way, the PDP11 designers have been able to make the various device registers accessible without the need to provide special instruction types.">Wysoka strona pamięci fizycznej jest zarezerwowana dla różnych specjalnych rejestrów związanych z procesorem i urządzeniami peryferyjnymi. Poświęcając w ten sposób jedną stronę przestrzeni pamięci, projektanci PDP11 byli w stanie udostępnić różne rejestry urządzenia bez konieczności dostarczania specjalnych typów instrukcji.</p>
+<p class="bilingual" title="The method of assignment of addresses to registers in this page is a black art: the values are hallowed by tradition and are not to be questioned.">Sposób przypisywania adresów do rejestrów na tej stronie to czarna sztuka: wartości są uświęcone tradycją i nie podlegają kwestionowaniu.</p>
+</div> <!--main-text -->
+</div> <!-- content-wrapper -->
+</div> <!-- content -->
+</div> <!-- wrapper -->
+<nav class="prev_up_next">
+<a href="sect0002.html" title="Introduction"><svg class="icon icon-arrow-left"><use xlink:href="symbol-defs.svg#icon-arrow-left"></use></svg>
+</a>
+<a href="index.html" title=""><svg class="icon icon-arrow-up"><use xlink:href="symbol-defs.svg#icon-arrow-up"></use></svg>
+</a>
+<a href="sect0004.html" title="Reading “C” Programs"><svg class="icon icon-arrow-right"><use xlink:href="symbol-defs.svg#icon-arrow-right"></use></svg>
+</a>
+</nav>
+<script src="js/jquery.min.js" type="text/javascript"></script>
+<script src="js/plastex.js" type="text/javascript"></script>
+<script src="js/svgxuse.js" type="text/javascript"></script>
+</body>
+</html>

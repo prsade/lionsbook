@@ -1,0 +1,1801 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<script>
+  MathJax = { 
+    tex: {
+		    inlineMath: [['\\(','\\)']]
+	} }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" type="text/javascript">
+</script>
+<meta content="plasTeX" name="generator"/>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>: Processes</title>
+<link href="sect0010.html" rel="next" title="Process Management"/>
+<link href="sect0008.html" rel="prev" title="Getting Started"/>
+<link href="index.html" rel="up" title=""/>
+<link href="styles/theme-white.css" rel="stylesheet"/>
+<style id="line-ref-style">.line-ref { color: #0066cc; text-decoration: none; font-weight: 500; }
+.line-ref:hover { text-decoration: underline; background-color: #f0f7ff; }
+</style></head>
+<body>
+<header>
+<svg class="icon icon-list-numbered" id="toc-toggle"><use xlink:href="symbol-defs.svg#icon-list-numbered"></use></svg>
+<h1 id="doc_title"><a href="index.html"></a></h1>
+</header>
+<div class="wrapper">
+<nav class="toc">
+<ul class="sub-toc-0">
+<li class="">
+<a href="sect0001.html"><span class="toc_ref"></span> <span class="toc_entry">Preface</span></a>
+</li>
+<li class="">
+<a href="sect0002.html"><span class="toc_ref">1</span> <span class="toc_entry">Introduction</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0002.html#a0000000031"><span class="toc_ref">1.1</span> <span class="toc_entry">The UNIX Operating System</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000032"><span class="toc_ref">1.2</span> <span class="toc_entry">Utilities</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000033"><span class="toc_ref">1.3</span> <span class="toc_entry">Other Documentation</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000034"><span class="toc_ref">1.4</span> <span class="toc_entry">UNIX Programmer’s Manual</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000035"><span class="toc_ref">1.5</span> <span class="toc_entry">UNIX Documents</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000036"><span class="toc_ref">1.6</span> <span class="toc_entry">UNIX Operating System Source Code</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000037"><span class="toc_ref">1.7</span> <span class="toc_entry">Source Code Selections</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000038"><span class="toc_ref">1.8</span> <span class="toc_entry">Source Code Files</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000039"><span class="toc_ref">1.9</span> <span class="toc_entry">Use of these notes</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000040"><span class="toc_ref">1.10</span> <span class="toc_entry">A Note on Programming Standards</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0003.html"><span class="toc_ref">2</span> <span class="toc_entry">Fundamentals</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0003.html#a0000000041"><span class="toc_ref">2.1</span> <span class="toc_entry">The Processor</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000042"><span class="toc_ref">2.2</span> <span class="toc_entry">Processor Status Word</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000043"><span class="toc_ref">2.3</span> <span class="toc_entry">General Registers</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000044"><span class="toc_ref">2.4</span> <span class="toc_entry">Instruction Set</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000045"><span class="toc_ref">2.5</span> <span class="toc_entry">Addressing Modes</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000046"><span class="toc_ref">2.6</span> <span class="toc_entry">Unix Assembler</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000047"><span class="toc_ref">2.7</span> <span class="toc_entry">Memory Management</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000048"><span class="toc_ref">2.8</span> <span class="toc_entry">Segmentation Registers.</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000049"><span class="toc_ref">2.9</span> <span class="toc_entry">Page Description Register</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000050"><span class="toc_ref">2.10</span> <span class="toc_entry">Memory Allocation</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000051"><span class="toc_ref">2.11</span> <span class="toc_entry">Memory Management Status Registers</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000052"><span class="toc_ref">2.12</span> <span class="toc_entry">“i” and “d” Spaces</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000053"><span class="toc_ref">2.13</span> <span class="toc_entry">Initial Conditions</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000054"><span class="toc_ref">2.14</span> <span class="toc_entry">Special Device Registers</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0004.html"><span class="toc_ref">3</span> <span class="toc_entry">Reading “C” Programs</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0004.html#a0000000055"><span class="toc_ref">3.1</span> <span class="toc_entry">Some Selected Examples</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000056"><span class="toc_ref">3.2</span> <span class="toc_entry">Example 1</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000057"><span class="toc_ref">3.3</span> <span class="toc_entry">Example 2</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000058"><span class="toc_ref">3.4</span> <span class="toc_entry">Example 3</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000059"><span class="toc_ref">3.5</span> <span class="toc_entry">Example 4</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000060"><span class="toc_ref">3.6</span> <span class="toc_entry">Example 5</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000061"><span class="toc_ref">3.7</span> <span class="toc_entry">Example 6</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000062"><span class="toc_ref">3.8</span> <span class="toc_entry">Example 7</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000063"><span class="toc_ref">3.9</span> <span class="toc_entry">Example 8</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000064"><span class="toc_ref">3.10</span> <span class="toc_entry">Example 9</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000065"><span class="toc_ref">3.11</span> <span class="toc_entry">Example 10</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000066"><span class="toc_ref">3.12</span> <span class="toc_entry">Example 11</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000067"><span class="toc_ref">3.13</span> <span class="toc_entry">Example 12</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000068"><span class="toc_ref">3.14</span> <span class="toc_entry">Example 13</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000069"><span class="toc_ref">3.15</span> <span class="toc_entry">Example 14</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000070"><span class="toc_ref">3.16</span> <span class="toc_entry">Example 15</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000071"><span class="toc_ref">3.17</span> <span class="toc_entry">Example 16</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000072"><span class="toc_ref">3.18</span> <span class="toc_entry">Example 17</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0005.html"><span class="toc_ref">4</span> <span class="toc_entry">An Overview</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0005.html#a0000000073"><span class="toc_ref">4.1</span> <span class="toc_entry">Variable Allocation</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000074"><span class="toc_ref">4.2</span> <span class="toc_entry">Global Variables</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000075"><span class="toc_ref">4.3</span> <span class="toc_entry">The ‘C’ Preprocessor</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000076"><span class="toc_ref">4.4</span> <span class="toc_entry">Section One</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000077"><span class="toc_ref">4.5</span> <span class="toc_entry">The First Group of ‘.h’ Files</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000078"><span class="toc_ref">4.6</span> <span class="toc_entry">Assembly Language Files</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000079"><span class="toc_ref">4.7</span> <span class="toc_entry">Other Files in Section One</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000080"><span class="toc_ref">4.8</span> <span class="toc_entry">Section Two</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000081"><span class="toc_ref">4.9</span> <span class="toc_entry">Section Three</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000082"><span class="toc_ref">4.10</span> <span class="toc_entry">Section Four</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000083"><span class="toc_ref">4.11</span> <span class="toc_entry">Section Five</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0006.html"><span class="toc_ref"></span> <span class="toc_entry">Section One</span></a>
+</li>
+<li class="">
+<a href="sect0007.html"><span class="toc_ref">5</span> <span class="toc_entry">Two Files</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0007.html#a0000000084"><span class="toc_ref">5.1</span> <span class="toc_entry">The File ‘malloc.c’</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000085"><span class="toc_ref">5.2</span> <span class="toc_entry">Rules for List Maintenance</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000086"><span class="toc_ref">5.3</span> <span class="toc_entry">malloc (2528)</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000087"><span class="toc_ref">5.4</span> <span class="toc_entry">mfree (2556)</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000088"><span class="toc_ref">5.5</span> <span class="toc_entry">In conclusion ...</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000089"><span class="toc_ref">5.6</span> <span class="toc_entry">The File ‘prf.c’</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000090"><span class="toc_ref">5.7</span> <span class="toc_entry">printf (2340)</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000091"><span class="toc_ref">5.8</span> <span class="toc_entry">printn (2369)</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000092"><span class="toc_ref">5.9</span> <span class="toc_entry">putchar (2386)</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000093"><span class="toc_ref">5.10</span> <span class="toc_entry">panic (2419)</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000094"><span class="toc_ref">5.11</span> <span class="toc_entry">prdev (2433), deverror (2447)</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000095"><span class="toc_ref">5.12</span> <span class="toc_entry">Included Files</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0008.html"><span class="toc_ref">6</span> <span class="toc_entry">Getting Started</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0008.html#a0000000096"><span class="toc_ref">6.1</span> <span class="toc_entry">Operator Actions</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000097"><span class="toc_ref">6.2</span> <span class="toc_entry">start (0612)</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000098"><span class="toc_ref">6.3</span> <span class="toc_entry">main (1550)</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000099"><span class="toc_ref">6.4</span> <span class="toc_entry">Processes</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000100"><span class="toc_ref">6.5</span> <span class="toc_entry">Initialisation of proc[0]</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000101"><span class="toc_ref">6.6</span> <span class="toc_entry">The story continues ...</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000102"><span class="toc_ref">6.7</span> <span class="toc_entry">sched (1940)</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000103"><span class="toc_ref">6.8</span> <span class="toc_entry">sleep (2066)</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000104"><span class="toc_ref">6.9</span> <span class="toc_entry">swtch (2178)</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000105"><span class="toc_ref">6.10</span> <span class="toc_entry">main revisited</span></a>
+</li>
+</ul>
+</li>
+<li class="active current">
+<a href="sect0009.html"><span class="toc_ref">7</span> <span class="toc_entry">Processes</span></a>
+<span class="expand-toc">▼</span>
+<ul class="sub-toc-1 active">
+<li class="">
+<a href="sect0009.html#a0000000106"><span class="toc_ref">7.1</span> <span class="toc_entry">The Process</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000107"><span class="toc_ref">7.2</span> <span class="toc_entry">The proc Structure (0358)</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000108"><span class="toc_ref">7.3</span> <span class="toc_entry">The user Structure (0413)</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000109"><span class="toc_ref">7.4</span> <span class="toc_entry">The Per Process Data Area</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000110"><span class="toc_ref">7.5</span> <span class="toc_entry">The Segments</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000111"><span class="toc_ref">7.6</span> <span class="toc_entry">Execution of an Image</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000112"><span class="toc_ref">7.7</span> <span class="toc_entry">Kernel Mode Execution</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000113"><span class="toc_ref">7.8</span> <span class="toc_entry">User Mode Execution</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000114"><span class="toc_ref">7.9</span> <span class="toc_entry">An Example</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000115"><span class="toc_ref">7.10</span> <span class="toc_entry">Setting the Segmentation Registers</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000116"><span class="toc_ref">7.11</span> <span class="toc_entry">estabur (1650)</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000117"><span class="toc_ref">7.12</span> <span class="toc_entry">sureg (1739)</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000118"><span class="toc_ref">7.13</span> <span class="toc_entry">newproc (1826)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0010.html"><span class="toc_ref">8</span> <span class="toc_entry">Process Management</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0010.html#a0000000119"><span class="toc_ref">8.1</span> <span class="toc_entry">Process Switching</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000120"><span class="toc_ref">8.2</span> <span class="toc_entry">Interrupts</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000121"><span class="toc_ref">8.3</span> <span class="toc_entry">Program Swapping</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000122"><span class="toc_ref">8.4</span> <span class="toc_entry">Jobs</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000123"><span class="toc_ref">8.5</span> <span class="toc_entry">Assembler Procedures</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000124"><span class="toc_ref">8.6</span> <span class="toc_entry">savu (0725)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000125"><span class="toc_ref">8.7</span> <span class="toc_entry">retu (0740)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000126"><span class="toc_ref">8.8</span> <span class="toc_entry">aretu (0734)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000127"><span class="toc_ref">8.9</span> <span class="toc_entry">swtch (2178)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000128"><span class="toc_ref">8.10</span> <span class="toc_entry">setpri (2156)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000129"><span class="toc_ref">8.11</span> <span class="toc_entry">sleep (2066)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000130"><span class="toc_ref">8.12</span> <span class="toc_entry">wakeup (2113)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000131"><span class="toc_ref">8.13</span> <span class="toc_entry">setrun (2134)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000132"><span class="toc_ref">8.14</span> <span class="toc_entry">expand (2268)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000133"><span class="toc_ref">8.15</span> <span class="toc_entry">swtch revisited</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000134"><span class="toc_ref">8.16</span> <span class="toc_entry">Critical Sections</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0011.html"><span class="toc_ref"></span> <span class="toc_entry">Section Two</span></a>
+</li>
+<li class="">
+<a href="sect0012.html"><span class="toc_ref">9</span> <span class="toc_entry">Hardware Interrupts and Traps</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0012.html#a0000000135"><span class="toc_ref">9.1</span> <span class="toc_entry">Hardware Interrupts</span></a>
+</li>
+<li class="">
+<a href="sect0012.html#a0000000136"><span class="toc_ref">9.2</span> <span class="toc_entry">The Interrupt Vector</span></a>
+</li>
+<li class="">
+<a href="sect0012.html#a0000000137"><span class="toc_ref">9.3</span> <span class="toc_entry">Interrupt Handlers</span></a>
+</li>
+<li class="">
+<a href="sect0012.html#a0000000138"><span class="toc_ref">9.4</span> <span class="toc_entry">Priorities</span></a>
+</li>
+<li class="">
+<a href="sect0012.html#a0000000139"><span class="toc_ref">9.5</span> <span class="toc_entry">Interrupt Priorities</span></a>
+</li>
+<li class="">
+<a href="sect0012.html#a0000000140"><span class="toc_ref">9.6</span> <span class="toc_entry">Rules for Interrupt Handlers</span></a>
+</li>
+<li class="">
+<a href="sect0012.html#a0000000141"><span class="toc_ref">9.7</span> <span class="toc_entry">Traps</span></a>
+</li>
+<li class="">
+<a href="sect0012.html#a0000000142"><span class="toc_ref">9.8</span> <span class="toc_entry">Assembly Language ‘trap’</span></a>
+</li>
+<li class="">
+<a href="sect0012.html#a0000000143"><span class="toc_ref">9.9</span> <span class="toc_entry">Return</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0013.html"><span class="toc_ref">10</span> <span class="toc_entry">The Assembler “Trap” Routine</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0013.html#a0000000144"><span class="toc_ref">10.1</span> <span class="toc_entry">Sources of Traps and Interrupts</span></a>
+</li>
+<li class="">
+<a href="sect0013.html#a0000000145"><span class="toc_ref">10.2</span> <span class="toc_entry">fuibyte (0814), fuiword (0844)</span></a>
+</li>
+<li class="">
+<a href="sect0013.html#a0000000146"><span class="toc_ref">10.3</span> <span class="toc_entry">Interrupts</span></a>
+</li>
+<li class="">
+<a href="sect0013.html#a0000000147"><span class="toc_ref">10.4</span> <span class="toc_entry">call (0776)</span></a>
+</li>
+<li class="">
+<a href="sect0013.html#a0000000148"><span class="toc_ref">10.5</span> <span class="toc_entry">User Program Traps</span></a>
+</li>
+<li class="">
+<a href="sect0013.html#a0000000149"><span class="toc_ref">10.6</span> <span class="toc_entry">The Kernel Stack</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0014.html"><span class="toc_ref">11</span> <span class="toc_entry">Clock Interrupts</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0014.html#a0000000150"><span class="toc_ref">11.1</span> <span class="toc_entry">clock (3725)</span></a>
+</li>
+<li class="">
+<a href="sect0014.html#a0000000151"><span class="toc_ref">11.2</span> <span class="toc_entry">timeout (3845)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0015.html"><span class="toc_ref">12</span> <span class="toc_entry">Traps and System Calls</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0015.html#a0000000152"><span class="toc_ref">12.1</span> <span class="toc_entry">trap (2693)</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000153"><span class="toc_ref">12.2</span> <span class="toc_entry">Kernel Mode Traps</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000154"><span class="toc_ref">12.3</span> <span class="toc_entry">User Mode Traps</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000155"><span class="toc_ref">12.4</span> <span class="toc_entry">System Calls</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000156"><span class="toc_ref">12.5</span> <span class="toc_entry">System Call Handlers</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000157"><span class="toc_ref">12.6</span> <span class="toc_entry">The File ‘sysl.c’</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000158"><span class="toc_ref">12.7</span> <span class="toc_entry">exec (3020)</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000159"><span class="toc_ref">12.8</span> <span class="toc_entry">fork (3322)</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000160"><span class="toc_ref">12.9</span> <span class="toc_entry">sbreak (3354)</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000161"><span class="toc_ref">12.10</span> <span class="toc_entry">The Files ‘sys2.c’ and ‘sys3.c’</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000162"><span class="toc_ref">12.11</span> <span class="toc_entry">The File ‘sys4.c’</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0016.html"><span class="toc_ref">13</span> <span class="toc_entry">Software Interrupts</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0016.html#a0000000163"><span class="toc_ref">13.1</span> <span class="toc_entry">Anticipation</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000164"><span class="toc_ref">13.2</span> <span class="toc_entry">Causation</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000165"><span class="toc_ref">13.3</span> <span class="toc_entry">Effect</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000166"><span class="toc_ref">13.4</span> <span class="toc_entry">Tracing</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000167"><span class="toc_ref">13.5</span> <span class="toc_entry">Procedures</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000168"><span class="toc_ref">13.6</span> <span class="toc_entry">A. Anticipation</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000169"><span class="toc_ref">13.7</span> <span class="toc_entry">B. Causation</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000170"><span class="toc_ref">13.8</span> <span class="toc_entry">C. Effect</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000171"><span class="toc_ref">13.9</span> <span class="toc_entry">D. Tracing</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000172"><span class="toc_ref">13.10</span> <span class="toc_entry">ssig (3614)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000173"><span class="toc_ref">13.11</span> <span class="toc_entry">kill (3630)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000174"><span class="toc_ref">13.12</span> <span class="toc_entry">signal (3949)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000175"><span class="toc_ref">13.13</span> <span class="toc_entry">psignal (3963)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000176"><span class="toc_ref">13.14</span> <span class="toc_entry">issig (3991)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000177"><span class="toc_ref">13.15</span> <span class="toc_entry">psig (4043)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000178"><span class="toc_ref">13.16</span> <span class="toc_entry">core (4094)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000179"><span class="toc_ref">13.17</span> <span class="toc_entry">grow (4136)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000180"><span class="toc_ref">13.18</span> <span class="toc_entry">exit (3219)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000181"><span class="toc_ref">13.19</span> <span class="toc_entry">rexit (3205)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000182"><span class="toc_ref">13.20</span> <span class="toc_entry">wait (3270)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000183"><span class="toc_ref">13.21</span> <span class="toc_entry">Tracing</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000184"><span class="toc_ref">13.22</span> <span class="toc_entry">stop (4016)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000185"><span class="toc_ref">13.23</span> <span class="toc_entry">wait (3270) (continued)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000186"><span class="toc_ref">13.24</span> <span class="toc_entry">ptrace (4164)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000187"><span class="toc_ref">13.25</span> <span class="toc_entry">procxmt (4204)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0017.html"><span class="toc_ref">14</span> <span class="toc_entry">Program Swapping</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0017.html#a0000000188"><span class="toc_ref">14.1</span> <span class="toc_entry">Text Segments</span></a>
+</li>
+<li class="">
+<a href="sect0017.html#a0000000189"><span class="toc_ref">14.2</span> <span class="toc_entry">sched (1940)</span></a>
+</li>
+<li class="">
+<a href="sect0017.html#a0000000190"><span class="toc_ref">14.3</span> <span class="toc_entry">xswap (4368)</span></a>
+</li>
+<li class="">
+<a href="sect0017.html#a0000000191"><span class="toc_ref">14.4</span> <span class="toc_entry">xalloc (4433)</span></a>
+</li>
+<li class="">
+<a href="sect0017.html#a0000000192"><span class="toc_ref">14.5</span> <span class="toc_entry">xfree (4398)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0018.html"><span class="toc_ref">15</span> <span class="toc_entry">Introduction to Basic I/O</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0018.html#a0000000193"><span class="toc_ref">15.1</span> <span class="toc_entry">The File ‘buf.h’</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000194"><span class="toc_ref">15.2</span> <span class="toc_entry">devtab (4551)</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000195"><span class="toc_ref">15.3</span> <span class="toc_entry">The File ‘conf.h’</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000196"><span class="toc_ref">15.4</span> <span class="toc_entry">The File ‘conf.c’</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000197"><span class="toc_ref">15.5</span> <span class="toc_entry">System Generation</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000198"><span class="toc_ref">15.6</span> <span class="toc_entry">swap (5196)</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000199"><span class="toc_ref">15.7</span> <span class="toc_entry">Race Conditions</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000200"><span class="toc_ref">15.8</span> <span class="toc_entry">Reentrancy</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000201"><span class="toc_ref">15.9</span> <span class="toc_entry">For the Uninitiated</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000202"><span class="toc_ref">15.10</span> <span class="toc_entry">Additional Reading</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0019.html"><span class="toc_ref">16</span> <span class="toc_entry">The RK Disk Driver</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0019.html#a0000000203"><span class="toc_ref">16.1</span> <span class="toc_entry">The file ‘rk.c’</span></a>
+</li>
+<li class="">
+<a href="sect0019.html#a0000000204"><span class="toc_ref">16.2</span> <span class="toc_entry">rkstrategy (5389)</span></a>
+</li>
+<li class="">
+<a href="sect0019.html#a0000000205"><span class="toc_ref">16.3</span> <span class="toc_entry">rkaddr (5420)</span></a>
+</li>
+<li class="">
+<a href="sect0019.html#a0000000206"><span class="toc_ref">16.4</span> <span class="toc_entry">devstart (5096)</span></a>
+</li>
+<li class="">
+<a href="sect0019.html#a0000000207"><span class="toc_ref">16.5</span> <span class="toc_entry">rkintr (5451)</span></a>
+</li>
+<li class="">
+<a href="sect0019.html#a0000000208"><span class="toc_ref">16.6</span> <span class="toc_entry">iodone (5018)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0020.html"><span class="toc_ref">17</span> <span class="toc_entry">Buffer Manipulation</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0020.html#a0000000209"><span class="toc_ref">17.1</span> <span class="toc_entry">Flags</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000210"><span class="toc_ref">17.2</span> <span class="toc_entry">A Cache-like Memory</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000211"><span class="toc_ref">17.3</span> <span class="toc_entry">clrbuf (5038)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000212"><span class="toc_ref">17.4</span> <span class="toc_entry">incore (4899)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000213"><span class="toc_ref">17.5</span> <span class="toc_entry">getblk (4921)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000214"><span class="toc_ref">17.6</span> <span class="toc_entry">brelse (4869)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000215"><span class="toc_ref">17.7</span> <span class="toc_entry">binit (5055)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000216"><span class="toc_ref">17.8</span> <span class="toc_entry">bread (4754)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000217"><span class="toc_ref">17.9</span> <span class="toc_entry">breada (4773)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000218"><span class="toc_ref">17.10</span> <span class="toc_entry">bwrite (4809)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000219"><span class="toc_ref">17.11</span> <span class="toc_entry">bawrite (4856)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000220"><span class="toc_ref">17.12</span> <span class="toc_entry">bdwrite (4836)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000221"><span class="toc_ref">17.13</span> <span class="toc_entry">bflush (5229)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000222"><span class="toc_ref">17.14</span> <span class="toc_entry">physio (5259)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0021.html"><span class="toc_ref">18</span> <span class="toc_entry">File Access and Control</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0021.html#a0000000223"><span class="toc_ref">18.1</span> <span class="toc_entry">File Characteristics</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000224"><span class="toc_ref">18.2</span> <span class="toc_entry">System Calls</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000225"><span class="toc_ref">18.3</span> <span class="toc_entry">Control Tables</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000226"><span class="toc_ref">18.4</span> <span class="toc_entry">file (5507)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000227"><span class="toc_ref">18.5</span> <span class="toc_entry">inode (5659)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000228"><span class="toc_ref">18.6</span> <span class="toc_entry">Resources Required</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000229"><span class="toc_ref">18.7</span> <span class="toc_entry">Opening a File</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000230"><span class="toc_ref">18.8</span> <span class="toc_entry">creat (5781)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000231"><span class="toc_ref">18.9</span> <span class="toc_entry">openl (5804)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000232"><span class="toc_ref">18.10</span> <span class="toc_entry">open (5763)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000233"><span class="toc_ref">18.11</span> <span class="toc_entry">openl revisited</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000234"><span class="toc_ref">18.12</span> <span class="toc_entry">close (5846)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000235"><span class="toc_ref">18.13</span> <span class="toc_entry">closef (6643)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000236"><span class="toc_ref">18.14</span> <span class="toc_entry">iput (7344)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000237"><span class="toc_ref">18.15</span> <span class="toc_entry">Deletion of Files</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000238"><span class="toc_ref">18.16</span> <span class="toc_entry">Reading and Writing</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000239"><span class="toc_ref">18.17</span> <span class="toc_entry">rdwr (5731)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000240"><span class="toc_ref">18.18</span> <span class="toc_entry">readi (6221)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000241"><span class="toc_ref">18.19</span> <span class="toc_entry">writei</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000242"><span class="toc_ref">18.20</span> <span class="toc_entry">iomove (6364)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000243"><span class="toc_ref">18.21</span> <span class="toc_entry">bmap (6415)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000244"><span class="toc_ref">18.22</span> <span class="toc_entry">Leftovers</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0022.html"><span class="toc_ref">19</span> <span class="toc_entry">File Directories and Directory Files</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0022.html#a0000000245"><span class="toc_ref">19.1</span> <span class="toc_entry">The Directory Data Structure</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000246"><span class="toc_ref">19.2</span> <span class="toc_entry">Directory Files</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000247"><span class="toc_ref">19.3</span> <span class="toc_entry">namei (7518)</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000248"><span class="toc_ref">19.4</span> <span class="toc_entry">Some Comments</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000249"><span class="toc_ref">19.5</span> <span class="toc_entry">link (5909)</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000250"><span class="toc_ref">19.6</span> <span class="toc_entry">wdir (7477)</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000251"><span class="toc_ref">19.7</span> <span class="toc_entry">maknode (7455)</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000252"><span class="toc_ref">19.8</span> <span class="toc_entry">unlink (3510)</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000253"><span class="toc_ref">19.9</span> <span class="toc_entry">mknod (5952)</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000254"><span class="toc_ref">19.10</span> <span class="toc_entry">access (6746)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0023.html"><span class="toc_ref">20</span> <span class="toc_entry">File Systems</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0023.html#a0000000255"><span class="toc_ref">20.1</span> <span class="toc_entry">The ‘Super Block’ (5561)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000256"><span class="toc_ref">20.2</span> <span class="toc_entry">The ’mount’ table (0272)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000257"><span class="toc_ref">20.3</span> <span class="toc_entry">iinit (6922)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000258"><span class="toc_ref">20.4</span> <span class="toc_entry">Mounting</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000259"><span class="toc_ref">20.5</span> <span class="toc_entry">smount (6086)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000260"><span class="toc_ref">20.6</span> <span class="toc_entry">Notes</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000261"><span class="toc_ref">20.7</span> <span class="toc_entry">iget (7276)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000262"><span class="toc_ref">20.8</span> <span class="toc_entry">getfs (7167)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000263"><span class="toc_ref">20.9</span> <span class="toc_entry">update (7201)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000264"><span class="toc_ref">20.10</span> <span class="toc_entry">sumount (6144)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000265"><span class="toc_ref">20.11</span> <span class="toc_entry">Resource Allocation</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000266"><span class="toc_ref">20.12</span> <span class="toc_entry">alloc (6965)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000267"><span class="toc_ref">20.13</span> <span class="toc_entry">itrunc (7414)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000268"><span class="toc_ref">20.14</span> <span class="toc_entry">free (7000)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000269"><span class="toc_ref">20.15</span> <span class="toc_entry">iput (7344)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000270"><span class="toc_ref">20.16</span> <span class="toc_entry">ifree (7134)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000271"><span class="toc_ref">20.17</span> <span class="toc_entry">iupdat (7374)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0024.html"><span class="toc_ref">21</span> <span class="toc_entry">Pipes</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0024.html#a0000000272"><span class="toc_ref">21.1</span> <span class="toc_entry">pipe (7723)</span></a>
+</li>
+<li class="">
+<a href="sect0024.html#a0000000273"><span class="toc_ref">21.2</span> <span class="toc_entry">readp (7758)</span></a>
+</li>
+<li class="">
+<a href="sect0024.html#a0000000274"><span class="toc_ref">21.3</span> <span class="toc_entry">writep (7805)</span></a>
+</li>
+<li class="">
+<a href="sect0024.html#a0000000275"><span class="toc_ref">21.4</span> <span class="toc_entry">plock (7862)</span></a>
+</li>
+<li class="">
+<a href="sect0024.html#a0000000276"><span class="toc_ref">21.5</span> <span class="toc_entry">prele (7882)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0025.html"><span class="toc_ref">22</span> <span class="toc_entry">Character Oriented Special Files</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0025.html#a0000000277"><span class="toc_ref">22.1</span> <span class="toc_entry">LP11 Line Printer Driver</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000278"><span class="toc_ref">22.2</span> <span class="toc_entry">lpopen (8850)</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000279"><span class="toc_ref">22.3</span> <span class="toc_entry">Notes</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000280"><span class="toc_ref">22.4</span> <span class="toc_entry">lpoutput (8986)</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000281"><span class="toc_ref">22.5</span> <span class="toc_entry">lpstart (8967)</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000282"><span class="toc_ref">22.6</span> <span class="toc_entry">lpinit(8976)</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000283"><span class="toc_ref">22.7</span> <span class="toc_entry">lpwrite (8870)</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000284"><span class="toc_ref">22.8</span> <span class="toc_entry">Discussion</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000285"><span class="toc_ref">22.9</span> <span class="toc_entry">lpcanon (8879)</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000286"><span class="toc_ref">22.10</span> <span class="toc_entry">For idle readers: A suggestion</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000287"><span class="toc_ref">22.11</span> <span class="toc_entry">PC-11 Paper Tape Reader/Punch Driver</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0026.html"><span class="toc_ref">23</span> <span class="toc_entry">Character Handling</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0026.html#a0000000288"><span class="toc_ref">23.1</span> <span class="toc_entry">cinit (8234)</span></a>
+</li>
+<li class="">
+<a href="sect0026.html#a0000000289"><span class="toc_ref">23.2</span> <span class="toc_entry">getc (0930)</span></a>
+</li>
+<li class="">
+<a href="sect0026.html#a0000000290"><span class="toc_ref">23.3</span> <span class="toc_entry">putc (0967)</span></a>
+</li>
+<li class="">
+<a href="sect0026.html#a0000000291"><span class="toc_ref">23.4</span> <span class="toc_entry">Character Sets</span></a>
+</li>
+<li class="">
+<a href="sect0026.html#a0000000292"><span class="toc_ref">23.5</span> <span class="toc_entry">Control Characters</span></a>
+</li>
+<li class="">
+<a href="sect0026.html#a0000000293"><span class="toc_ref">23.6</span> <span class="toc_entry">Graphic Characters</span></a>
+</li>
+<li class="">
+<a href="sect0026.html#a0000000294"><span class="toc_ref">23.7</span> <span class="toc_entry">Graphic Character Sets</span></a>
+</li>
+<li class="">
+<a href="sect0026.html#a0000000295"><span class="toc_ref">23.8</span> <span class="toc_entry">maptab (8117)</span></a>
+</li>
+<li class="">
+<a href="sect0026.html#a0000000296"><span class="toc_ref">23.9</span> <span class="toc_entry">partab (7947)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0027.html"><span class="toc_ref">24</span> <span class="toc_entry">Interactive Terminals</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0027.html#a0000000297"><span class="toc_ref">24.1</span> <span class="toc_entry">The ’tty’ Structure (7926)</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000298"><span class="toc_ref">24.2</span> <span class="toc_entry"> Interactive Terminals</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000299"><span class="toc_ref">24.3</span> <span class="toc_entry">Initialisation</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000300"><span class="toc_ref">24.4</span> <span class="toc_entry">stty (8183)</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000301"><span class="toc_ref">24.5</span> <span class="toc_entry">sgtty (8201)</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000302"><span class="toc_ref">24.6</span> <span class="toc_entry">klsgtty (8090)</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000303"><span class="toc_ref">24.7</span> <span class="toc_entry">tysty (8577)</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000304"><span class="toc_ref">24.8</span> <span class="toc_entry">The DL11/KL11 Terminal Device Handler</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000305"><span class="toc_ref">24.9</span> <span class="toc_entry">Device Registers</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000306"><span class="toc_ref">24.10</span> <span class="toc_entry">UNIBUS Addresses</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000307"><span class="toc_ref">24.11</span> <span class="toc_entry">Software Considerations</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000308"><span class="toc_ref">24.12</span> <span class="toc_entry">Interrupt Vector Addresses</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000309"><span class="toc_ref">24.13</span> <span class="toc_entry">Source Code</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000310"><span class="toc_ref">24.14</span> <span class="toc_entry">klopen (8023)</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000311"><span class="toc_ref">24.15</span> <span class="toc_entry">klclose (8055)</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000312"><span class="toc_ref">24.16</span> <span class="toc_entry">klxint (8070)</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000313"><span class="toc_ref">24.17</span> <span class="toc_entry">klrint (8078)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0028.html"><span class="toc_ref">25</span> <span class="toc_entry">The File “tty.c”</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0028.html#a0000000314"><span class="toc_ref">25.1</span> <span class="toc_entry">flushtty (8252)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000315"><span class="toc_ref">25.2</span> <span class="toc_entry">wflushtty (8217)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000316"><span class="toc_ref">25.3</span> <span class="toc_entry">Character Input</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000317"><span class="toc_ref">25.4</span> <span class="toc_entry">ttread (8535)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000318"><span class="toc_ref">25.5</span> <span class="toc_entry">canon (8274)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000319"><span class="toc_ref">25.6</span> <span class="toc_entry">Notes</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000320"><span class="toc_ref">25.7</span> <span class="toc_entry">ttyinput (8333)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000321"><span class="toc_ref">25.8</span> <span class="toc_entry">Character Output – ttwrite (8550)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000322"><span class="toc_ref">25.9</span> <span class="toc_entry">ttstart</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000323"><span class="toc_ref">25.10</span> <span class="toc_entry">ttrstrt (8486)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000324"><span class="toc_ref">25.11</span> <span class="toc_entry">ttyoutput (8373)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000325"><span class="toc_ref">25.12</span> <span class="toc_entry">Terminals with a restricted character set</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000326"><span class="toc_ref">25.13</span> <span class="toc_entry">A. The test for ’TTLOWAT’ (Line 8074)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000327"><span class="toc_ref">25.14</span> <span class="toc_entry">B. Inactive Terminals</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000328"><span class="toc_ref">25.15</span> <span class="toc_entry">Well, that’s all, folks ...</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0029.html"><span class="toc_ref">26</span> <span class="toc_entry">Suggested Exercises</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0029.html#a0000000329"><span class="toc_ref">26.1</span> <span class="toc_entry">Section One</span></a>
+</li>
+<li class="">
+<a href="sect0029.html#a0000000330"><span class="toc_ref">26.2</span> <span class="toc_entry">Section Two</span></a>
+</li>
+<li class="">
+<a href="sect0029.html#a0000000331"><span class="toc_ref">26.3</span> <span class="toc_entry">Section Three</span></a>
+</li>
+<li class="">
+<a href="sect0029.html#a0000000332"><span class="toc_ref">26.4</span> <span class="toc_entry">Section Four</span></a>
+</li>
+<li class="">
+<a href="sect0029.html#a0000000333"><span class="toc_ref">26.5</span> <span class="toc_entry">General</span></a>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+<div class="content">
+<div class="content-wrapper">
+<div class="main-text">
+<h1 class="bilingual" id="a0000000010" title="7 Processes">7 Procesy</h1>
+<p class="bilingual" title="The previous chapter traced the developments which occur after “the operating system has been rebooted”, and in so doing introduced a number of significant features of the process concept. One of the aims of this chapter is to go back and re-explore some of the same ground more thoroughly.">W poprzednim rozdziale omówiono rozwój sytuacji, jaki następuje po „ponownym uruchomieniu systemu operacyjnego”, wprowadzając w ten sposób szereg istotnych cech koncepcji procesu. Jednym z celów tego rozdziału jest powrót i ponowne dokładniejsze zbadanie niektórych obszarów.</p>
+<p class="bilingual" title="There are a number of serious difficulties in providing a generally acceptable definition of “process”. These are akin to the difficulties faced by the philosopher who would answer “what is life?” We will be in good company if we brush the more subtle points lightly aside.">Istnieje szereg poważnych trudności w określeniu ogólnie akceptowalnej definicji „procesu”. Przypominają one trudności, jakie napotyka filozof, który odpowiada na pytanie: „Czym jest życie?” Będziemy w dobrym towarzystwie, jeśli lekko odsuniemy na bok bardziej subtelne punkty.</p>
+<p class="bilingual" title="The definition for “process” already given, “a program in execution”, does reasonably well in suggesting what is intended. However it does not fit the case of either process #0 throughout its life or process #1 during its first moments. All other processes in the system however are clearly associated with the execution of some program file or other.">Podana już definicja „procesu” i „programu w trakcie wykonywania” dość dobrze sugeruje zamierzenia. Jednakże nie pasuje to do przypadku procesu nr 0 w całym jego życiu lub procesu nr 1 w jego pierwszych chwilach. Jednakże wszystkie inne procesy w systemie są wyraźnie powiązane z wykonaniem tego czy innego pliku programu.</p>
+<p class="bilingual" title="Processes can be introduced into discussions of operating systems at two levels.">Procesy można wprowadzać do dyskusji na temat systemów operacyjnych na dwóch poziomach.</p>
+<p class="bilingual" title="At the upper level, “process” is an important organising concept for describing the activity of a computer system as a whole. It is often expedient to view the latter as the combined activity of a number of processes, each associated with a particular program such as the “shell”, or the “editor”. A discussion of UNIX at this level is given in the second half of Ritchie’s and Thompson’s paper, “The UNIX Time-sharing System”.">Na wyższym poziomie „proces” jest ważną koncepcją organizującą opisującą działanie systemu komputerowego jako całości. Często celowe jest postrzeganie tego ostatniego jako połączonego działania wielu procesów, z których każdy jest powiązany z konkretnym programem, takim jak „powłoka” lub „edytor”. Omówienie systemu UNIX na tym poziomie znajduje się w drugiej połowie artykułu Ritchiego i Thompsona, „The UNIX Time-sharing System”.</p>
+<p class="bilingual" title="At this level the processes themselves are considered to be the active entities in the system, while the identities of the true active elements, the processor and the peripheral devices, are submerged: the processes are born, live and die; they exist in varying numbers; they may acquire and release resources; they may interact, cooperate, conflict, share resources; etc.">Na tym poziomie same procesy są uważane za aktywne byty w systemie, podczas gdy tożsamość prawdziwie aktywnych elementów, procesora i urządzeń peryferyjnych, jest zanurzona: procesy rodzą się, żyją i umierają; istnieją w różnej liczbie; mogą nabywać i uwalniać zasoby; mogą wchodzić w interakcje, współpracować, konfliktować, dzielić się zasobami; itp.</p>
+<p class="bilingual" title="At the lower level, “processes” are inactive entities which are acted on by active entities such as the processor. By allowing the processor to switch frequently from the execution of one process image to another, the impression can be created that each of the process images is developing continuously and this leads to the upper level interpretation.">Na niższym poziomie „procesy” to nieaktywne byty, na które działają aktywne podmioty, takie jak procesor. Umożliwiając procesorowi częste przełączanie się z wykonywania jednego obrazu procesu na inny, można stworzyć wrażenie, że każdy z obrazów procesu rozwija się w sposób ciągły, co prowadzi do interpretacji wyższego poziomu.</p>
+<p class="bilingual" title="Our present concern is with the low level interpretation: with the structure of the process image, with the details of execution and with the means for switching the processor between processes.">Naszą obecną troską jest interpretacja niskiego poziomu: struktura obrazu procesu, szczegóły wykonania oraz środki przełączania procesora pomiędzy procesami.</p>
+<p class="bilingual" title="The following observations may be made about processes in the UNIX context:">Na temat procesów w kontekście UNIX można poczynić następujące obserwacje:</p>
+<dl class="description">
+<dt>(a)</dt>
+<dd class="bilingual" title="the existence of a process is implied by the existence of a non-null structure in the “proc” array, i.e. a “proc” structure for which the element “p_stat” is non-null;"><p class="bilingual" title="o istnieniu procesu implikuje się istnienie w tablicy „proc” struktury o wartości innej niż null, czyli struktury „proc”, dla której element „p_stat” ma wartość różną od null;">o skomplikowany proces implikuje istnienie w strukturze „proc” o wartościach innych niż null, czyli strukturze „proc”, dla której element „p_stat” ma wartość różną od null;</p>
+</dd>
+<dt>(b)</dt>
+<dd class="bilingual" title="for each process there is a “per process data area” containing a copy of the “user” structure;"><p class="bilingual" title="dla każdego procesu istnieje „obszar danych na proces” zawierający kopię struktury „użytkownika”;">dla każdego procesu istnieje „obszar danych na proces” dostarczany przez strukturę „użytkownika”;</p>
+</dd>
+<dt>(c)</dt>
+<dd class="bilingual" title="the processor spends its entire life executing one process or another (except when it is resting between instructions);"><p class="bilingual" title="procesor spędza całe swoje życie na wykonywaniu tego czy innego procesu (z wyjątkiem sytuacji, gdy odpoczywa pomiędzy instrukcjami);">procesor spędza całe życie na wykonywaniu tego lub innego procesu (z sytuacji, gdy odpoczywa pomiędzy instrukcjami);</p>
+</dd>
+<dt>(d)</dt>
+<dd class="bilingual" title="it is possible for one process to create or destroy another process;"><p class="bilingual" title="możliwe jest, że jeden proces utworzy lub zniszczy inny proces;">możliwe jest, że jeden proces utworzy lub zniszczy inny proces;</p>
+</dd>
+<dt>(e)</dt>
+<dd class="bilingual" title="a process may acquire and possess resources of various kinds."><p class="bilingual" title="proces może pozyskiwać i posiadać różnego rodzaju zasoby.">proces może pozyskać i zająć się rodzajem zasobów.</p>
+</dd>
+</dl>
+<h2 class="bilingual" id="a0000000106" title="7.1 The Process">7.1 Proces</h2>
+<p class="bilingual" title="Ritchie and Thompson in their paper define a “process” as the execution of an “image”, where the “image” is the current state of a pseudo-computer, i.e. an abstract data structure, which may be represented in either main memory or on disk.">Ritchie i Thompson w swojej pracy definiują „proces” jako wykonanie „obrazu”, przy czym „obraz” to bieżący stan pseudokomputera, tj. abstrakcyjna struktura danych, która może być reprezentowana albo w pamięci głównej, albo na dysku.</p>
+<p class="bilingual" title="The process image involves two or three physically distinct areas of memory:">Obraz procesu obejmuje dwa lub trzy fizycznie odrębne obszary pamięci:</p>
+<dl class="description">
+<dt>(1)</dt>
+<dd class="bilingual" title="the “proc” structure , which is contained within the core resident “proc” array and is accessible at all times;"><p class="bilingual" title="strukturę „proc”. , który jest zawarty w głównej tablicy „proc” i jest dostępny przez cały czas;"><b class="bf">struktura „proc”.</b>, który jest następstwem w głównej płycie „proc” i jest dostępny przez cały czas;</p>
+</dd>
+<dt>(2)</dt>
+<dd class="bilingual" title="the data segment , which consists of the “per process data area”, combined with a segment containing the user program data, (possibly) program text, and stack;"><p class="bilingual" title="segment danych , który składa się z „obszaru danych na proces” połączonego z segmentem zawierającym dane programu użytkownika, (ewentualnie) tekst programu i stos;"><b class="bf">dane segmentu</b>, który składa się z „obszaru danych na proces” połączonygo z segmentem danych programu użytkownika, (ewentualnie) tekst programu i stos;</p>
+</dd>
+<dt>(3)</dt>
+<dd class="bilingual" title="the text segment , which is not always present, consists of a segment containing only pure program text i.e. re-entrant code and constant data."><p class="bilingual" title="segment tekstu , który nie zawsze występuje, składa się z segmentu zawierającego wyłącznie czysty tekst programu, tj. kod ponownego wejścia i dane stałe."><b class="bf">fragment tekstu</b>, który nie zawsze składa się z segmentu zawierającego wyłącznie czysty tekst programu, tj. kod wejściowy i dane stałe.</p>
+</dd>
+</dl>
+<p class="bilingual" title="Many programs do not have a separate text segment. Where one is defined, a single copy will be shared among all processes which are executions of the same particular program.">Wiele programów nie ma oddzielnego segmentu tekstu. Jeśli takowy zostanie zdefiniowany, pojedyncza kopia będzie współdzielona pomiędzy wszystkimi procesami będącymi wykonaniami tego samego konkretnego programu.</p>
+<h2 class="bilingual" id="a0000000107" title="7.2 The proc Structure (0358)">7.2 Struktura proc (0358)</h2>
+<p class="bilingual" title="This structure, which is permanently resident in main memory, contains fifteen elements, of which eight are characters, six are integers, and one a pointer to an integer. Each element represents information that must be accessible at any time, especially when the main part of the process image has been swapped out to disk:">Struktura ta, znajdująca się na stałe w pamięci głównej, zawiera piętnaście elementów, z których osiem to znaki, sześć to liczby całkowite, a jeden to wskaźnik do liczby całkowitej. Każdy element reprezentuje informację, która musi być dostępna w każdej chwili, zwłaszcza gdy główna część obrazu procesu została zamieniona na dysk:</p>
+<ul class="itemize">
+<li class="bilingual" title="“p_stat” may take one of seven values which define seven mutually exclusive states. See lines 0381 to 0387;"><p class="bilingual" title="„p_stat” może przyjmować jedną z siedmiu wartości definiujących siedem wzajemnie wykluczających się stanów. Zobacz linie 0381 do 0387;">„p_stat” może być określony jako jeden z wartości definiujących siedem odrębnych, które się znajdują. Zobacz linię 0381 do 0387;</p>
+</li>
+<li class="bilingual" title="“p_flag” is an amalgam of six one bit flags which may be set independently. See lines 0391 to 0396;"><p class="bilingual" title="„p_flag” jest połączeniem sześciu jednobitowych flag, które można ustawić niezależnie. Zobacz linie 0391 do 0396;">„p_flag” to połączenie sześciu jednobitowych flag, które można zastosować. Zobacz linię 0391 do 0396;</p>
+</li>
+<li class="bilingual" title="“p_addr” is the address of the data segment: If the data segment is in main memory this is a block number; otherwise, if the data segment has been swapped out, this is a disk record number;"><p class="bilingual" title="„p_addr” to adres segmentu danych:">„p_addr” na adres segmentu danych:</p>
+<ul class="itemize">
+<li class="bilingual" title="Jeśli segment danych znajduje się w pamięci głównej, jest to numer bloku;"><p class="bilingual" title="Jeśli segment danych znajduje się w pamięci głównej, jest to numer prywatny;">Jeśli segment danych znajduje się w pamięci głównej, jest to numer prywatny;</p>
+</li>
+<li class="bilingual" title="w przeciwnym razie, jeśli segment danych został zamieniony, jest to numer rekordu na dysku;"><p class="bilingual" title="w razie wypadku, jeśli segment danych został zamieniony, jest to numer rekordu na dysku;">w razie wypadku, jeśli segment danych został zamieniony, jest to numer rekordu na dysku;</p>
+</li>
+</ul>
+</li>
+<li class="bilingual" title="“p_size” is the size of the data segment, measured in blocks;"><p class="bilingual" title="„p_size” to rozmiar segmentu danych mierzony w blokach;">„p_size” na rozmiar segmentu danych mierzonych w blokach;</p>
+</li>
+<li class="bilingual" title="“p_pri” is the current process priority. This may be recalculated from time to time as a function of “p_nice”, “p_cpu” and “p_time”;"><p class="bilingual" title="„p_pri” to bieżący priorytet procesu. Może to być od czasu do czasu przeliczane jako funkcja „p_nice”, „p_cpu” i „p_time”;">„p_pri” do uruchomienia priorytetu procesu. Może być od czasu do czasu przeliczane jako funkcja „p_nice”, „p_cpu” i „p_time”;</p>
+</li>
+<li class="bilingual" title="“p_pid”, “p_ppid” are numbers which uniquely identify a process and its parent;"><p class="bilingual" title="„p_pid”, „p_ppid” to liczby, które jednoznacznie identyfikują proces i jego rodzica;">„p_pid”, „p_ppid” to liczba, które identyfikują proces i jego rodzica;</p>
+</li>
+<li class="bilingual" title="“p_sig”, “p_uid”, “p_ttyp” are involved with external communication i.e. with messages or “signals” from outside the process’s normal domain;"><p class="bilingual" title="„p_sig”, „p_uid”, „p_ttyp” zajmują się komunikacją zewnętrzną, tj. komunikatami lub „sygnałami” spoza normalnej domeny procesu;">„p_sig”, „p_uid”, „p_ttyp” dotyczący komunikacji zewnętrznej, tj. komunikatami lub „sygnałami” poza normalną dziedziną procesu;</p>
+</li>
+<li class="bilingual" title="“p_wchan” identifies, for a “sleeping” process (“p_stat” equals either “SSLEEP” or “SWAIT”), the reason for sleeping;"><p class="bilingual" title="„p_wchan” określa, dla procesu „uśpienia” („p_stat” oznacza „SSLEEP” lub „SWAIT”), powód snu;">„p_wchan” określenie, dla procesu „uśpienia” („p_stat” oznacza „SSLEEP” lub „SWAIT”), podstawa snu;</p>
+</li>
+<li class="bilingual" title="“p_textp” is either null or a pointer to an entry in the “text” array (4306), which contains vital statistics regarding the text segment."><p class="bilingual" title="„p_textp” ma wartość null lub jest wskaźnikiem do wpisu w tablicy „text” (4306), która zawiera istotne statystyki dotyczące segmentu tekstu.">„p_textp” ma wartość null lub jest znacznikiem do wpisu w tablicy „text” (4306), która zawiera istotne statystyki dotyczące segmentu tekstu.</p>
+</li>
+</ul>
+<h2 class="bilingual" id="a0000000108" title="7.3 The user Structure (0413)">7.3 Struktura użytkownika (0413)</h2>
+<p class="bilingual" title="One copy of the “user” structure is an essential ingredient of each “per process data area”. At any one time there is exactly one copy of the “user” structure which is accessible. This goes under the name “u” and is always to be found at kernel address 0140000 i.e. at the beginning of the seventh page of the kernel address space.">Jedna kopia struktury „użytkownika” jest niezbędnym składnikiem każdego „obszaru danych na proces”. W danym momencie dostępna jest dokładnie jedna kopia struktury „użytkownika”. Dzieje się to pod nazwą „u” i zawsze można je znaleźć pod adresem jądra 0140000, tj. na początku siódmej strony przestrzeni adresowej jądra.</p>
+<p class="bilingual" title="The “user” structure has more elements than can be conveniently or usefully introduced here. The comment accompanying each declaration on Sheet 04 succinctly suggests the function of each element.">Struktura „użytkownika” ma więcej elementów, niż można tu wygodnie i użytecznie wprowadzić. Komentarz towarzyszący każdej deklaracji na arkuszu 04 zwięźle sugeruje funkcję każdego elementu.</p>
+<p class="bilingual" title="For the moment you should notice:">Na chwilę obecną powinieneś zauważyć:</p>
+<dl class="description">
+<dt>(a)</dt>
+<dd class="bilingual" title="“u_rsav”, “u_qsav” , “u_ssav” which are two word arrays used to store values for r5, r6;"><p class="bilingual" title="„u_rsav”, „u_qsav”, „u_ssav”, które są dwiema tablicami słów używanymi do przechowywania wartości dla r5, r6;">„u_rsav”, „u_qsav”, „u_ssav”, które są dwiema tablicami słów używanymi do przechowywania wartości dla r5, r6;</p>
+</dd>
+<dt>(b)</dt>
+<dd class="bilingual" title="“u_procp” which gives the address of the corresponding “proc” structure in the “proc” array;"><p class="bilingual" title="„u_procp”, który podaje adres odpowiedniej struktury „proc” w tablicy „proc”;">„u_procp”, który podaje adres odpowiednich struktur „proc” w tablicy „proc”;</p>
+</dd>
+<dt>(c)</dt>
+<dd class="bilingual" title="“u_uisa[16]”, ”u_uisd[16]” which store prototypes for the page address and description registers;"><p class="bilingual" title="„u_uisa[16]”, „u_uisd[16]” przechowujące prototypy rejestrów adresu strony i opisu;">„u_uisa[16]”, „u_uisd[16]” przechowujące prototypy rejestrów adresu strony i opisu;</p>
+</dd>
+<dt>(d)</dt>
+<dd class="bilingual" title="“u_tsize”, “u_dsize”, “u_ssize” which are the size of the text segment and two parameters defining the size of the data segment, measured in 32 word blocks."><p class="bilingual" title="„u_tsize”, „u_dsize”, „u_ssize” będące rozmiarem segmentu tekstu oraz dwoma parametrami określającymi rozmiar segmentu danych, mierzonymi w 32 blokach słów.">„u_tsize”, „u_dsize”, „u_ssize” określony rozmiarem segmentu tekstu oraz określone parametry określające rozmiar segmentów danych, mierzonymi w 32 blokach słów.</p>
+</dd>
+</dl>
+<p class="bilingual" title="The remaining elements are concerned with:">Pozostałe elementy dotyczą:</p>
+<ul class="itemize">
+<li class="bilingual" title="saving floating point registers (not for the PDP11/40);"><p class="bilingual" title="zapisywanie rejestrów zmiennoprzecinkowych (nie dla PDP11/40);">zapisywanie rejestrów zmiennoprzecinkowych (nie dla<br/>PDP11/40);</p>
+</li>
+<li class="bilingual" title="user identification;"><p class="bilingual" title="identyfikacja użytkownika;">identyfikacja użytkownika;</p>
+</li>
+<li class="bilingual" title="parameters for input/output operations;"><p class="bilingual" title="parametry operacji wejścia/wyjścia;">parametry operacji wejścia/wyjścia;</p>
+</li>
+<li class="bilingual" title="file access control;"><p class="bilingual" title="kontrola dostępu do plików;">kontrola dostępu do plików;</p>
+</li>
+<li class="bilingual" title="system call parameters;"><p class="bilingual" title="parametry wywołania systemowego;">parametry wywołania systemowego;</p>
+</li>
+<li class="bilingual" title="accounting information."><p class="bilingual" title="informacje księgowe.">informacje księgowe.</p>
+</li>
+</ul>
+<h2 class="bilingual" id="a0000000109" title="7.4 The Per Process Data Area">7.4 Obszar danych na proces</h2>
+<p class="bilingual" title="The “per process data area” corresponds to the valid part (lower part) of the seventh page of the kernel address space. It is 1024 bytes long. The lower 289 bytes are occupied by an instance of the “user” structure, leaving 367 words to be used as a kernel mode stack area. (Obviously there will be as many kernel mode stacks as there are processes.)">„Obszar danych na proces” odpowiada ważnej części (dolnej części) siódmej strony przestrzeni adresowej jądra. Ma długość 1024 bajtów. Dolne 289 bajtów jest zajęte przez instancję struktury „user”, pozostawiając 367 słów do wykorzystania jako obszar stosu trybu jądra. (Oczywiście będzie tyle stosów trybu jądra, ile jest procesów.)</p>
+<p class="bilingual" title="While the processor is in kernel mode, the values of r5 and r6, the environment and stack pointers, should remain within the range 0140441 to 01437777. Transition beyond the upper limit would be trapped as a segmentation violation, but the lower limit is protected only by the integrity of the software. (It may be noted that the hardware stack limit option is not used by UNIX.)">Gdy procesor znajduje się w trybie jądra, wartości r5 i r6, wskaźniki środowiska i stosu powinny mieścić się w zakresie od 0140441 do 01437777. Przejście poza górny limit zostałoby uznane za naruszenie segmentacji, ale dolny limit jest chroniony jedynie przez integralność oprogramowania. (Można zauważyć, że opcja limitu stosu sprzętowego nie jest używana w systemie UNIX.)</p>
+<h2 class="bilingual" id="a0000000110" title="7.5 The Segments">7.5 Segmenty</h2>
+<p class="bilingual" title="The data segment is allocated as one single area of physical memory but consists of three distinct parts:">Segment danych jest przydzielany jako jeden obszar pamięci fizycznej, ale składa się z trzech odrębnych części:</p>
+<dl class="description">
+<dt>(a)</dt>
+<dd class="bilingual" title="a “per process data area”;"><p class="bilingual" title="„obszar danych na proces”;">„obszar danych na procesie”;</p>
+</dd>
+<dt>(b)</dt>
+<dd class="bilingual" title="a data area for the user program. This may be further divided into areas for program text, initialised data and uninitialised data;"><p class="bilingual" title="obszar danych dla programu użytkownika. Można to dalej podzielić na obszary tekstu programu, danych zainicjowanych i danych niezainicjowanych;">obszar danych dla programu użytkownika. Można w dalszym ciągu przenieść na tekst programu, dane przechowywane i dane niezainicjowane;</p>
+</dd>
+<dt>(c)</dt>
+<dd class="bilingual" title="a stack for the user program."><p class="bilingual" title="stos dla programu użytkownika.">stos dla programu użytkownika.</p>
+</dd>
+</dl>
+<p class="bilingual" title="The size of (a) is always “USIZE” blocks. The sizes of (b) and (c) are given in blocks by “u.u_dsize” and “u.u_ssize”. (It may be noted in passing that the latter two may change during the life of a process.)">Rozmiar (a) to zawsze bloki „USIZE”. Rozmiary (b) i (c) są podawane w blokach „u.u_dsize” i „u.u_ssize”. (Można zauważyć na marginesie, że te dwa ostatnie mogą ulec zmianie w trakcie trwania procesu.)</p>
+<p class="bilingual" title="A separate text segment containing only pure text is allocated as one single area of physical memory. The internal structure of the segment is not important here.">Oddzielny segment tekstu zawierający wyłącznie czysty tekst jest przydzielany jako pojedynczy obszar pamięci fizycznej. Wewnętrzna struktura segmentu nie jest tu istotna.</p>
+<h2 class="bilingual" id="a0000000111" title="7.6 Execution of an Image">7.6 Wykonanie obrazu</h2>
+<p class="bilingual" title="The image currently being executed (and hence the identity of the current process) is determined by the setting of the seventh kernel segmentation address register. If process #i is the current process, then the register has the value “proc[i].p_addr”.">Aktualnie wykonywany obraz (a tym samym tożsamość bieżącego procesu) jest określany przez ustawienie siódmego rejestru adresowego segmentacji jądra. Jeśli proces #i jest procesem bieżącym, wówczas rejestr ma wartość „proc[i].p_addr”.</p>
+<p class="bilingual" title="It is often desirable to distinguish between a process being executed in kernel mode and the same one being executed in user mode. We will use the terms “kernel process #i” and “user process #i” to denote “process #i executing in kernel mode” and “process #i executing in user mode” respectively.">Często pożądane jest rozróżnienie pomiędzy procesem wykonywanym w trybie jądra a tym samym procesem wykonywanym w trybie użytkownika. Będziemy używać terminów „proces jądra #i” i „proces użytkownika #i” do określenia odpowiednio „procesu #i wykonującego się w trybie jądra” i „procesu #i wykonującego się w trybie użytkownika”.</p>
+<p class="bilingual" title="If we chose to associate processes with particular execution stacks rather than with an entry in the “proc” array, then we would consider kernel process #i and user process #i to be separate processes, rather than different aspects of a single process #i.">Gdybyśmy zdecydowali się powiązać procesy z określonymi stosami wykonania, a nie z wpisem w tablicy „proc”, wówczas uznalibyśmy proces jądra #i i proces użytkownika #i za oddzielne procesy, a nie różne aspekty pojedynczego procesu #i.</p>
+<h2 class="bilingual" id="a0000000112" title="7.7 Kernel Mode Execution">7.7 Wykonywanie trybu jądra</h2>
+<p class="bilingual" title="The seventh kernel segmentation address register must be set appropriately. None of the other kernel segmentation registers is ever disturbed and so their values are assumed. As was seen earlier, the first six kernel pages are mapped to the first six pages of physical memory, while the eighth is mapped into the highest page of physical memory. The size of the seventh segment is always the same.">Siódmy rejestr adresowy segmentacji jądra musi być odpowiednio ustawiony. Żaden z pozostałych rejestrów segmentacji jądra nie jest nigdy zakłócony, dlatego przyjmuje się ich wartości. Jak widzieliśmy wcześniej, pierwsze sześć stron jądra jest mapowanych na pierwsze sześć stron pamięci fizycznej, podczas gdy ósma jest mapowana na najwyższą stronę pamięci fizycznej. Rozmiar siódmego segmentu jest zawsze taki sam.</p>
+<p class="bilingual" title="In kernel mode the setting of the user mode segmentation registers is in general irrelevant. However they are normally set correctly for the user process.">W trybie jądra ustawienie rejestrów segmentacji trybu użytkownika jest ogólnie nieistotne. Jednak zwykle są one ustawione poprawnie dla procesu użytkownika.</p>
+<p class="bilingual" title="The environment and stack pointers point into the kernel stack area in the seventh page, above the “user” structure.">Wskaźniki środowiska i stosu wskazują obszar stosu jądra na siódmej stronie, nad strukturą „użytkownika”.</p>
+<h2 class="bilingual" id="a0000000113" title="7.8 User Mode Execution">7.8 Wykonywanie trybu użytkownika</h2>
+<p class="bilingual" title="Each activation of a user process is preceded and succeeded by an activation of the corresponding kernel process. Accordingly both the user mode and kernel mode registers will be properly set whenever a process image is being executed in user mode.">Każda aktywacja procesu użytkownika jest poprzedzona i następująca po aktywacji odpowiedniego procesu jądra. W związku z tym zarówno rejestry trybu użytkownika, jak i trybu jądra zostaną poprawnie ustawione za każdym razem, gdy obraz procesu jest wykonywany w trybie użytkownika.</p>
+<p class="bilingual" title="The environment and stack pointers point into the user stack area. This begins as the upper part of the eighth user page, but may be extended downwards, e.g. to occupy the whole of the eighth page and part or all of the seventh page, etc.">Wskaźniki środowiska i stosu wskazują obszar stosu użytkownika. Zaczyna się od górnej części ósmej strony użytkownika, ale może być przedłużony w dół, np. zajmować całą ósmą stronę i część lub całość siódmej strony itp.</p>
+<p class="bilingual" title="Whereas the setting of the kernel segmentation registers is fairly trivial, setting the user segmentation registers is much less so.">Podczas gdy ustawienie rejestrów segmentacji jądra jest dość proste, ustawienie rejestrów segmentacji użytkownika jest znacznie mniej skomplikowane.</p>
+<h2 class="bilingual" id="a0000000114" title="7.9 An Example">7.9 Przykład</h2>
+<p class="bilingual" title="Consider a program on the PDP11/40 which uses 1.7 pages of text, 3.3 pages of data, and 0.7 pages of stack area. (Our use of fractions in this example is admittedly a little crude.) The set of virtual addresses would be divided as shown in the following diagram:">Rozważmy program na PDP11/40, który wykorzystuje 1,7 strony tekstu, 3,3 strony danych i 0,7 strony stosu. (W tym przykładzie użycie ułamków jest wprawdzie trochę prymitywne.) Zbiór adresów wirtualnych zostanie podzielony w sposób pokazany na poniższym diagramie:</p>
+<div class="centered"><table class="tabular">
+<tr>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p class="bilingual" title="888 s1">888 s1</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="Stack">Stos</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p class="bilingual" title="888 s1">888 s1</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> area </p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p> 888 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p> 777 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p>777 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p>777 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p> 666 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p>666 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p> 666 d4 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p> 555 d3 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p>555 d3 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p>555 d3 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p> 444 d2 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> Data </p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p>444 d2 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p>444 d2 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> area </p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p> 333 d1 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p>333 d1 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p>333 d1 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p> 222 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p class="bilingual" title="222 t2">222 t2</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p class="bilingual" title="222 t2">222 t2</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> Text </p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p class="bilingual" title="111 t1">111 t1</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p class="bilingual" title="111 t1">111 t1</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> area </p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left; border-right:1px solid black; border-left:1px solid black; border-bottom-style:solid; border-bottom-color:black; border-bottom-width:1px">
+<p class="bilingual" title="111 t1">111 t1</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+</table>
+<p class="bilingual" title="Virtual Address Space">Wirtualna przestrzeń adresowa</p>
+</div>
+<p class="bilingual" title="Two whole pages in the virtual address space must be allocated to the text segment, even though the physical area required is only 1.7 pages.">Do segmentu tekstowego muszą zostać przydzielone dwie całe strony wirtualnej przestrzeni adresowej, mimo że wymagany obszar fizyczny wynosi tylko 1,7 strony.</p>
+<div class="centered"><table class="tabular">
+<tr>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p class="bilingual" title="222 t2">222 t2</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p class="bilingual" title="222 t2">222 t2</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> Text </p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p class="bilingual" title="111 t1">111 t1</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p class="bilingual" title="111 t1">111 t1</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> area </p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left; border-right:1px solid black; border-left:1px solid black; border-bottom-style:solid; border-bottom-color:black; border-bottom-width:1px">
+<p class="bilingual" title="111 t1">111 t1</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+</table>
+<p class="bilingual" title="Text Segment">Segment tekstu</p>
+</div>
+<p class="bilingual" title="The data and stack areas require the dedication of four and one pages of virtual address space, and 3.3 and 0.7 pages of physical memory respectively.">Obszary danych i stosu wymagają poświęcenia odpowiednio czterech i jednej strony wirtualnej przestrzeni adresowej oraz 3,3 i 0,7 strony pamięci fizycznej.</p>
+<p class="bilingual" title="The whole data segment requires four and one eighth pages of physical memory. The extra eighth is for the “per process data area” which corresponds (from time to time) to the seventh kernel address page.">Cały segment danych wymaga czterech i jednej ósmej strony pamięci fizycznej. Dodatkowa ósma jest przeznaczona na „obszar danych na proces”, który odpowiada (od czasu do czasu) siódmej stronie adresowej jądra.</p>
+<div class="centered"><table class="tabular">
+<tr>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p class="bilingual" title="888 s1">888 s1</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="Stack">Stos</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p class="bilingual" title="888 s1">888 s1</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> area </p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p> 666 d4 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p> 555 d3 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p>555 d3 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p>555 d3 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p> 444 d2 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> Data </p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p>444 d2 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p>444 d2 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> area </p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p> 333 d1 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p>333 d1 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left; border-right:1px solid black; border-left:1px solid black">
+<p>333 d1 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+<tr>
+<td colspan="1" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:right; border-right:1px solid black; border-left:1px solid black; border-bottom-style:solid; border-bottom-color:black; border-bottom-width:1px">
+<p> ppda </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+</table>
+<p class="bilingual" title="Data Segment">Segment danych</p>
+</div>
+<p class="bilingual" title="Note the order of the components of the data segment, and that there is no embedded unused space.">Zwróć uwagę na kolejność składników segmentu danych oraz na to, czy nie ma wbudowanego, niewykorzystanego miejsca.</p>
+<p class="bilingual" title="The user mode segmentation need to be set to reflect the values in the following table, where “t”, “d” denote the block numbers of beginning of the text and data segments respectively:">Segmentację trybu użytkownika należy ustawić tak, aby odzwierciedlała wartości z poniższej tabeli, gdzie „t”, „d” oznaczają odpowiednio numery bloków początku segmentu tekstu i danych:</p>
+<table class="tabular">
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p> <b class="bf">Page</b> </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="Address"> <b class="bf">Adres</b> </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> <b class="bf">Size</b> </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="Comment"> <b class="bf">Komentarz</b> </p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left">
+<p>1 </p>
+</td>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left">
+<p> t+0 </p>
+</td>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left">
+<p> 1.0 </p>
+</td>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left">
+<p class="bilingual" title="read only">tylko czytać</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p>2 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="t+128">t+128</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 0.7 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="read only">tylko czytać</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p>3 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> d+16 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 1.0 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p>4 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="d+144">d+144</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 1.0 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p>5 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="d+272">d+272</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 1.0 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p>6 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="d+400">d+400</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 0.3 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"> </td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p>7 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> ? </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 0.0 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="not used">nie używany</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p>8 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="d+400">d+400</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 0.7 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="grows downward">rośnie w dół</p>
+</td>
+</tr>
+</table>
+<p class="bilingual" title="Note the setting of the eighth address register. The address prototypes stored in the array “u.u_uisa” are obtained by setting “t” and “d” to zero.">Zwróć uwagę na ustawienie ósmego rejestru adresowego. Prototypy adresów przechowywane w tablicy „u.u_uisa” uzyskuje się poprzez ustawienie „t” i „d” na zero.</p>
+<h2 class="bilingual" id="a0000000115" title="7.10 Setting the Segmentation Registers">7.10 Ustawianie rejestrów segmentacji</h2>
+<p class="bilingual" title="Prototypes for the user segmentation registers are set up by “estabur” which is called when a program is first launched into execution, and again whenever a significant change in memory allocation requires it. The prototypes are stored in the arrays “u.u_uisa”, “u.u_uisd”.">Prototypy rejestrów segmentacji użytkownika są tworzone przez „estabur”, który jest wywoływany przy pierwszym uruchomieniu programu i ponownie, gdy wymaga tego znacząca zmiana w alokacji pamięci. Prototypy przechowywane są w tablicach „u.u_uisa”, „u.u_uisd”.</p>
+<p class="bilingual" title="Whenever process #i is about to be reactivated, the procedure “sureg” is called to copy the the prototypes into the appropriate registers. The description registers are copied directly, but the address registers must be adjusted to reflect the actual location in physical memory of the area used.">Ilekroć proces #i ma zostać reaktywowany, wywoływana jest procedura „sureg” w celu skopiowania prototypów do odpowiednich rejestrów. Rejestry opisowe są kopiowane bezpośrednio, ale rejestry adresowe muszą zostać dostosowane tak, aby odzwierciedlały rzeczywistą lokalizację wykorzystywanego obszaru w pamięci fizycznej.</p>
+<h2 class="bilingual" id="a0000000116" title="7.11 estabur (1650)">7.11 stabur (1650)</h2>
+<dl class="description">
+<dt><a class="line-ref" data-line="1654" href="../all.html#line1654" target="source">1654:</a></dt>
+<dd class="bilingual" title="Various checks on consistency are performed, to ensure that the requested sizes for the text, data and stack are reasonable. Note that a non-zero value for “sep” implies separate mappings for the text area (“i” space) and the data area (“d” space). This is never possible on the PDP11/40;"><p class="bilingual" title="Przeprowadzane są różne kontrole spójności, aby upewnić się, że żądane rozmiary tekstu, danych i stosu są rozsądne.">Przeprowadzane są różne kontrole, które mogą być obsługiwane, że są dostępne rozmiary tekstu, dane i są dostosowane.</p>
+<p class="bilingual" title="Należy zauważyć, że niezerowa wartość „sep” oznacza oddzielne mapowanie obszaru tekstowego (spacja „i”) i obszaru danych (spacja „d”). W przypadku PDP11/40 nie jest to nigdy możliwe;">Obejmuje to, że niezerowa wartość „sep” oznacza mapowanie obszaru tekstowego (spacja „i”) i obszar danych (spacja „d”). W przypadku PDP11/40 nie jest to nigdy możliwe;</p>
+</dd>
+<dt><a class="line-ref" data-line="1664" href="../all.html#line1664" target="source">1664:</a></dt>
+<dd class="bilingual" title="“a” defines the address of a segment relative to an arbitrary base of zero. “ap” and “dp” point to the set of prototype segmentation address and descriptor registers respectively."><p class="bilingual" title="„a” definiuje adres segmentu względem dowolnej podstawy zera. „ap” i „dp” wskazują odpowiednio zestaw prototypowych adresów segmentacji i rejestrów deskryptorów.">„a” oznacza adres segmentu uwzględniając podstawowe podstawy zera. „ap” i „dp” odpowiednio zestaw prototypowych adresów segmentacji i rejestrów deskryptorów.</p>
+</dd>
+</dl>
+<p class="bilingual" title="The first eight of each of these sets are intended to refer to “i” space, and">Pierwsze osiem z każdego z tych zbiorów ma odnosić się do przestrzeni „i” oraz</p>
+<dl class="description">
+<dt><a class="line-ref" data-line="1667" href="../all.html#line1667" target="source">1667:</a></dt>
+<dd class="bilingual" title="“nt” measures the number of 32 word blocks needed for the text segment. If “nt” is non-zero, one or more pages must be allocated for this purpose."><p class="bilingual" title="„nt” mierzy liczbę 32 bloków słów potrzebnych do zbudowania segmentu tekstu. Jeżeli „nt” jest niezerowe, należy w tym celu przydzielić jedną lub więcej stron.">„nt” kontroli 32 bloków słów do zbudowania segmentu tekstu. Jeśli „nt” jest niezerowe, należy w tym celu przydzielić jedną lub więcej stron.</p>
+</dd>
+</dl>
+<p class="bilingual" title="Where more than one page is allocated, all but the last will consist of 128 blocks (4096 words), and will be read only, and will have relative addresses starting at zero and increasing successively by 128.">Jeżeli przydzielona jest więcej niż jedna strona, wszystkie oprócz ostatniej będą składać się ze 128 bloków (4096 słów) i będą tylko do odczytu, a adresy względne będą zaczynały się od zera i sukcesywnie zwiększały się o 128.</p>
+<dl class="description">
+<dt><a class="line-ref" data-line="1672" href="../all.html#line1672" target="source">1672:</a></dt>
+<dd class="bilingual" title="If some fraction of a page of text is still to be assigned, allocate the appropriate part of the next page;"><p class="bilingual" title="Jeżeli do przydzielenia pozostaje jeszcze jakiś fragment strony tekstu, przydziel odpowiednią część następnej strony;">Jeśli do przydzielenia pozostaje jeszcze jakiś fragment tekstu, przydzielona część strony;</p>
+</dd>
+<dt><a class="line-ref" data-line="1677" href="../all.html#line1677" target="source">1677:</a></dt>
+<dd class="bilingual" title="if “i” and “d” spaces are being used separately, mark the segmentation registers for the remaining “i” pages as null;"><p class="bilingual" title="jeżeli spacje „i” i „d” są używane oddzielnie, należy oznaczyć rejestry segmentacyjne dla pozostałych stron „i” jako puste;">odrębne spacje „i” i „d” są stosowane oddzielnie, należy je uwzględnić, rejestrując je dla odrębnych stron „i” jako puste;</p>
+</dd>
+<dt><a class="line-ref" data-line="1682" href="../all.html#line1682" target="source">1682:</a></dt>
+<dd class="bilingual" title="“a” is reset because all remaining addresses refer to the data area (not the text area) and are relative to the beginning of this area. The first “USIZE” blocks of this area are reserved for the “per process data area”;"><p class="bilingual" title="„a” zostaje zresetowane, ponieważ wszystkie pozostałe adresy odnoszą się do obszaru danych (a nie obszaru tekstowego) i odnoszą się do początku tego obszaru. Pierwsze bloki „USIZE” tego obszaru są zarezerwowane dla „obszaru danych na proces”;">„a” pozostaje usunięte, ponieważ wszystkie pozostałe adresy występują w obszarze danych (a nie obszarze tekstowym) i występują do początku tego obszaru. Pierwsze bloki „USIZE” tego obszaru są przeznaczone dla „obszaru danych na proces”;</p>
+</dd>
+<dt><a class="line-ref" data-line="1703" href="../all.html#line1703" target="source">1703:</a></dt>
+<dd class="bilingual" title="The stack area is allocated from the top of the address space towards the lower addresses (“downwards”);"><p class="bilingual" title="Obszar stosu jest przydzielany od góry przestrzeni adresowej w kierunku dolnych adresów („w dół”);">Obszar stosu jest przydzielany od góry przestrzeni adresowej w kierunku dolnych adresów („w dół”);</p>
+</dd>
+<dt><a class="line-ref" data-line="1711" href="../all.html#line1711" target="source">1711:</a></dt>
+<dd class="bilingual" title="If a partial page must be allocated for the stack area, it is the high address art of the page which is valid. (For text and data areas, which grow “upwards”, it is the lower part of a partial page which is valid.) This requires an extra bit in the descriptor, hence “ED” (“expansion downwards”);"><p class="bilingual" title="Jeśli w obszarze stosu musi zostać przydzielona część strony, ważny jest górny element adresu strony. (W przypadku obszarów tekstu i danych, które rosną „w górę”, obowiązuje dolna część częściowej strony.) Wymaga to dodatkowego bitu w deskryptorze, stąd „ED” („rozwinięcie w dół”);">Jeśli w stosu musi pozostać przydzielona część strony, służy ona jako górny element adresu strony. (W przypadku tekstów i danych, które rosną „w górę”, podstawa dolna część częściowej strony.) Wymagane do dodatkowego bitu w deskryptorze, stąd „ED” („rozwinięcie w dół”);</p>
+</dd>
+<dt><a class="line-ref" data-line="1714" href="../all.html#line1714" target="source">1714:</a></dt>
+<dd class="bilingual" title="If separate “i” and “d” spaces are not used, only the first eight of the sixteen prototype register pairs will have been initialised by this point. In this case, the second eight are copied from the first eight."><p class="bilingual" title="Jeśli nie zostaną użyte oddzielne spacje „i” i „d”, do tego momentu zostanie zainicjowanych tylko pierwszych osiem z szesnastu prototypowych par rejestrów. W tym przypadku druga ósemka jest kopiowana z pierwszej ósemki.">Jeśli nie zostanie wykorzystane wykorzystanie spacji „i” i „d”, to ten moment zostanie wyświetlony tylko przez osiem z szesnastu prototypowych par rejestrów. W tym przypadku druga ósemka jest kopiowana z pierwszej ósemki.</p>
+</dd>
+</dl>
+<h2 class="bilingual" id="a0000000117" title="7.12 sureg (1739)">7,12 Sureg (1739)</h2>
+<p class="bilingual" title="This routine is called by “estabur” (1724), “swtch” (2229) and “expand” (2295), to copy the prototype segmentation registers into the actual hardware segmentation registers.">Ta procedura jest wywoływana przez „estabur” (1724), „swtch” (2229) i „expand” (2295), aby skopiować prototypowe rejestry segmentacji do rzeczywistych rejestrów segmentacji sprzętu.</p>
+<dl class="description">
+<dt><a class="line-ref" data-line="1743" href="../all.html#line1743" target="source">1743:</a></dt>
+<dd class="bilingual" title="Get the base address for the data area from the appropriate element of the “proc” array;"><p class="bilingual" title="Uzyskaj adres bazowy obszaru danych z odpowiedniego elementu tablicy „proc”;">uzyskany adres bazowy obszaru danych z odpowiedniego elementu „proc”;</p>
+</dd>
+<dt><a class="line-ref" data-line="1744" href="../all.html#line1744" target="source">1744:</a></dt>
+<dd class="bilingual" title="The prototype address registers (of which there are only eight for the PDP11/40) are modified by the addition of “a” and stored in the hardware segmentation address registers;"><p class="bilingual" title="Prototypowe rejestry adresowe (których jest tylko osiem w przypadku PDP11/40) są modyfikowane przez dodanie „a” i przechowywane w rejestrach adresowych segmentacji sprzętowej;">Prototypowe rejestry adresowe (które są tylko przeciwnikiem w przypadku PDP11/40) są modyfikowane przez ryzyko „a” i stosowane w rejestrach adresowych segmentacji sprzętowej;</p>
+</dd>
+<dt><a class="line-ref" data-line="1752" href="../all.html#line1752" target="source">1752:</a></dt>
+<dd class="bilingual" title="Test if a separate text area has been allocated, and if so, reset “a” to the relative address of the text area to the data area. (Note this value may be negative! Fortunately at this point, addresses are in terms of 32 word blocks.);"><p class="bilingual" title="Sprawdź, czy przydzielono oddzielny obszar tekstowy i jeśli tak, zresetuj „a” do adresu względnego obszaru tekstowego w stosunku do obszaru danych. (Zauważ, że ta wartość może być ujemna! Na szczęście w tym momencie adresy są wyrażone w blokach 32 słów.);">Sprawdź, czy przydzielono oddzielny obszar tekstowy i jeśli tak, zresetuj „a” do adresu względnego obszaru tekstowego w odniesieniu do obszaru danych. (Zauważ, że ta wartość może być ujemna! Na szczęście w tym momencie adresy są wyrażone w blokach 32 słów.);</p>
+</dd>
+<dt><a class="line-ref" data-line="1754" href="../all.html#line1754" target="source">1754:</a></dt>
+<dd class="bilingual" title="The pattern of code now followed is similar to the beginning of the routine, except ..."><p class="bilingual" title="Schemat stosowanego teraz kodu jest podobny do początku procedury, z tą różnicą, że...">Schemat zastosowanygo teraz kodu jest poprzedzający procedurę, z inną różnicą, że...</p>
+</dd>
+<dt><a class="line-ref" data-line="1762" href="../all.html#line1762" target="source">1762:</a></dt>
+<dd class="bilingual" title="a rather obscure piece of code adjusts the setting of the address register for segments which are not “writable” i.e. which presumably are text segments."><p class="bilingual" title="raczej niejasny fragment kodu dostosowuje ustawienie rejestru adresowego dla segmentów, których nie można „zapisywać”, tj. które prawdopodobnie są segmentami tekstowymi.">Dlatego niejasny fragment kodu zawiera konfigurację rejestru adresowego dla segmentów, których nie można „zapisać”, tj. Które prawdopodobnie są segmentami tekstowymi.</p>
+</dd>
+</dl>
+<p class="bilingual" title="The code in “estabur” and “sureg” shows evidence of having been developed in several stages and is not as elegant as could be desired.">Kod w „estabur” i „sureg” wykazuje, że był opracowywany w kilku etapach i nie jest tak elegancki, jak można by sobie tego życzyć.</p>
+<h2 class="bilingual" id="a0000000118" title="7.13 newproc (1826)">7,13 nowyproc (1826)</h2>
+<p class="bilingual" title="It is now time to take a good look at the procedure which creates new processes as (almost exact) replicas of their creators.">Nadszedł czas, aby przyjrzeć się bliżej procedurze, która tworzy nowe procesy jako (prawie dokładne) repliki ich twórców.</p>
+<dl class="description">
+<dt><a class="line-ref" data-line="1841" href="../all.html#line1841" target="source">1841:</a></dt>
+<dd class="bilingual" title="“mpid” is an integer which is stepped through the values 0 to 32767. As each new process is created, a new value for “mpid” is created to provide a unique distinguishing number for the process. Since the cycle of values may eventually repeat, a check is made that the number is not still in use; if so a new value is tried;"><p class="bilingual" title="„mpid” jest liczbą całkowitą, którą można przesunąć w zakresie od 0 do 32767. Podczas tworzenia każdego nowego procesu tworzona jest nowa wartość „mpid”, aby zapewnić unikalny numer wyróżniający proces. Ponieważ cykl wartości może w końcu się powtórzyć, sprawdza się, czy liczba nie jest nadal używana; jeśli tak, próbowana jest nowa wartość;">„mpid” to suma ogólna, którą można wyodrębnić z zakresu od 0 do 32767. Podczas tworzenia nowego procesu jest nowa wartość „mpid”, która obejmuje numer wyróżniający proces. Ponieważ wartości cykli mogą w końcu się sprawdzić, sprawdzić się, czy liczba nie jest nadal używana; jeśli tak, próba jest nową wartością;</p>
+</dd>
+<dt><a class="line-ref" data-line="1846" href="../all.html#line1846" target="source">1846:</a></dt>
+<dd class="bilingual" title="A search is made through the “proc” array for a null “proc” structure (indicated by “p_stat” having a null value);"><p class="bilingual" title="W tablicy „proc” przeszukiwana jest struktura „proc” o wartości null (wskazywana przez „p_stat” o wartości null);">W tablicy „proc” przeszukiwanej jest struktura „proc” o wartości null (wskazywana przez „p_stat” o wartości null);</p>
+</dd>
+<dt><a class="line-ref" data-line="1860" href="../all.html#line1860" target="source">1860:</a></dt>
+<dd class="bilingual" title="At this point, the address of the new entry in the “proc” array is stored as both “p” and “rpp”, and the address of “proc” entry for the current process is stored both as “up” and “rip”;"><p class="bilingual" title="W tym momencie adres nowego wpisu w tablicy „proc” jest zapisywany zarówno jako „p”, jak i „rpp”, a adres wpisu „proc” dla bieżącego procesu jest zapisywany zarówno jako „up”, jak i „rip”;">W tym momencie adres nowego wpisu w nazwie „proc” jest zapisywany zarówno jako „p”, jak i „rpp”, a adres wpisu „proc” dla stosowanego procesu jest zapisywany zarówno jako „up”, jak i „rip”;</p>
+</dd>
+<dt><a class="line-ref" data-line="1861" href="../all.html#line1861" target="source">1861:</a></dt>
+<dd class="bilingual" title="The attributes of the new process are stored in the new “proc” entry. Many of these are copied from the current process;"><p class="bilingual" title="Atrybuty nowego procesu są przechowywane w nowym wpisie „proc”. Wiele z nich zostało skopiowanych z bieżącego procesu;">Atrybuty nowego procesu są dostępne w nowym wpisie „proc”. Wiele z nich powstałych z powstałego procesu;</p>
+</dd>
+<dt><a class="line-ref" data-line="1876" href="../all.html#line1876" target="source">1876:</a></dt>
+<dd class="bilingual" title="The new process inherits the open files of its parent. Increment the reference count for each of these;"><p class="bilingual" title="Nowy proces dziedziczy otwarte pliki swojego rodzica. Zwiększ liczbę referencji dla każdego z nich;">Nowy proces dziedziczy otwartych plików swojego rodzica. Wzmocnione referencje dla każdego z nich;</p>
+</dd>
+<dt><a class="line-ref" data-line="1879" href="../all.html#line1879" target="source">1879:</a></dt>
+<dd class="bilingual" title="If there is a separate text segment increment the associated reference counts. Notice that “rip”, “rpp” are used for temporary reference here;"><p class="bilingual" title="Jeśli istnieje oddzielny przyrost segmentu tekstu, liczy się powiązane z nim odwołanie. Zauważ, że „rip” i „rpp” są tutaj użyte tymczasowo;">Jeśli istnieje oddzielny dodatek do segmentu tekstu, liczy się to z nim odwołanie. Pamiętaj, że „rip” i „rpp” są przydatne w tym artykule;</p>
+</dd>
+<dt><a class="line-ref" data-line="1883" href="../all.html#line1883" target="source">1883:</a></dt>
+<dd class="bilingual" title="Increment the reference count for the parent’s current directory;"><p class="bilingual" title="Zwiększ liczbę odwołań dla bieżącego katalogu nadrzędnego;">Możliwość zastosowania dla nadzoru nadrzędnego;</p>
+</dd>
+<dt><a class="line-ref" data-line="1889" href="../all.html#line1889" target="source">1889:</a></dt>
+<dd class="bilingual" title="Save the current values of the environment and stack pointers in “u.u_rsav”. “savu” is an assembler routine defined at line 0725;"><p class="bilingual" title="Zapisz bieżące wartości środowiska i wskaźniki stosu w „u.u_rsav”. „savu” jest procedurą asemblera zdefiniowaną w linii 0725;">Zapisz bieżące wartości środowiska i znaczniki stosu w „u.u_rsav”. „savu” jest procedurą asemblera zdefiniowaną w linii 0725;</p>
+</dd>
+<dt><a class="line-ref" data-line="1890" href="../all.html#line1890" target="source">1890:</a></dt>
+<dd class="bilingual" title="Restore the values of “rip” and “rpp”. Temporarily change the value of “u.u_procp” from the value appropriate to the current process to the value appropriate to the new process;"><p class="bilingual" title="Przywróć wartości „rip” i „rpp”. Tymczasowo zmień wartość „u.u_procp” z wartości właściwej dla bieżącego procesu na wartość odpowiednią dla nowego procesu;">Przywróć wartości „rip” i „rpp”. Tymczasowo zmień wartość „u.u_procp” z wartością właściwą dla procesu na wartość wyznaczoną dla nowego procesu;</p>
+</dd>
+<dt><a class="line-ref" data-line="1896" href="../all.html#line1896" target="source">1896:</a></dt>
+<dd class="bilingual" title="Try to find an area in main memory in which to create the new data segment;"><p class="bilingual" title="Spróbuj znaleźć obszar w pamięci głównej, w którym chcesz utworzyć nowy segment danych;">Wyszukaj obszar w pamięci głównej, który zawiera nowy segment danych;</p>
+</dd>
+<dt><a class="line-ref" data-line="1902" href="../all.html#line1902" target="source">1902:</a></dt>
+<dd class="bilingual" title="If there is no suitable area in main memory, the new copy will have to be made on disk. The next section of code should be analysed carefully because of the inconsistency introduced at line 1891 i.e. u.u_procp-\({\gt}\)p_addr != *ka6"><p class="bilingual" title="Jeżeli w pamięci głównej nie ma odpowiedniego obszaru, należy wykonać nową kopię na dysku. Kolejną sekcję kodu należy dokładnie przeanalizować ze względu na niespójność wprowadzoną w linii 1891, tj. u.u_procp-\({\gt}\)p_addr != *ka6">Znajduje się w pamięci głównej nie ma odpowiedniego obszaru, należy umieścić nową kopię na dysku. wydanie decyzji należy uwzględnić ze względu na niespójność wprowadzoną w linii 1891, tj.<br/>u.u_procp-\({\gt}\)p_addr != *ka6</p>
+</dd>
+<dt><a class="line-ref" data-line="1903" href="../all.html#line1903" target="source">1903:</a></dt>
+<dd class="bilingual" title="Mark the current process as “SIDL” to head off temporarily any further attempt to swap it out (i.e. initiated by “sched” (1940));"><p class="bilingual" title="Oznacz bieżący proces jako „SIDL”, aby tymczasowo zapobiec wszelkim dalszym próbom jego zamiany (tj. zainicjowanym przez „sched” (1940));">Oznaczenie procesu jako „SIDL”, aby zapobiec ewentualnemu wystąpieniu próby jego zamiany (tj. przez „sched” (1940));</p>
+</dd>
+<dt><a class="line-ref" data-line="1904" href="../all.html#line1904" target="source">1904:</a></dt>
+<dd class="bilingual" title="Make the new “proc” entry consistent, i.e set rpp-\({\gt}\)p_addr = *ka6;"><p class="bilingual" title="Spraw, aby nowy wpis „proc” był spójny, tj. ustaw rpp-\({\gt}\)p_addr = *ka6;">Spraw, nowy wpis „proc” był spójny, tj. ustaw rpp-\({\gt}\)p_addr = *ka6;</p>
+</dd>
+<dt><a class="line-ref" data-line="1905" href="../all.html#line1905" target="source">1905:</a></dt>
+<dd class="bilingual" title="Save the current values of the environment and stack pointers in “u.u_ssav”;"><p class="bilingual" title="Zapisz bieżące wartości środowiska i wskaźniki stosu w „u.u_ssav”;">Zapisz bieżące wartości środowiska i znaczniki stosu w „u.u_ssav”;</p>
+</dd>
+<dt><a class="line-ref" data-line="1906" href="../all.html#line1906" target="source">1906:</a></dt>
+<dd class="bilingual" title="Call “xswap” (4368) to copy the data segment into the disk swap area. Because the second parameter is zero, the main memory area will not be released;"><p class="bilingual" title="Wywołaj „xswap” (4368), aby skopiować segment danych do obszaru wymiany dysku. Ponieważ drugi parametr ma wartość zero, obszar pamięci głównej nie zostanie zwolniony;">Wywołaj „xswap” (4368), aby uzyskać segment danych do obszaru wymiany dysku. Ponieważ drugi parametr ma wartość zero, obszar pamięci głównej nie zostanie zwolniony;</p>
+</dd>
+<dt><a class="line-ref" data-line="1907" href="../all.html#line1907" target="source">1907:</a></dt>
+<dd class="bilingual" title="Mark the new process as “swapped out”;"><p class="bilingual" title="Oznacz nowy proces jako „wymieniony”;">Oznacz nowy proces jako „wymieniony”;</p>
+</dd>
+<dt><a class="line-ref" data-line="1908" href="../all.html#line1908" target="source">1908:</a></dt>
+<dd class="bilingual" title="Return the current process to its normal state;"><p class="bilingual" title="Przywróć bieżący proces do normalnego stanu;">Przywróć proces do stanu ustalonego;</p>
+</dd>
+<dt><a class="line-ref" data-line="1913" href="../all.html#line1913" target="source">1913:</a></dt>
+<dd class="bilingual" title="There was room in main memory, so store the address of the new “proc” entry and copy the data segment a block at a time;"><p class="bilingual" title="W pamięci głównej było miejsce, więc zapisz adres nowego wpisu „proc” i kopiuj segment danych blok po bloku;">W pamięci głównej było miejsce, więc zapisz adres nowego wpisu „proc” i kopiuj segment danych bloku po bloku;</p>
+</dd>
+<dt><a class="line-ref" data-line="1917" href="../all.html#line1917" target="source">1917:</a></dt>
+<dd class="bilingual" title="Restore the current process’ “per process data area” to its previous state;"><p class="bilingual" title="Przywróć „obszar danych procesu” bieżącego procesu do poprzedniego stanu;">Przywróć „obszar danych procesu” dotyczący procesu sprawdzenia stanu;</p>
+</dd>
+<dt><a class="line-ref" data-line="1918" href="../all.html#line1918" target="source">1918:</a></dt>
+<dd class="bilingual" title="Return with a value of zero."><p class="bilingual" title="Powrót z wartością zero.">Powrót z wartością zerową.</p>
+</dd>
+</dl>
+<p class="bilingual" title="Obviously “newproc” on its own is not sufficient to produce an interesting and varied set of processes. The procedure “exec” (3020) which is discussed in Chapter Twelve provides the necessary additional facility: the means for a process to change its character, to be reincarnated.">Oczywiście samo „newproc” nie wystarczy do stworzenia interesującego i zróżnicowanego zestawu procesów. Procedura „exec” (3020), omówiona w rozdziale dwunastym, zapewnia niezbędne dodatkowe ułatwienie: środki umożliwiające procesowi zmianę jego charakteru, reinkarnację.</p>
+</div> <!--main-text -->
+</div> <!-- content-wrapper -->
+</div> <!-- content -->
+</div> <!-- wrapper -->
+<nav class="prev_up_next">
+<a href="sect0008.html" title="Getting Started"><svg class="icon icon-arrow-left"><use xlink:href="symbol-defs.svg#icon-arrow-left"></use></svg>
+</a>
+<a href="index.html" title=""><svg class="icon icon-arrow-up"><use xlink:href="symbol-defs.svg#icon-arrow-up"></use></svg>
+</a>
+<a href="sect0010.html" title="Process Management"><svg class="icon icon-arrow-right"><use xlink:href="symbol-defs.svg#icon-arrow-right"></use></svg>
+</a>
+</nav>
+<script src="js/jquery.min.js" type="text/javascript"></script>
+<script src="js/plastex.js" type="text/javascript"></script>
+<script src="js/svgxuse.js" type="text/javascript"></script>
+</body>
+</html>

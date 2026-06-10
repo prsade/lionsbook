@@ -1,0 +1,1740 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<script>
+  MathJax = { 
+    tex: {
+		    inlineMath: [['\\(','\\)']]
+	} }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" type="text/javascript">
+</script>
+<meta content="plasTeX" name="generator"/>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>: File Access and Control</title>
+<link href="sect0022.html" rel="next" title="File Directories and Directory Files"/>
+<link href="sect0020.html" rel="prev" title="Buffer Manipulation"/>
+<link href="index.html" rel="up" title=""/>
+<link href="styles/theme-white.css" rel="stylesheet"/>
+<style id="line-ref-style">.line-ref { color: #0066cc; text-decoration: none; font-weight: 500; }
+.line-ref:hover { text-decoration: underline; background-color: #f0f7ff; }
+</style></head>
+<body>
+<header>
+<svg class="icon icon-list-numbered" id="toc-toggle"><use xlink:href="symbol-defs.svg#icon-list-numbered"></use></svg>
+<h1 id="doc_title"><a href="index.html"></a></h1>
+</header>
+<div class="wrapper">
+<nav class="toc">
+<ul class="sub-toc-0">
+<li class="">
+<a href="sect0001.html"><span class="toc_ref"></span> <span class="toc_entry">Preface</span></a>
+</li>
+<li class="">
+<a href="sect0002.html"><span class="toc_ref">1</span> <span class="toc_entry">Introduction</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0002.html#a0000000031"><span class="toc_ref">1.1</span> <span class="toc_entry">The UNIX Operating System</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000032"><span class="toc_ref">1.2</span> <span class="toc_entry">Utilities</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000033"><span class="toc_ref">1.3</span> <span class="toc_entry">Other Documentation</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000034"><span class="toc_ref">1.4</span> <span class="toc_entry">UNIX Programmer’s Manual</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000035"><span class="toc_ref">1.5</span> <span class="toc_entry">UNIX Documents</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000036"><span class="toc_ref">1.6</span> <span class="toc_entry">UNIX Operating System Source Code</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000037"><span class="toc_ref">1.7</span> <span class="toc_entry">Source Code Selections</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000038"><span class="toc_ref">1.8</span> <span class="toc_entry">Source Code Files</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000039"><span class="toc_ref">1.9</span> <span class="toc_entry">Use of these notes</span></a>
+</li>
+<li class="">
+<a href="sect0002.html#a0000000040"><span class="toc_ref">1.10</span> <span class="toc_entry">A Note on Programming Standards</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0003.html"><span class="toc_ref">2</span> <span class="toc_entry">Fundamentals</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0003.html#a0000000041"><span class="toc_ref">2.1</span> <span class="toc_entry">The Processor</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000042"><span class="toc_ref">2.2</span> <span class="toc_entry">Processor Status Word</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000043"><span class="toc_ref">2.3</span> <span class="toc_entry">General Registers</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000044"><span class="toc_ref">2.4</span> <span class="toc_entry">Instruction Set</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000045"><span class="toc_ref">2.5</span> <span class="toc_entry">Addressing Modes</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000046"><span class="toc_ref">2.6</span> <span class="toc_entry">Unix Assembler</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000047"><span class="toc_ref">2.7</span> <span class="toc_entry">Memory Management</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000048"><span class="toc_ref">2.8</span> <span class="toc_entry">Segmentation Registers.</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000049"><span class="toc_ref">2.9</span> <span class="toc_entry">Page Description Register</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000050"><span class="toc_ref">2.10</span> <span class="toc_entry">Memory Allocation</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000051"><span class="toc_ref">2.11</span> <span class="toc_entry">Memory Management Status Registers</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000052"><span class="toc_ref">2.12</span> <span class="toc_entry">“i” and “d” Spaces</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000053"><span class="toc_ref">2.13</span> <span class="toc_entry">Initial Conditions</span></a>
+</li>
+<li class="">
+<a href="sect0003.html#a0000000054"><span class="toc_ref">2.14</span> <span class="toc_entry">Special Device Registers</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0004.html"><span class="toc_ref">3</span> <span class="toc_entry">Reading “C” Programs</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0004.html#a0000000055"><span class="toc_ref">3.1</span> <span class="toc_entry">Some Selected Examples</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000056"><span class="toc_ref">3.2</span> <span class="toc_entry">Example 1</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000057"><span class="toc_ref">3.3</span> <span class="toc_entry">Example 2</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000058"><span class="toc_ref">3.4</span> <span class="toc_entry">Example 3</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000059"><span class="toc_ref">3.5</span> <span class="toc_entry">Example 4</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000060"><span class="toc_ref">3.6</span> <span class="toc_entry">Example 5</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000061"><span class="toc_ref">3.7</span> <span class="toc_entry">Example 6</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000062"><span class="toc_ref">3.8</span> <span class="toc_entry">Example 7</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000063"><span class="toc_ref">3.9</span> <span class="toc_entry">Example 8</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000064"><span class="toc_ref">3.10</span> <span class="toc_entry">Example 9</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000065"><span class="toc_ref">3.11</span> <span class="toc_entry">Example 10</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000066"><span class="toc_ref">3.12</span> <span class="toc_entry">Example 11</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000067"><span class="toc_ref">3.13</span> <span class="toc_entry">Example 12</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000068"><span class="toc_ref">3.14</span> <span class="toc_entry">Example 13</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000069"><span class="toc_ref">3.15</span> <span class="toc_entry">Example 14</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000070"><span class="toc_ref">3.16</span> <span class="toc_entry">Example 15</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000071"><span class="toc_ref">3.17</span> <span class="toc_entry">Example 16</span></a>
+</li>
+<li class="">
+<a href="sect0004.html#a0000000072"><span class="toc_ref">3.18</span> <span class="toc_entry">Example 17</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0005.html"><span class="toc_ref">4</span> <span class="toc_entry">An Overview</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0005.html#a0000000073"><span class="toc_ref">4.1</span> <span class="toc_entry">Variable Allocation</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000074"><span class="toc_ref">4.2</span> <span class="toc_entry">Global Variables</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000075"><span class="toc_ref">4.3</span> <span class="toc_entry">The ‘C’ Preprocessor</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000076"><span class="toc_ref">4.4</span> <span class="toc_entry">Section One</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000077"><span class="toc_ref">4.5</span> <span class="toc_entry">The First Group of ‘.h’ Files</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000078"><span class="toc_ref">4.6</span> <span class="toc_entry">Assembly Language Files</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000079"><span class="toc_ref">4.7</span> <span class="toc_entry">Other Files in Section One</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000080"><span class="toc_ref">4.8</span> <span class="toc_entry">Section Two</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000081"><span class="toc_ref">4.9</span> <span class="toc_entry">Section Three</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000082"><span class="toc_ref">4.10</span> <span class="toc_entry">Section Four</span></a>
+</li>
+<li class="">
+<a href="sect0005.html#a0000000083"><span class="toc_ref">4.11</span> <span class="toc_entry">Section Five</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0006.html"><span class="toc_ref"></span> <span class="toc_entry">Section One</span></a>
+</li>
+<li class="">
+<a href="sect0007.html"><span class="toc_ref">5</span> <span class="toc_entry">Two Files</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0007.html#a0000000084"><span class="toc_ref">5.1</span> <span class="toc_entry">The File ‘malloc.c’</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000085"><span class="toc_ref">5.2</span> <span class="toc_entry">Rules for List Maintenance</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000086"><span class="toc_ref">5.3</span> <span class="toc_entry">malloc (2528)</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000087"><span class="toc_ref">5.4</span> <span class="toc_entry">mfree (2556)</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000088"><span class="toc_ref">5.5</span> <span class="toc_entry">In conclusion ...</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000089"><span class="toc_ref">5.6</span> <span class="toc_entry">The File ‘prf.c’</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000090"><span class="toc_ref">5.7</span> <span class="toc_entry">printf (2340)</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000091"><span class="toc_ref">5.8</span> <span class="toc_entry">printn (2369)</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000092"><span class="toc_ref">5.9</span> <span class="toc_entry">putchar (2386)</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000093"><span class="toc_ref">5.10</span> <span class="toc_entry">panic (2419)</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000094"><span class="toc_ref">5.11</span> <span class="toc_entry">prdev (2433), deverror (2447)</span></a>
+</li>
+<li class="">
+<a href="sect0007.html#a0000000095"><span class="toc_ref">5.12</span> <span class="toc_entry">Included Files</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0008.html"><span class="toc_ref">6</span> <span class="toc_entry">Getting Started</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0008.html#a0000000096"><span class="toc_ref">6.1</span> <span class="toc_entry">Operator Actions</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000097"><span class="toc_ref">6.2</span> <span class="toc_entry">start (0612)</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000098"><span class="toc_ref">6.3</span> <span class="toc_entry">main (1550)</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000099"><span class="toc_ref">6.4</span> <span class="toc_entry">Processes</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000100"><span class="toc_ref">6.5</span> <span class="toc_entry">Initialisation of proc[0]</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000101"><span class="toc_ref">6.6</span> <span class="toc_entry">The story continues ...</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000102"><span class="toc_ref">6.7</span> <span class="toc_entry">sched (1940)</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000103"><span class="toc_ref">6.8</span> <span class="toc_entry">sleep (2066)</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000104"><span class="toc_ref">6.9</span> <span class="toc_entry">swtch (2178)</span></a>
+</li>
+<li class="">
+<a href="sect0008.html#a0000000105"><span class="toc_ref">6.10</span> <span class="toc_entry">main revisited</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0009.html"><span class="toc_ref">7</span> <span class="toc_entry">Processes</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0009.html#a0000000106"><span class="toc_ref">7.1</span> <span class="toc_entry">The Process</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000107"><span class="toc_ref">7.2</span> <span class="toc_entry">The proc Structure (0358)</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000108"><span class="toc_ref">7.3</span> <span class="toc_entry">The user Structure (0413)</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000109"><span class="toc_ref">7.4</span> <span class="toc_entry">The Per Process Data Area</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000110"><span class="toc_ref">7.5</span> <span class="toc_entry">The Segments</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000111"><span class="toc_ref">7.6</span> <span class="toc_entry">Execution of an Image</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000112"><span class="toc_ref">7.7</span> <span class="toc_entry">Kernel Mode Execution</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000113"><span class="toc_ref">7.8</span> <span class="toc_entry">User Mode Execution</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000114"><span class="toc_ref">7.9</span> <span class="toc_entry">An Example</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000115"><span class="toc_ref">7.10</span> <span class="toc_entry">Setting the Segmentation Registers</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000116"><span class="toc_ref">7.11</span> <span class="toc_entry">estabur (1650)</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000117"><span class="toc_ref">7.12</span> <span class="toc_entry">sureg (1739)</span></a>
+</li>
+<li class="">
+<a href="sect0009.html#a0000000118"><span class="toc_ref">7.13</span> <span class="toc_entry">newproc (1826)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0010.html"><span class="toc_ref">8</span> <span class="toc_entry">Process Management</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0010.html#a0000000119"><span class="toc_ref">8.1</span> <span class="toc_entry">Process Switching</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000120"><span class="toc_ref">8.2</span> <span class="toc_entry">Interrupts</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000121"><span class="toc_ref">8.3</span> <span class="toc_entry">Program Swapping</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000122"><span class="toc_ref">8.4</span> <span class="toc_entry">Jobs</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000123"><span class="toc_ref">8.5</span> <span class="toc_entry">Assembler Procedures</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000124"><span class="toc_ref">8.6</span> <span class="toc_entry">savu (0725)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000125"><span class="toc_ref">8.7</span> <span class="toc_entry">retu (0740)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000126"><span class="toc_ref">8.8</span> <span class="toc_entry">aretu (0734)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000127"><span class="toc_ref">8.9</span> <span class="toc_entry">swtch (2178)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000128"><span class="toc_ref">8.10</span> <span class="toc_entry">setpri (2156)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000129"><span class="toc_ref">8.11</span> <span class="toc_entry">sleep (2066)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000130"><span class="toc_ref">8.12</span> <span class="toc_entry">wakeup (2113)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000131"><span class="toc_ref">8.13</span> <span class="toc_entry">setrun (2134)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000132"><span class="toc_ref">8.14</span> <span class="toc_entry">expand (2268)</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000133"><span class="toc_ref">8.15</span> <span class="toc_entry">swtch revisited</span></a>
+</li>
+<li class="">
+<a href="sect0010.html#a0000000134"><span class="toc_ref">8.16</span> <span class="toc_entry">Critical Sections</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0011.html"><span class="toc_ref"></span> <span class="toc_entry">Section Two</span></a>
+</li>
+<li class="">
+<a href="sect0012.html"><span class="toc_ref">9</span> <span class="toc_entry">Hardware Interrupts and Traps</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0012.html#a0000000135"><span class="toc_ref">9.1</span> <span class="toc_entry">Hardware Interrupts</span></a>
+</li>
+<li class="">
+<a href="sect0012.html#a0000000136"><span class="toc_ref">9.2</span> <span class="toc_entry">The Interrupt Vector</span></a>
+</li>
+<li class="">
+<a href="sect0012.html#a0000000137"><span class="toc_ref">9.3</span> <span class="toc_entry">Interrupt Handlers</span></a>
+</li>
+<li class="">
+<a href="sect0012.html#a0000000138"><span class="toc_ref">9.4</span> <span class="toc_entry">Priorities</span></a>
+</li>
+<li class="">
+<a href="sect0012.html#a0000000139"><span class="toc_ref">9.5</span> <span class="toc_entry">Interrupt Priorities</span></a>
+</li>
+<li class="">
+<a href="sect0012.html#a0000000140"><span class="toc_ref">9.6</span> <span class="toc_entry">Rules for Interrupt Handlers</span></a>
+</li>
+<li class="">
+<a href="sect0012.html#a0000000141"><span class="toc_ref">9.7</span> <span class="toc_entry">Traps</span></a>
+</li>
+<li class="">
+<a href="sect0012.html#a0000000142"><span class="toc_ref">9.8</span> <span class="toc_entry">Assembly Language ‘trap’</span></a>
+</li>
+<li class="">
+<a href="sect0012.html#a0000000143"><span class="toc_ref">9.9</span> <span class="toc_entry">Return</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0013.html"><span class="toc_ref">10</span> <span class="toc_entry">The Assembler “Trap” Routine</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0013.html#a0000000144"><span class="toc_ref">10.1</span> <span class="toc_entry">Sources of Traps and Interrupts</span></a>
+</li>
+<li class="">
+<a href="sect0013.html#a0000000145"><span class="toc_ref">10.2</span> <span class="toc_entry">fuibyte (0814), fuiword (0844)</span></a>
+</li>
+<li class="">
+<a href="sect0013.html#a0000000146"><span class="toc_ref">10.3</span> <span class="toc_entry">Interrupts</span></a>
+</li>
+<li class="">
+<a href="sect0013.html#a0000000147"><span class="toc_ref">10.4</span> <span class="toc_entry">call (0776)</span></a>
+</li>
+<li class="">
+<a href="sect0013.html#a0000000148"><span class="toc_ref">10.5</span> <span class="toc_entry">User Program Traps</span></a>
+</li>
+<li class="">
+<a href="sect0013.html#a0000000149"><span class="toc_ref">10.6</span> <span class="toc_entry">The Kernel Stack</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0014.html"><span class="toc_ref">11</span> <span class="toc_entry">Clock Interrupts</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0014.html#a0000000150"><span class="toc_ref">11.1</span> <span class="toc_entry">clock (3725)</span></a>
+</li>
+<li class="">
+<a href="sect0014.html#a0000000151"><span class="toc_ref">11.2</span> <span class="toc_entry">timeout (3845)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0015.html"><span class="toc_ref">12</span> <span class="toc_entry">Traps and System Calls</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0015.html#a0000000152"><span class="toc_ref">12.1</span> <span class="toc_entry">trap (2693)</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000153"><span class="toc_ref">12.2</span> <span class="toc_entry">Kernel Mode Traps</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000154"><span class="toc_ref">12.3</span> <span class="toc_entry">User Mode Traps</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000155"><span class="toc_ref">12.4</span> <span class="toc_entry">System Calls</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000156"><span class="toc_ref">12.5</span> <span class="toc_entry">System Call Handlers</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000157"><span class="toc_ref">12.6</span> <span class="toc_entry">The File ‘sysl.c’</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000158"><span class="toc_ref">12.7</span> <span class="toc_entry">exec (3020)</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000159"><span class="toc_ref">12.8</span> <span class="toc_entry">fork (3322)</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000160"><span class="toc_ref">12.9</span> <span class="toc_entry">sbreak (3354)</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000161"><span class="toc_ref">12.10</span> <span class="toc_entry">The Files ‘sys2.c’ and ‘sys3.c’</span></a>
+</li>
+<li class="">
+<a href="sect0015.html#a0000000162"><span class="toc_ref">12.11</span> <span class="toc_entry">The File ‘sys4.c’</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0016.html"><span class="toc_ref">13</span> <span class="toc_entry">Software Interrupts</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0016.html#a0000000163"><span class="toc_ref">13.1</span> <span class="toc_entry">Anticipation</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000164"><span class="toc_ref">13.2</span> <span class="toc_entry">Causation</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000165"><span class="toc_ref">13.3</span> <span class="toc_entry">Effect</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000166"><span class="toc_ref">13.4</span> <span class="toc_entry">Tracing</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000167"><span class="toc_ref">13.5</span> <span class="toc_entry">Procedures</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000168"><span class="toc_ref">13.6</span> <span class="toc_entry">A. Anticipation</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000169"><span class="toc_ref">13.7</span> <span class="toc_entry">B. Causation</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000170"><span class="toc_ref">13.8</span> <span class="toc_entry">C. Effect</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000171"><span class="toc_ref">13.9</span> <span class="toc_entry">D. Tracing</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000172"><span class="toc_ref">13.10</span> <span class="toc_entry">ssig (3614)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000173"><span class="toc_ref">13.11</span> <span class="toc_entry">kill (3630)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000174"><span class="toc_ref">13.12</span> <span class="toc_entry">signal (3949)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000175"><span class="toc_ref">13.13</span> <span class="toc_entry">psignal (3963)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000176"><span class="toc_ref">13.14</span> <span class="toc_entry">issig (3991)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000177"><span class="toc_ref">13.15</span> <span class="toc_entry">psig (4043)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000178"><span class="toc_ref">13.16</span> <span class="toc_entry">core (4094)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000179"><span class="toc_ref">13.17</span> <span class="toc_entry">grow (4136)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000180"><span class="toc_ref">13.18</span> <span class="toc_entry">exit (3219)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000181"><span class="toc_ref">13.19</span> <span class="toc_entry">rexit (3205)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000182"><span class="toc_ref">13.20</span> <span class="toc_entry">wait (3270)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000183"><span class="toc_ref">13.21</span> <span class="toc_entry">Tracing</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000184"><span class="toc_ref">13.22</span> <span class="toc_entry">stop (4016)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000185"><span class="toc_ref">13.23</span> <span class="toc_entry">wait (3270) (continued)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000186"><span class="toc_ref">13.24</span> <span class="toc_entry">ptrace (4164)</span></a>
+</li>
+<li class="">
+<a href="sect0016.html#a0000000187"><span class="toc_ref">13.25</span> <span class="toc_entry">procxmt (4204)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0017.html"><span class="toc_ref">14</span> <span class="toc_entry">Program Swapping</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0017.html#a0000000188"><span class="toc_ref">14.1</span> <span class="toc_entry">Text Segments</span></a>
+</li>
+<li class="">
+<a href="sect0017.html#a0000000189"><span class="toc_ref">14.2</span> <span class="toc_entry">sched (1940)</span></a>
+</li>
+<li class="">
+<a href="sect0017.html#a0000000190"><span class="toc_ref">14.3</span> <span class="toc_entry">xswap (4368)</span></a>
+</li>
+<li class="">
+<a href="sect0017.html#a0000000191"><span class="toc_ref">14.4</span> <span class="toc_entry">xalloc (4433)</span></a>
+</li>
+<li class="">
+<a href="sect0017.html#a0000000192"><span class="toc_ref">14.5</span> <span class="toc_entry">xfree (4398)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0018.html"><span class="toc_ref">15</span> <span class="toc_entry">Introduction to Basic I/O</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0018.html#a0000000193"><span class="toc_ref">15.1</span> <span class="toc_entry">The File ‘buf.h’</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000194"><span class="toc_ref">15.2</span> <span class="toc_entry">devtab (4551)</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000195"><span class="toc_ref">15.3</span> <span class="toc_entry">The File ‘conf.h’</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000196"><span class="toc_ref">15.4</span> <span class="toc_entry">The File ‘conf.c’</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000197"><span class="toc_ref">15.5</span> <span class="toc_entry">System Generation</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000198"><span class="toc_ref">15.6</span> <span class="toc_entry">swap (5196)</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000199"><span class="toc_ref">15.7</span> <span class="toc_entry">Race Conditions</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000200"><span class="toc_ref">15.8</span> <span class="toc_entry">Reentrancy</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000201"><span class="toc_ref">15.9</span> <span class="toc_entry">For the Uninitiated</span></a>
+</li>
+<li class="">
+<a href="sect0018.html#a0000000202"><span class="toc_ref">15.10</span> <span class="toc_entry">Additional Reading</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0019.html"><span class="toc_ref">16</span> <span class="toc_entry">The RK Disk Driver</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0019.html#a0000000203"><span class="toc_ref">16.1</span> <span class="toc_entry">The file ‘rk.c’</span></a>
+</li>
+<li class="">
+<a href="sect0019.html#a0000000204"><span class="toc_ref">16.2</span> <span class="toc_entry">rkstrategy (5389)</span></a>
+</li>
+<li class="">
+<a href="sect0019.html#a0000000205"><span class="toc_ref">16.3</span> <span class="toc_entry">rkaddr (5420)</span></a>
+</li>
+<li class="">
+<a href="sect0019.html#a0000000206"><span class="toc_ref">16.4</span> <span class="toc_entry">devstart (5096)</span></a>
+</li>
+<li class="">
+<a href="sect0019.html#a0000000207"><span class="toc_ref">16.5</span> <span class="toc_entry">rkintr (5451)</span></a>
+</li>
+<li class="">
+<a href="sect0019.html#a0000000208"><span class="toc_ref">16.6</span> <span class="toc_entry">iodone (5018)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0020.html"><span class="toc_ref">17</span> <span class="toc_entry">Buffer Manipulation</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0020.html#a0000000209"><span class="toc_ref">17.1</span> <span class="toc_entry">Flags</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000210"><span class="toc_ref">17.2</span> <span class="toc_entry">A Cache-like Memory</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000211"><span class="toc_ref">17.3</span> <span class="toc_entry">clrbuf (5038)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000212"><span class="toc_ref">17.4</span> <span class="toc_entry">incore (4899)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000213"><span class="toc_ref">17.5</span> <span class="toc_entry">getblk (4921)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000214"><span class="toc_ref">17.6</span> <span class="toc_entry">brelse (4869)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000215"><span class="toc_ref">17.7</span> <span class="toc_entry">binit (5055)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000216"><span class="toc_ref">17.8</span> <span class="toc_entry">bread (4754)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000217"><span class="toc_ref">17.9</span> <span class="toc_entry">breada (4773)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000218"><span class="toc_ref">17.10</span> <span class="toc_entry">bwrite (4809)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000219"><span class="toc_ref">17.11</span> <span class="toc_entry">bawrite (4856)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000220"><span class="toc_ref">17.12</span> <span class="toc_entry">bdwrite (4836)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000221"><span class="toc_ref">17.13</span> <span class="toc_entry">bflush (5229)</span></a>
+</li>
+<li class="">
+<a href="sect0020.html#a0000000222"><span class="toc_ref">17.14</span> <span class="toc_entry">physio (5259)</span></a>
+</li>
+</ul>
+</li>
+<li class="active current">
+<a href="sect0021.html"><span class="toc_ref">18</span> <span class="toc_entry">File Access and Control</span></a>
+<span class="expand-toc">▼</span>
+<ul class="sub-toc-1 active">
+<li class="">
+<a href="sect0021.html#a0000000223"><span class="toc_ref">18.1</span> <span class="toc_entry">File Characteristics</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000224"><span class="toc_ref">18.2</span> <span class="toc_entry">System Calls</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000225"><span class="toc_ref">18.3</span> <span class="toc_entry">Control Tables</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000226"><span class="toc_ref">18.4</span> <span class="toc_entry">file (5507)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000227"><span class="toc_ref">18.5</span> <span class="toc_entry">inode (5659)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000228"><span class="toc_ref">18.6</span> <span class="toc_entry">Resources Required</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000229"><span class="toc_ref">18.7</span> <span class="toc_entry">Opening a File</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000230"><span class="toc_ref">18.8</span> <span class="toc_entry">creat (5781)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000231"><span class="toc_ref">18.9</span> <span class="toc_entry">openl (5804)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000232"><span class="toc_ref">18.10</span> <span class="toc_entry">open (5763)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000233"><span class="toc_ref">18.11</span> <span class="toc_entry">openl revisited</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000234"><span class="toc_ref">18.12</span> <span class="toc_entry">close (5846)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000235"><span class="toc_ref">18.13</span> <span class="toc_entry">closef (6643)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000236"><span class="toc_ref">18.14</span> <span class="toc_entry">iput (7344)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000237"><span class="toc_ref">18.15</span> <span class="toc_entry">Deletion of Files</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000238"><span class="toc_ref">18.16</span> <span class="toc_entry">Reading and Writing</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000239"><span class="toc_ref">18.17</span> <span class="toc_entry">rdwr (5731)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000240"><span class="toc_ref">18.18</span> <span class="toc_entry">readi (6221)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000241"><span class="toc_ref">18.19</span> <span class="toc_entry">writei</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000242"><span class="toc_ref">18.20</span> <span class="toc_entry">iomove (6364)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000243"><span class="toc_ref">18.21</span> <span class="toc_entry">bmap (6415)</span></a>
+</li>
+<li class="">
+<a href="sect0021.html#a0000000244"><span class="toc_ref">18.22</span> <span class="toc_entry">Leftovers</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0022.html"><span class="toc_ref">19</span> <span class="toc_entry">File Directories and Directory Files</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0022.html#a0000000245"><span class="toc_ref">19.1</span> <span class="toc_entry">The Directory Data Structure</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000246"><span class="toc_ref">19.2</span> <span class="toc_entry">Directory Files</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000247"><span class="toc_ref">19.3</span> <span class="toc_entry">namei (7518)</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000248"><span class="toc_ref">19.4</span> <span class="toc_entry">Some Comments</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000249"><span class="toc_ref">19.5</span> <span class="toc_entry">link (5909)</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000250"><span class="toc_ref">19.6</span> <span class="toc_entry">wdir (7477)</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000251"><span class="toc_ref">19.7</span> <span class="toc_entry">maknode (7455)</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000252"><span class="toc_ref">19.8</span> <span class="toc_entry">unlink (3510)</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000253"><span class="toc_ref">19.9</span> <span class="toc_entry">mknod (5952)</span></a>
+</li>
+<li class="">
+<a href="sect0022.html#a0000000254"><span class="toc_ref">19.10</span> <span class="toc_entry">access (6746)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0023.html"><span class="toc_ref">20</span> <span class="toc_entry">File Systems</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0023.html#a0000000255"><span class="toc_ref">20.1</span> <span class="toc_entry">The ‘Super Block’ (5561)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000256"><span class="toc_ref">20.2</span> <span class="toc_entry">The ’mount’ table (0272)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000257"><span class="toc_ref">20.3</span> <span class="toc_entry">iinit (6922)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000258"><span class="toc_ref">20.4</span> <span class="toc_entry">Mounting</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000259"><span class="toc_ref">20.5</span> <span class="toc_entry">smount (6086)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000260"><span class="toc_ref">20.6</span> <span class="toc_entry">Notes</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000261"><span class="toc_ref">20.7</span> <span class="toc_entry">iget (7276)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000262"><span class="toc_ref">20.8</span> <span class="toc_entry">getfs (7167)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000263"><span class="toc_ref">20.9</span> <span class="toc_entry">update (7201)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000264"><span class="toc_ref">20.10</span> <span class="toc_entry">sumount (6144)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000265"><span class="toc_ref">20.11</span> <span class="toc_entry">Resource Allocation</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000266"><span class="toc_ref">20.12</span> <span class="toc_entry">alloc (6965)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000267"><span class="toc_ref">20.13</span> <span class="toc_entry">itrunc (7414)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000268"><span class="toc_ref">20.14</span> <span class="toc_entry">free (7000)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000269"><span class="toc_ref">20.15</span> <span class="toc_entry">iput (7344)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000270"><span class="toc_ref">20.16</span> <span class="toc_entry">ifree (7134)</span></a>
+</li>
+<li class="">
+<a href="sect0023.html#a0000000271"><span class="toc_ref">20.17</span> <span class="toc_entry">iupdat (7374)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0024.html"><span class="toc_ref">21</span> <span class="toc_entry">Pipes</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0024.html#a0000000272"><span class="toc_ref">21.1</span> <span class="toc_entry">pipe (7723)</span></a>
+</li>
+<li class="">
+<a href="sect0024.html#a0000000273"><span class="toc_ref">21.2</span> <span class="toc_entry">readp (7758)</span></a>
+</li>
+<li class="">
+<a href="sect0024.html#a0000000274"><span class="toc_ref">21.3</span> <span class="toc_entry">writep (7805)</span></a>
+</li>
+<li class="">
+<a href="sect0024.html#a0000000275"><span class="toc_ref">21.4</span> <span class="toc_entry">plock (7862)</span></a>
+</li>
+<li class="">
+<a href="sect0024.html#a0000000276"><span class="toc_ref">21.5</span> <span class="toc_entry">prele (7882)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0025.html"><span class="toc_ref">22</span> <span class="toc_entry">Character Oriented Special Files</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0025.html#a0000000277"><span class="toc_ref">22.1</span> <span class="toc_entry">LP11 Line Printer Driver</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000278"><span class="toc_ref">22.2</span> <span class="toc_entry">lpopen (8850)</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000279"><span class="toc_ref">22.3</span> <span class="toc_entry">Notes</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000280"><span class="toc_ref">22.4</span> <span class="toc_entry">lpoutput (8986)</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000281"><span class="toc_ref">22.5</span> <span class="toc_entry">lpstart (8967)</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000282"><span class="toc_ref">22.6</span> <span class="toc_entry">lpinit(8976)</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000283"><span class="toc_ref">22.7</span> <span class="toc_entry">lpwrite (8870)</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000284"><span class="toc_ref">22.8</span> <span class="toc_entry">Discussion</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000285"><span class="toc_ref">22.9</span> <span class="toc_entry">lpcanon (8879)</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000286"><span class="toc_ref">22.10</span> <span class="toc_entry">For idle readers: A suggestion</span></a>
+</li>
+<li class="">
+<a href="sect0025.html#a0000000287"><span class="toc_ref">22.11</span> <span class="toc_entry">PC-11 Paper Tape Reader/Punch Driver</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0026.html"><span class="toc_ref">23</span> <span class="toc_entry">Character Handling</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0026.html#a0000000288"><span class="toc_ref">23.1</span> <span class="toc_entry">cinit (8234)</span></a>
+</li>
+<li class="">
+<a href="sect0026.html#a0000000289"><span class="toc_ref">23.2</span> <span class="toc_entry">getc (0930)</span></a>
+</li>
+<li class="">
+<a href="sect0026.html#a0000000290"><span class="toc_ref">23.3</span> <span class="toc_entry">putc (0967)</span></a>
+</li>
+<li class="">
+<a href="sect0026.html#a0000000291"><span class="toc_ref">23.4</span> <span class="toc_entry">Character Sets</span></a>
+</li>
+<li class="">
+<a href="sect0026.html#a0000000292"><span class="toc_ref">23.5</span> <span class="toc_entry">Control Characters</span></a>
+</li>
+<li class="">
+<a href="sect0026.html#a0000000293"><span class="toc_ref">23.6</span> <span class="toc_entry">Graphic Characters</span></a>
+</li>
+<li class="">
+<a href="sect0026.html#a0000000294"><span class="toc_ref">23.7</span> <span class="toc_entry">Graphic Character Sets</span></a>
+</li>
+<li class="">
+<a href="sect0026.html#a0000000295"><span class="toc_ref">23.8</span> <span class="toc_entry">maptab (8117)</span></a>
+</li>
+<li class="">
+<a href="sect0026.html#a0000000296"><span class="toc_ref">23.9</span> <span class="toc_entry">partab (7947)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0027.html"><span class="toc_ref">24</span> <span class="toc_entry">Interactive Terminals</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0027.html#a0000000297"><span class="toc_ref">24.1</span> <span class="toc_entry">The ’tty’ Structure (7926)</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000298"><span class="toc_ref">24.2</span> <span class="toc_entry"> Interactive Terminals</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000299"><span class="toc_ref">24.3</span> <span class="toc_entry">Initialisation</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000300"><span class="toc_ref">24.4</span> <span class="toc_entry">stty (8183)</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000301"><span class="toc_ref">24.5</span> <span class="toc_entry">sgtty (8201)</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000302"><span class="toc_ref">24.6</span> <span class="toc_entry">klsgtty (8090)</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000303"><span class="toc_ref">24.7</span> <span class="toc_entry">tysty (8577)</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000304"><span class="toc_ref">24.8</span> <span class="toc_entry">The DL11/KL11 Terminal Device Handler</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000305"><span class="toc_ref">24.9</span> <span class="toc_entry">Device Registers</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000306"><span class="toc_ref">24.10</span> <span class="toc_entry">UNIBUS Addresses</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000307"><span class="toc_ref">24.11</span> <span class="toc_entry">Software Considerations</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000308"><span class="toc_ref">24.12</span> <span class="toc_entry">Interrupt Vector Addresses</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000309"><span class="toc_ref">24.13</span> <span class="toc_entry">Source Code</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000310"><span class="toc_ref">24.14</span> <span class="toc_entry">klopen (8023)</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000311"><span class="toc_ref">24.15</span> <span class="toc_entry">klclose (8055)</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000312"><span class="toc_ref">24.16</span> <span class="toc_entry">klxint (8070)</span></a>
+</li>
+<li class="">
+<a href="sect0027.html#a0000000313"><span class="toc_ref">24.17</span> <span class="toc_entry">klrint (8078)</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0028.html"><span class="toc_ref">25</span> <span class="toc_entry">The File “tty.c”</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0028.html#a0000000314"><span class="toc_ref">25.1</span> <span class="toc_entry">flushtty (8252)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000315"><span class="toc_ref">25.2</span> <span class="toc_entry">wflushtty (8217)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000316"><span class="toc_ref">25.3</span> <span class="toc_entry">Character Input</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000317"><span class="toc_ref">25.4</span> <span class="toc_entry">ttread (8535)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000318"><span class="toc_ref">25.5</span> <span class="toc_entry">canon (8274)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000319"><span class="toc_ref">25.6</span> <span class="toc_entry">Notes</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000320"><span class="toc_ref">25.7</span> <span class="toc_entry">ttyinput (8333)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000321"><span class="toc_ref">25.8</span> <span class="toc_entry">Character Output – ttwrite (8550)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000322"><span class="toc_ref">25.9</span> <span class="toc_entry">ttstart</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000323"><span class="toc_ref">25.10</span> <span class="toc_entry">ttrstrt (8486)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000324"><span class="toc_ref">25.11</span> <span class="toc_entry">ttyoutput (8373)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000325"><span class="toc_ref">25.12</span> <span class="toc_entry">Terminals with a restricted character set</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000326"><span class="toc_ref">25.13</span> <span class="toc_entry">A. The test for ’TTLOWAT’ (Line 8074)</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000327"><span class="toc_ref">25.14</span> <span class="toc_entry">B. Inactive Terminals</span></a>
+</li>
+<li class="">
+<a href="sect0028.html#a0000000328"><span class="toc_ref">25.15</span> <span class="toc_entry">Well, that’s all, folks ...</span></a>
+</li>
+</ul>
+</li>
+<li class="">
+<a href="sect0029.html"><span class="toc_ref">26</span> <span class="toc_entry">Suggested Exercises</span></a>
+<span class="expand-toc">▶</span>
+<ul class="sub-toc-1">
+<li class="">
+<a href="sect0029.html#a0000000329"><span class="toc_ref">26.1</span> <span class="toc_entry">Section One</span></a>
+</li>
+<li class="">
+<a href="sect0029.html#a0000000330"><span class="toc_ref">26.2</span> <span class="toc_entry">Section Two</span></a>
+</li>
+<li class="">
+<a href="sect0029.html#a0000000331"><span class="toc_ref">26.3</span> <span class="toc_entry">Section Three</span></a>
+</li>
+<li class="">
+<a href="sect0029.html#a0000000332"><span class="toc_ref">26.4</span> <span class="toc_entry">Section Four</span></a>
+</li>
+<li class="">
+<a href="sect0029.html#a0000000333"><span class="toc_ref">26.5</span> <span class="toc_entry">General</span></a>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+<div class="content">
+<div class="content-wrapper">
+<div class="main-text">
+<h1 class="bilingual" id="a0000000022" title="18 File Access and Control">18 Dostęp do plików i kontrola</h1>
+<p class="bilingual" title="A large part of every operating system seems to be concerned with data management and file management, and UNIX turns out to be no exception.">Wydaje się, że duża część każdego systemu operacyjnego zajmuje się zarządzaniem danymi i zarządzaniem plikami, a UNIX nie jest wyjątkiem.</p>
+<p class="bilingual" title="Section Four of the source code contains thirteen files.">Sekcja czwarta kodu źródłowego zawiera trzynaście plików.</p>
+<p class="bilingual" title="The first four contain common declarations needed by various of the other routines:">Pierwsze cztery zawierają wspólne deklaracje potrzebne różnym innym procedurom:</p>
+<dl class="description">
+<dt class="bilingual" title="“file.h”">„plik.h”</dt>
+<dd class="bilingual" title="describes the structure of the “file” array;"><p class="bilingual" title="opisuje strukturę tablicy „plik”;">zapis struktury „plik”;</p>
+</dd>
+<dt class="bilingual" title="“filsvs.h”">„filsvs.h”</dt>
+<dd class="bilingual" title="describes the structure of the “super block” for “mounted” file systems;"><p class="bilingual" title="opisuje strukturę „superbloku” dla „zamontowanych” systemów plików;">struktury „superbloku” dla „załączonych” systemów plików;</p>
+</dd>
+<dt class="bilingual" title="“ino.h”">„ino.h”</dt>
+<dd class="bilingual" title="describes the structure of “inodes” recorded on “mounted” devices;"><p class="bilingual" title="opisuje strukturę „i-węzłów” zarejestrowanych na „zamontowanych” urządzeniach;">wbudowane struktury „i-węzłów” umieszczone na „zamontowanych”;</p>
+</dd>
+<dt class="bilingual" title="“inode.h”">„i-węzeł.h”</dt>
+<dd class="bilingual" title="describes the structure of the “inode” array;"><p class="bilingual" title="opisuje strukturę tablicy „i-węzłów”;">zapis struktury „i-węzłów”;</p>
+</dd>
+</dl>
+<p class="bilingual" title="The next two files, “sys2.c” and “sys3.c” contain code for system calls. (“sys1.c” and “sys4.c” were presented in Section Two).">Następne dwa pliki, „sys2.c” i „sys3.c”, zawierają kod wywołań systemowych. („sys1.c” i „sys4.c” zostały przedstawione w Części Drugiej).</p>
+<p class="bilingual" title="Tne next five files, “rdwri.c”, “subr.c”, “fio.c”, “alloc.c” and “iget.c”, together present the principal routines for file management, and provide a link between the i/o oriented system calls and the basic i/o routines.">Pięć następnych plików, „rdwri.c”, „subr.c”, „fio.c”, „alloc.c” i „iget.c”, przedstawia razem główne procedury zarządzania plikami i zapewnia łącze pomiędzy wywołaniami systemowymi zorientowanymi na we/wy i podstawowymi procedurami we/wy.</p>
+<p class="bilingual" title="The file “nami.c” is concerned with searching directories to convert file pathnames into “inode” references.">Plik „nami.c” służy do przeszukiwania katalogów w celu konwersji nazw ścieżek plików na odniesienia do „i-węzłów”.</p>
+<p class="bilingual" title="Finally, “pipe.c” is the “device driver” for pipes.">Wreszcie „pipe.c” to „sterownik urządzenia” dla potoków.</p>
+<h2 class="bilingual" id="a0000000223" title="18.1 File Characteristics">18.1 Charakterystyka pliku</h2>
+<p class="bilingual" title="A UNIX file is conceptually a named character string, stored on one of a variety of peripheral devices (or in the main memory), and accessible via mechanisms appropriate to the usual peripheral devices.">Plik UNIX to koncepcyjnie nazwany ciąg znaków, przechowywany na jednym z różnych urządzeń peryferyjnych (lub w pamięci głównej) i dostępny poprzez mechanizmy właściwe dla zwykłych urządzeń peryferyjnych.</p>
+<p class="bilingual" title="It will be noted that there is no record structure associated with UNIX files. However “newline” characters may be inserted into the file to define substrings analogous to records.">Należy zauważyć, że z plikami UNIX nie jest powiązana żadna struktura rekordów. Jednakże do pliku można wstawić znaki „nowej linii”, aby zdefiniować podciągi analogicznie do rekordów.</p>
+<p class="bilingual" title="UNIX carries the ideas of device independence to their logical extreme by allowing the file name in effect to determine uniquely all relevant attributes of the file.">UNIX doprowadza ideę niezależności urządzenia do logicznego ekstremum, umożliwiając obowiązującej nazwie pliku jednoznaczne określenie wszystkich istotnych atrybutów pliku.</p>
+<h2 class="bilingual" id="a0000000224" title="18.2 System Calls">18.2 Wywołania systemowe</h2>
+<p class="bilingual" title="The following system calls are provided expressly for file manipulation:">Poniższe wywołania systemowe są przeznaczone wyłącznie do manipulacji plikami:</p>
+<div class="centered"> <table class="tabular">
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p> <b class="bf">#</b> </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> <b class="bf">Name</b> </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> <b class="bf">Line </b> </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> <b class="bf">#</b> </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> <b class="bf">Name</b> </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> <b class="bf">Line</b></p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left">
+<p>3 </p>
+</td>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left">
+<p> read </p>
+</td>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left">
+<p> 5711 </p>
+</td>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left">
+<p> 14 </p>
+</td>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left">
+<p class="bilingual" title="mknod">mknod</p>
+</td>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left">
+<p> 5952</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p>4 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="write">pisać</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 5720 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 15 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="chmod">chmod</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 3560</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p>5 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> open </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 5765 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 16 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="chown">chowane</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 3575</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p>6 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="close">zamknąć</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 5846 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 19 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> seek </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 5861</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p>8 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="creat">stworzyć</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 5781 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 21 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="mount">uchwyt</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 6086</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p>9 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> link </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 5909 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 22 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="umount">ilość</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 6144</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p>10 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="unlink">odczepić</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 3510 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 41 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> dup </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 6069</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p>12 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="chdir">chdir</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 3538 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 42 </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> pipe </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> 7723</p>
+</td>
+</tr>
+</table> </div>
+<h2 class="bilingual" id="a0000000225" title="18.3 Control Tables">18.3 Tabele kontrolne</h2>
+<p class="bilingual" title="The arrays “file” and “inode” are essential components of the file access mechanism.">Tablice „file” i „i-węzeł” są istotnymi elementami mechanizmu dostępu do plików.</p>
+<h2 class="bilingual" id="a0000000226" title="18.4 file (5507)">plik 18.4 (5507)</h2>
+<p class="bilingual" title="The array “file” is defined as an array of structures (also named “file”).">Tablicę „plik” definiuje się jako tablicę struktur (nazywaną także „plikiem”).</p>
+<p class="bilingual" title="An element of the “file” array is considered to be unallocated if “f_count” is zero.">Element tablicy „file” uważa się za nieprzydzielony, jeśli „f_count” wynosi zero.</p>
+<p class="bilingual" title="Each “open” or “creat” system call results in the allocation of an element of the “file” array. The address of this element is stored in an element of the calling process’s array “u.u_ofile”. It is the index of the newly allocated element of the latter array which is passed back to the user process. Descendants of a process created by “newproc” inherit the contents of the parent’s “u.u_ofile” array.">Każde wywołanie systemowe „open” lub „creat” skutkuje alokacją elementu tablicy „file”. Adres tego elementu przechowywany jest w elemencie tablicy wywołującego procesu „u.u_ofile”. Jest to indeks nowo przydzielonego elementu tej ostatniej tablicy, który jest przekazywany z powrotem do procesu użytkownika. Potomkowie procesu utworzonego przez „newproc” dziedziczą zawartość tablicy „u.u_ofile” rodzica.</p>
+<p class="bilingual" title="Each element of “file” includes a counter, “f_count”, to determine the number of current processes which reference it.">Każdy element „pliku” zawiera licznik „f_count”, który określa liczbę bieżących procesów, które się do niego odwołują.</p>
+<p class="bilingual" title="“f_count” is incremented by “newproc” (1878), “dup” (6079) and “falloc” (6857); it is decremented by “closef” (6657) and (if the file can’t be opened) by “openl” (5836).">„f_count” jest zwiększane o „newproc” (1878), „dup” (6079) i „falloc” (6857); jest zmniejszana przez „closef” (6657) i (jeśli pliku nie można otworzyć) przez „openl” (5836).</p>
+<p class="bilingual" title="The “f_flag” (5509) of the “file” element notes whether the file is open for reading and/or writing or whether it is a “pipe” or not. (Further discussion of “pipes” will be deferred till Chapter Twenty-One.)">„f_flag” (5509) elementu „file” wskazuje, czy plik jest otwarty do odczytu i/lub zapisu, czy też jest to „potok”, czy nie. (Dalsze omówienie „fajek” zostanie odroczone do rozdziału dwudziestego pierwszego.)</p>
+<p class="bilingual" title="The “file” structure also contains a pointer, “f_inode” (5511) to an entry in the “inode” table, and a 32 bit integer, “f_offset” (5512), which is a logical pointer to a character within the file.">Struktura „pliku” zawiera także wskaźnik „f_inode” (5511) do wpisu w tabeli „i-węzeł” oraz 32-bitową liczbę całkowitą „f_offset” (5512), która jest logicznym wskaźnikiem do znaku w pliku.</p>
+<h2 class="bilingual" id="a0000000227" title="18.5 inode (5659)">i-węzeł 18,5 (5659)</h2>
+<p class="bilingual" title="“inode” is defined as an array of structures (also named “inode”).">„i-węzeł” definiuje się jako tablicę struktur (nazywaną także „i-węzłem”).</p>
+<p class="bilingual" title="An element of the “inode” is considered to be unallocated if the reference count, “i_count”, is zero.">Element „i-węzła” jest uważany za nieprzydzielony, jeśli liczba odwołań „i_count” wynosi zero.</p>
+<p class="bilingual" title="At each point in time, “inode” contains a single entry for each file which may be referenced for normal i/o operations, or which is being executed or which has been executed and has the “sticky” bit set, or which is the working directory for some process.">W każdym momencie „i-węzeł” zawiera pojedynczy wpis dla każdego pliku, do którego można się odwoływać w przypadku normalnych operacji we/wy, który jest wykonywany lub który został wykonany i ma ustawiony bit „lepki” lub który jest katalogiem roboczym dla jakiegoś procesu.</p>
+<p class="bilingual" title="Several “file” table entries may point to a single “inode” entry. The inode entry describes the general disporition of the file.">Kilka wpisów w tabeli „plików” może wskazywać na pojedynczy wpis „i-węzła”. Wpis i-węzła opisuje ogólny rozkład pliku.</p>
+<h2 class="bilingual" id="a0000000228" title="18.6 Resources Required">18.6 Wymagane zasoby</h2>
+<p class="bilingual" title="Each file requires the dedication of certain system resources. When a file exists, but is not being referenced in any way, it requires:">Każdy plik wymaga poświęcenia określonych zasobów systemowych. Gdy plik istnieje, ale nie ma do niego żadnego odniesienia, wymaga:</p>
+<dl class="description">
+<dt>(a)</dt>
+<dd class="bilingual" title="a directory entry (16 characters in a directory file);"><p class="bilingual" title="wpis do katalogu (16 znaków w pliku katalogu);">wpis do katalogu (16 znaków w katalogu);</p>
+</dd>
+<dt>(b)</dt>
+<dd class="bilingual" title="a disk “inode” entry (32 characters in a table stored on the disk);"><p class="bilingual" title="wpis „i-węzła” dysku (32 znaki w tabeli przechowywanej na dysku);">wpis „i-węzła” dysku (32 znaki w tabeli charakterystycznej na dysku);</p>
+</dd>
+<dt>(c)</dt>
+<dd class="bilingual" title="zero, one or more blocks of disk storage (512 characters each)."><p class="bilingual" title="zero, jeden lub więcej bloków pamięci dyskowej (każdy po 512 znaków).">zero, jeden lub więcej bloków pamięci dyskowej (każdy po 512 znaków).</p>
+</dd>
+</dl>
+<p class="bilingual" title="In addition if the file is being referenced for some purpose, it requires">Ponadto, jeśli plik jest przywoływany w jakimś celu, jest to wymagane</p>
+<dl class="description">
+<dt>(d)</dt>
+<dd class="bilingual" title="a core “inode” entry (32 characters in the “inode” array);"><p class="bilingual" title="podstawowy wpis „i-węzeł” (32 znaki w tablicy „i-węzeł”);">podstawowy wpis „i-węzeł” (32 znaki w bazie „i-węzeł”);</p>
+</dd>
+</dl>
+<p class="bilingual" title="Finally if a user program has “opened” the file for reading or writing, a number of resources are required:">Wreszcie, jeśli program użytkownika „otworzył” plik do odczytu lub zapisu, wymagana jest pewna liczba zasobów:</p>
+<dl class="description">
+<dt>(e)</dt>
+<dd class="bilingual" title="a “file” array entry (8 characters);"><p class="bilingual" title="wpis w tablicy „plik” (8 znaków);">wpis w pliku „plik” (8 znaków);</p>
+</dd>
+<dt>(f)</dt>
+<dd class="bilingual" title="an entry in the user program’s “u.u_ofile” array (one word per file, pointing to a “file” array entry);"><p class="bilingual" title="wpis w tablicy „u.u_ofile” programu użytkownika (jedno słowo na plik, wskazujące wpis w tablicy „file”);">wpis w nazwie „u.u_ofile” programu użytkownika (jedno słowo na plik, wskazujące wpis w nazwie „file”);</p>
+</dd>
+</dl>
+<p class="bilingual" title="Mechanisms have to be set up for allocating and deallocating each of these resources in an orderly manner. The following table gives the names of the principal procedures involved:">Należy ustanowić mechanizmy przydzielania i zwalniania każdego z tych zasobów w sposób uporządkowany. W poniższej tabeli podano nazwy głównych procedur:</p>
+<div class="centered"> <table class="tabular">
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="resource"> <b class="bf">ratunek</b> </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="obtain"> <b class="bf">uzyskać</b> </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> <b class="bf">free</b> </p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left">
+<p class="bilingual" title="directory entry">wpis do katalogu</p>
+</td>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left">
+<p class="bilingual" title="namei">imię</p>
+</td>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left">
+<p class="bilingual" title="namei">imię</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="disk “inode” entry">wpis „i-węzła” dysku</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="ialloc">ialloc</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="ifree">za darmo</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="disk storage block">blok przechowywania dysku</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="alloc">przydział</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> free</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="core “inode” entry">wpis „i-węzła” rdzenia</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> iget </p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p> iput</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="“file” table entry">Wpis w tabeli „plik”.</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="falloc">upadek</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="closef">zamknięcie</p>
+</td>
+</tr>
+<tr>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="“u_ofile” entry">Wpis „u_ofile”.</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="ufalloc">ufalloc</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left">
+<p class="bilingual" title="close">zamknąć</p>
+</td>
+</tr>
+</table> </div>
+<h2 class="bilingual" id="a0000000229" title="18.7 Opening a File">18.7 Otwieranie pliku</h2>
+<p class="bilingual" title="When a program wishes to reference a file which already exists, it must “open” the file to create a “bridge” to the file. (Note that in UNIX, processes usually inherit the open files of their parents or predecessors, so that often all needed files are already implicitly open.) If the file does not already exist, it must be “created”.">Kiedy program chce odwołać się do pliku, który już istnieje, musi „otworzyć” plik, aby utworzyć „pomost” do pliku. (Zauważ, że w systemie UNIX procesy zwykle dziedziczą otwarte pliki swoich rodziców lub poprzedników, więc często wszystkie potrzebne pliki są już domyślnie otwarte.) Jeśli plik jeszcze nie istnieje, należy go „utworzyć”.</p>
+<p class="bilingual" title="This second case will be investigated first:">Ten drugi przypadek zostanie zbadany w pierwszej kolejności:</p>
+<h2 class="bilingual" id="a0000000230" title="18.8 creat (5781)">18,8 tworzenia (5781)</h2>
+<dl class="description">
+<dt><a class="line-ref" data-line="5786" href="../all.html#line5786" target="source">5786:</a></dt>
+<dd class="bilingual" title="“namei” (7518) converts a pathname into an “inode” pointer. “uchar” is the name of a procedure which recovers the pathname, character by character, from the user program data area;"><p class="bilingual" title="„namei” (7518) konwertuje nazwę ścieżki na wskaźnik „i-węzła”. „uchar” to nazwa procedury, która odzyskuje ścieżkę znak po znaku z obszaru danych programu użytkownika;">„namei” (7518) konwertuje pozostałości na wynik „i-węzła”. „uchar” to nazwa procedury, która odzyskuje znak po znaku z obszaru danych programu użytkownika;</p>
+</dd>
+<dt><a class="line-ref" data-line="5787" href="../all.html#line5787" target="source">5787:</a></dt>
+<dd class="bilingual" title="A null “inode” pointer indicates either an error or that no file of that name already exists;"><p class="bilingual" title="Wskaźnik „i-węzła” o wartości null wskazuje albo na błąd, albo na to, że żaden plik o tej nazwie już nie istnieje;">Wskaźnik „i-węzła” o wartości null oznacza albo na błąd, albo na to, że niepowiązany plik o tej nazwie już nie istnieje;</p>
+</dd>
+<dt><a class="line-ref" data-line="5788" href="../all.html#line5788" target="source">5788:</a></dt>
+<dd class="bilingual" title="For error conditions, see “CREAT (II)” in the UPM;"><p class="bilingual" title="Informacje o błędach można znaleźć w sekcji „CREAT (II)” w module UPM;">Informacje o błędach można znaleźć w sekcji „CREAT (II)” w module UPM;</p>
+</dd>
+<dt><a class="line-ref" data-line="5790" href="../all.html#line5790" target="source">5790:</a></dt>
+<dd class="bilingual" title="“maknode” (7455) creates a core “inode” via a call on “ialloc” and then initialises it and enters it into the appropriate directory. Note the explicit resetting of the “sticky” bit"><p class="bilingual" title="„maknode” (7455) tworzy rdzeń „i-węzła” poprzez wywołanie „ialloc”, a następnie inicjuje go i wprowadza do odpowiedniego katalogu. Zwróć uwagę na wyraźne resetowanie „lepkiego” bitu">„maknode” (7455) tworzy rdzeń „i-węzła” poprzez wywołanie „ialloc”, a następnie inicjuje go i wprowadza do odpowiedniego katalogu. Zwróć uwagę na wcześniejsze resetowanie „lepkiego” bitu</p>
+</dd>
+</dl>
+<h2 class="bilingual" id="a0000000231" title="18.9 openl (5804)">18,9 otwarte (5804)</h2>
+<p class="bilingual" title="This procedure is called by “open” (5774) and “creat” (5793, 5795), passing values of the third parameter, “trf”, of 0, 2 and 1 respectively. The value 2 represents the case where no file of the desired name already exists.">Ta procedura jest wywoływana przez „open” (5774) i „creat” (5793, 5795), przekazując wartości trzeciego parametru „trf” odpowiednio 0, 2 i 1. Wartość 2 reprezentuje przypadek, w którym nie istnieje już żaden plik o żądanej nazwie.</p>
+<dl class="description">
+<dt><a class="line-ref" data-line="5812" href="../all.html#line5812" target="source">5812:</a></dt>
+<dd class="bilingual" title="The second parameter, “mode”, can take the values 01 (“FREAD”), 02 (“FWRITE”) or 03 (“FREAD | FWRITE”) when “trf” is 0, but only 02 otherwise; Whete a file of the desired name already exists, check the access permissions for the desired mode(s) of activity via calls on “access” (6746), which may set “u.u_error” as a side-effect;"><p class="bilingual" title="Drugi parametr, „mode”, może przyjmować wartości 01 („FREAD”), 02 („FWRITE”) lub 03 („FREAD | FWRITE”), gdy „trf” wynosi 0, ale tylko 02 w przeciwnym razie;">Drugi parametr, „mode”, może mieć wartości 01 („FREAD”), 02 („FWRITE”) lub 03 („FREAD<code class="verbatim">|</code>FWRITE”), gdy „trf” wynosi 0, ale tylko 02 w razie wypadku;</p>
+<p class="bilingual" title="Jeśli plik o żądanej nazwie już istnieje, sprawdź uprawnienia dostępu dla żądanych trybów działania poprzez wywołanie „access” (6746), co może ustawić „u.u_error” jako efekt uboczny;">Jeśli plik źródłowy już istnieje, sprawdź dostęp do dostępnych trybów poprzez wywołanie „access” (6746), co może spowodować „u.u_error” jako efekt;</p>
+</dd>
+<dt><a class="line-ref" data-line="5824" href="../all.html#line5824" target="source">5824:</a></dt>
+<dd class="bilingual" title="If the file is being “created”, eliminate its previous contents via a call on “itrunc” (7414). The code here could be improved by changing the test to “(trf == 1)”. Verify that this would be so."><p class="bilingual" title="Jeśli plik jest „tworzony”, usuń jego poprzednią zawartość poprzez wywołanie „itrunc” (7414). Kod tutaj można ulepszyć, zmieniając test na „(trf == 1)”. Sprawdź, czy tak właśnie będzie.">Jeśli plik jest „tworzony”, jego poprzednia zawartość została usunięta poprzez wywołanie „itrunc” (7414). Kod tutaj można ulepszyć, zabezpieczyć test na „(trf == 1)”. Sprawdź, czy tak właśnie będzie.</p>
+</dd>
+<dt><a class="line-ref" data-line="5826" href="../all.html#line5826" target="source">5826:</a></dt>
+<dd class="bilingual" title="“prele” (7882) is used to “unlock” “inodes”. Where, you may ask, did the “inode” get “locked”, and why?"><p class="bilingual" title="„prele” (7882) służy do „odblokowywania” „i-węzłów”. Gdzie, możesz zapytać, „i-węzeł” został „zablokowany” i dlaczego?">„prele” (7882) służył do „odblokowywania” „i-węzłów”. Gdzie, możesz otrzymać, „i-węzeł” został „zablokowany” i dlaczego?</p>
+</dd>
+<dt><a class="line-ref" data-line="5827" href="../all.html#line5827" target="source">5827:</a></dt>
+<dd class="bilingual" title="Note that “falloc” (6847) calls “ufalloc” (6824) as the first thing it does;"><p class="bilingual" title="Zauważ, że „falloc” (6847) wywołuje „ufalloc” (6824) jako pierwszą rzecz, którą robi;">Należy zauważyć, że „falloc” (6847) jest następstwem „ufalloc” (6824) jako pierwsza rzecz, która robi;</p>
+</dd>
+<dt><a class="line-ref" data-line="5831" href="../all.html#line5831" target="source">5831:</a></dt>
+<dd class="bilingual" title="“ufalloc” leaves the user file identifying number “u.u_ar0[R0]”. Why does this statement occur where it does, instead of after line 5834?"><p class="bilingual" title="„ufalloc” pozostawia plik użytkownika o numerze identyfikacyjnym „u.u_ar0[R0]”. Dlaczego ta instrukcja pojawia się tam, gdzie się pojawia, a nie po linii 5834?">„ufalloc” to plik użytkownika o numerze identyfikacyjnym „u.u_ar0[R0]”. Dlaczego ta instrukcja pojawia się tam, gdzie pojawia się, a nie po linii 5834?</p>
+</dd>
+<dt><a class="line-ref" data-line="5832" href="../all.html#line5832" target="source">5832:</a></dt>
+<dd class="bilingual" title="“openi” (6702) is called to call handlers for special files, in cae any device specific actions are required (for disk files there is no action);"><p class="bilingual" title="„openi” (6702) jest wywoływany w celu wywołania procedur obsługi plików specjalnych, jeśli wymagane są jakieś działania specyficzne dla urządzenia (w przypadku plików dyskowych nie ma żadnej akcji);">„openi” (6702) jest wywoływany w celu wywołania procedury obsługi plików specjalnych, jeśli wymagane są jakieś działania związane z urządzeniami (w przypadku plików dyskowych nie ma żadnej akcji);</p>
+</dd>
+<dt><a class="line-ref" data-line="5839" href="../all.html#line5839" target="source">5839:</a></dt>
+<dd class="bilingual" title="In the case of an error while making the “file” array entry, the “inode” entry is released by a call on “iput”."><p class="bilingual" title="W przypadku błędu podczas wprowadzania wpisu do tablicy „file”, wpis „i-węzła” zostaje zwolniony poprzez wywołanie „iput”.">W następstwie tego wpisu do „file”, wpis „i-węzła” został zwolniony poprzez zastosowanie „iput”.</p>
+</dd>
+</dl>
+<p class="bilingual" title="It will be seen that responsibility is quite widely distributed. The “file” table entry is initialised by “falloc” and “openl”; the “inode” table entry, by “iget”, “ialloc” and “maknode”.">Jak się okaże, odpowiedzialność jest dość szeroko rozłożona. Wpis w tabeli „file” jest inicjowany przez „falloc” i „openl”; wpis w tabeli „i-węzeł” za pomocą „iget”, „ialloc” i „maknode”.</p>
+<p class="bilingual" title="Note that “ialloc” clears out the “i_addr” array of a newly allocated “inode” and “itrunc” does the same for a pre-existing “inode”, so that after the “creat” system call, there are no disk blocks associated with the file, now classed as “small”.">Należy zauważyć, że „ialloc” czyści tablicę „i_addr” nowo przydzielonego „i-węzła”, a „itrunc” robi to samo dla istniejącego wcześniej „i-węzła”, tak że po wywołaniu systemowym „creat” nie ma żadnych bloków dyskowych powiązanych z plikiem, teraz sklasyfikowanym jako „mały”.</p>
+<h2 class="bilingual" id="a0000000232" title="18.10 open (5763)">18.10 otwarte (5763)</h2>
+<p class="bilingual" title="We now turn to consider the case where a program wishes to reference a file which already exists.">Przejdźmy teraz do rozważenia przypadku, w którym program chce odwołać się do pliku, który już istnieje.</p>
+<p class="bilingual" title="“namei” is called (5770) with a second parameter of zero to locate the named file. (“u.u_arg[0]” contains the address in the user space of a character string which defines a file path name.)">Wywoływana jest funkcja „namei” (5770) z drugim parametrem wynoszącym zero w celu zlokalizowania nazwanego pliku. („u.u_arg[0]” zawiera adres w przestrzeni użytkownika ciągu znaków, który definiuje nazwę ścieżki pliku.)</p>
+<p class="bilingual" title="“u.u_arg[1]” has to be incremented by one, because there is a mismatch between the user programming conventions and the internal data representations.)">„u.u_arg[1]” należy zwiększyć o jeden, ponieważ istnieje rozbieżność między konwencjami programowania użytkownika a wewnętrznymi reprezentacjami danych.)</p>
+<h2 class="bilingual" id="a0000000233" title="18.11 openl revisited">18.11 ponowna wizyta w openl</h2>
+<p class="bilingual" title="“trf” is now zero, so access permissions are checked (5813) but the existing file (if any) is not deallocated (5824).">„trf” ma teraz wartość zero, więc sprawdzane są uprawnienia dostępu (5813), ale istniejący plik (jeśli istnieje) nie jest zwalniany (5824).</p>
+<p class="bilingual" title="What is a little disconcerting here is that, apart from the call on “falloc” (5827), there is no direct call on any of the “resource allocation” routines. Of course, for an existing file, neither directory entry nor disk “inode” entry nor disk blocks need be allocated. The core “inode” entry is allocated (if necessary) as a side-effect of the call on “namei”, but ... where is it initialised?">Trochę niepokojące jest to, że poza wywołaniem „falloc” (5827) nie ma bezpośredniego wywołania żadnej z procedur „alokacji zasobów”. Oczywiście dla istniejącego pliku nie ma potrzeby alokacji wpisu do katalogu, wpisu „i-węzła” dysku ani bloków dysku. Podstawowy wpis „i-węzła” jest przydzielany (jeśli to konieczne) jako efekt uboczny wywołania „namei”, ale… gdzie jest inicjowany?</p>
+<h2 class="bilingual" id="a0000000234" title="18.12 close (5846)">18.12 blisko (5846)</h2>
+<p class="bilingual" title="The “close” system call is used to sever explicitly the connection between a user program and a file and thus can be regarded as the inverse of “open”.">Wywołanie systemowe „zamknij” służy do wyraźnego zerwania połączenia między programem użytkownika a plikiem i dlatego można je uważać za odwrotność „otwierania”.</p>
+<p class="bilingual" title="The user program’s file identification is passed via r0. The value is validated by “getf” (6619), the “u.u_ofile” entry is erased, and a call is made on “closef”.">Identyfikacja pliku programu użytkownika jest przekazywana przez r0. Wartość jest sprawdzana przez „getf” (6619), wpis „u.u_ofile” jest usuwany i wykonywane jest wywołanie „closef”.</p>
+<h2 class="bilingual" id="a0000000235" title="18.13 closef (6643)">18.13 zamknięcie (6643)</h2>
+<p class="bilingual" title="“closef” is called by “close” (5854) and by “exit” (3230). (The latter is more common since most files do not get closed explicitly but only implicitly when the user program terminates.)">„zamknięcie” nazywane jest „zamknięciem” (5854) i „wyjściem” (3230). (To drugie jest bardziej powszechne, ponieważ większość plików nie jest zamykana jawnie, ale tylko niejawnie, gdy program użytkownika kończy się).</p>
+<dl class="description">
+<dt><a class="line-ref" data-line="6649" href="../all.html#line6649" target="source">6649:</a></dt>
+<dd class="bilingual" title="If the file is a pipe, reset the mode of the pipe and “wakeup” any process which is waiting for the pipe, either for information or for space;"><p class="bilingual" title="Jeśli plik jest potokiem, zresetuj tryb potoku i „obudź” każdy proces oczekujący na potok, czy to w celu uzyskania informacji, czy miejsca;">Jeśli plik jest potokiem, zresetuj tryb potoku i „obudź” każdy proces oczekujący na potok, czy to w celu uzyskania informacji, czy miejsca;</p>
+</dd>
+<dt><a class="line-ref" data-line="6655" href="../all.html#line6655" target="source">6655:</a></dt>
+<dd class="bilingual" title="If this is the last process to reference the file, call “closei” (6672) to handle any special end of file processing for special files and then call “iput”;"><p class="bilingual" title="Jeśli jest to ostatni proces odwołujący się do pliku, wywołaj „closei” (6672), aby obsłużyć specjalne zakończenie przetwarzania plików specjalnych, a następnie wywołaj „iput”;">Jeśli jest to ostatni proces odbiegający od pliku, wywołany „closei” (6672), aby obsłużyć specjalne sformułowania dotyczące plików specjalnych, a następnie wywołaj „iput”;</p>
+</dd>
+<dt><a class="line-ref" data-line="6657" href="../all.html#line6657" target="source">6657:</a></dt>
+<dd class="bilingual" title="Decrement the “file” entry reference count. If this now zero, the entry is no longer allocated."><p class="bilingual" title="Zmniejsz liczbę odwołań do wpisu „pliku”. Jeśli teraz wynosi zero, wpis nie jest już przydzielony.">Zmniejsz odwołanie do wpisu „pliku”. Jeśli teraz wynosi zero, wpis nie jest już przydzielony.</p>
+</dd>
+</dl>
+<h2 class="bilingual" id="a0000000236" title="18.14 iput (7344)">18,14 iput (7344)</h2>
+<p class="bilingual" title="“closei”, as its last action calls “iput”. This routine is in fact called from many places, whenever a connection to a core “inode” is to be severed and the reference count decremented.">„closei”, ponieważ jego ostatnia akcja nazywa się „iput”. Ta procedura jest faktycznie wywoływana z wielu miejsc, ilekroć połączenie z „i-węzłem” rdzenia ma zostać przerwane i zmniejszona liczba odwołań.</p>
+<dl class="description">
+<dt><a class="line-ref" data-line="7350" href="../all.html#line7350" target="source">7350:</a></dt>
+<dd class="bilingual" title="If the reference count is one at this point, the “inode” is to be released. While this is happening, it should be locked."><p class="bilingual" title="Jeśli w tym momencie liczba odwołań wynosi jeden, „i-węzeł” powinien zostać zwolniony. Podczas gdy to się dzieje, powinno być zamknięte.">Jeśli w tym momencie liczba podstawowa wynosi jeden, „i-węzeł” powinien zostać usunięty. Podczas gdy się dzieje, powinno być zamknięte.</p>
+</dd>
+<dt><a class="line-ref" data-line="7352" href="../all.html#line7352" target="source">7352:</a></dt>
+<dd class="bilingual" title="If the number of “links” to the file is zero (or less) the file is to be deallocated (see below);"><p class="bilingual" title="Jeżeli liczba „linków” do pliku wynosi zero (lub mniej), plik należy zwolnić (patrz poniżej);">Jeśli liczba „linków” do pliku wynosi zero (lub mniej), plik powinien być zwolniony (patrz poniżej);</p>
+</dd>
+<dt><a class="line-ref" data-line="7357" href="../all.html#line7357" target="source">7357:</a></dt>
+<dd class="bilingual" title="“iupdat” (7374) updates the accessed and update times as recorded on the disk “inode”;"><p class="bilingual" title="„iupdat” (7374) aktualizuje czasy dostępu i aktualizacji zapisane na „i-węźle” dysku;">„iupdat” (7374) aktualizacja aktualizacji dostępu i aktualizacji na „i-węźle” dysku;</p>
+</dd>
+<dt><a class="line-ref" data-line="7358" href="../all.html#line7358" target="source">7358:</a></dt>
+<dd class="bilingual" title="“prele” unlocks the “inode”. Why should it be called here as well as at line 7363?"><p class="bilingual" title="„prele” odblokowuje „i-węzeł”. Dlaczego należy go wywołać tutaj, a także w linii 7363?">„prele” odblokowuje „i-węzeł”. Dlaczego należy uruchomić tutaj, a także w linii 7363?</p>
+</dd>
+</dl>
+<h2 class="bilingual" id="a0000000237" title="18.15 Deletion of Files">18.15 Usuwanie plików</h2>
+<p class="bilingual" title="New files are automatically entered into the file directory as permanent files as soon as they are “opened”. Subsequent “closing” of a file does not automatically cause its deletion. As was seen at line 7352, deletion will occur when the field “i_nlink” of the core “inode” entry is zero. This field is set to one initially by “maknode” (7464) when the file is first created. It may be incremented by the system call “link” (5941) and decremented by the system call “unlink” (3529).">Nowe pliki są automatycznie zapisywane do katalogu plików jako pliki stałe zaraz po ich „otwarciu”. Późniejsze „zamknięcie” pliku nie powoduje automatycznie jego usunięcia. Jak widzieliśmy w linii 7352, usunięcie nastąpi, gdy pole „i_nlink” wpisu rdzenia „i-węzeł” będzie wynosić zero. To pole jest początkowo ustawiane na jeden przez „maknode” (7464) podczas pierwszego tworzenia pliku. Może być zwiększana przez wywołanie systemowe „link” (5941) i zmniejszana przez wywołanie systemowe „unlink” (3529).</p>
+<p class="bilingual" title="Programs which create temporary “work files” should remove these files before terminating, by executing an “unlink” system call. Note that the “unlink” call does not of itself remove the file. This can only happen when the reference count (“i_count”) is about to be decremented to zero (7350, 7362).">Programy tworzące tymczasowe „pliki robocze” powinny przed zakończeniem usunąć te pliki, wykonując wywołanie systemowe „odłącz”. Należy pamiętać, że wywołanie „unlink” samo w sobie nie usuwa pliku. Może się to zdarzyć tylko wtedy, gdy liczba referencji („i_count”) ma zostać zmniejszona do zera (7350, 7362).</p>
+<p class="bilingual" title="To minimise the problems associated with “temporary” files which survive program or system crashes, programmers should observe the conventions that:">Aby zminimalizować problemy związane z plikami „tymczasowymi”, które przetrwają awarie programu lub systemu, programiści powinni przestrzegać konwencji, które:</p>
+<dl class="description">
+<dt>(a)</dt>
+<dd class="bilingual" title="temporary files should be “unlinked” immediately after they are opened;"><p class="bilingual" title="pliki tymczasowe należy „odłączyć” natychmiast po ich otwarciu;">pliki tymczasowe „od urządzenia” natychmiast po ich uruchomieniu;</p>
+</dd>
+<dt>(b)</dt>
+<dd class="bilingual" title="temporary files should always be placed in the “tmp” directory. Unique file names can be generated by incorporating the process’s identifying number into the file name (See “getpid” (3480))."><p class="bilingual" title="pliki tymczasowe należy zawsze umieszczać w katalogu „tmp”. Unikalne nazwy plików można wygenerować poprzez włączenie numeru identyfikacyjnego procesu do nazwy pliku (patrz „getpid” (3480)).">Pliki tymczasowe powinny być umieszczane w katalogu „tmp”. Unikalne nazwy plików można wygenerować poprzez włączenie numeru identyfikacyjnego procesu do nazwy (patrz „getpid” (3480)).</p>
+</dd>
+</dl>
+<h2 class="bilingual" id="a0000000238" title="18.16 Reading and Writing">18.16 Czytanie i pisanie</h2>
+<p class="bilingual" title="It is of interest to work through an abbreviated summary of the code which is invoked when a user process performs a “read” system call before examining the code in detail.">Interesujące jest przestudiowanie skróconego podsumowania kodu, który jest wywoływany, gdy proces użytkownika wykonuje wywołanie systemowe „odczyt” przed szczegółowym sprawdzeniem kodu.</p>
+<pre class="verbatim">
+   .... read (f, b, n); /*user program/
+
+                 {trap occurs}
+   2693 trap
+
+                 {system call #3}
+   5711 read ();
+   5713   rdwr (PREAD);
+</pre>
+<p class="bilingual" title="Execution of the system call by the user process results in the activation of “trap” running in kernel mode. “trap” recognises system call #3, and calls (via “trapl”) the routine “read”, which calls “rdwr”.">Wykonanie wywołania systemowego przez proces użytkownika powoduje aktywację „pułapki” działającej w trybie jądra. „trap” rozpoznaje wywołanie systemowe nr 3 i wywołuje (poprzez „trapl”) procedurę „read”, która wywołuje „rdwr”.</p>
+<pre class="verbatim">
+  5731 rdwr
+
+  5736 fp = getf (u.u_ar0[R0];
+  5743 u.u_base = u.u_arg[0];
+  5744 u.u_count = u.u_arg[1];
+  5745 u.u_segflg = 0;
+  5751 u.u_offset[1] = f2-&gt;f offset[1];
+  5752 u.u_offset[0] = fp-&gt;f offset[0];
+  5754 readi(fp-&gt;f inode);
+  5756 dpadd(fp-&gt;f offset,
+              u.u_arg[1]-u.u_count);
+</pre>
+<p class="bilingual" title="“rdwr” includes much code which is common to both “read” and “write” operations. It converts, via “getf” (6619), the file identification supplied by the user process into the address of an entry in the “file” array.">„rdwr” zawiera dużo kodu, który jest wspólny zarówno dla operacji „odczytu”, jak i „zapisu”. Konwertuje, poprzez „getf” (6619), identyfikator pliku dostarczony przez proces użytkownika na adres wpisu w tablicy „file”.</p>
+<p class="bilingual" title="Note that the first parameter of the system call is passed in a different way from the remaining two parameters.">Należy zauważyć, że pierwszy parametr wywołania systemowego jest przekazywany w inny sposób niż pozostałe dwa parametry.</p>
+<p class="bilingual" title="“u.u_segflg” is set to zero to indicate that the operation destination is in the user address space. After “readi” is called with a parameter which is an “inode” pointer, the final accounting is performed by adding the number of characters requested for transfer less the residual number not transferred (left in “u.u_count”) to the file offset.">„u.u_segflg” jest ustawione na zero, aby wskazać, że miejsce docelowe operacji znajduje się w przestrzeni adresowej użytkownika. Po wywołaniu „readi” z parametrem będącym wskaźnikiem „i-węzła”, ostateczne rozliczenie następuje poprzez dodanie liczby znaków żądanych do przesłania pomniejszonej o liczbę pozostałych, które nie zostały przesłane (pozostawione w „u.u_count”) do offsetu pliku.</p>
+<pre class="verbatim">
+  6221 readi
+
+  6239 lbn = lshift (u.u_offset, -9);
+  6240 on = u.u_offset[1] &amp; 0777;
+  6241 n = min (512 - on, u.u_count);
+  6248 bn = bmap(ip, lbn);
+  6250 dn = ip-&gt;i_dev;
+  6258 bp = bread (dn, bn);
+  6260 iomove (bp, on, n, B READ);
+  6261 brelse (bp);
+
+</pre>
+<p class="bilingual" title="“readi” converts the file offset into two parts: a logical block number, “lbn”, and an index into the block, “on”. The number of characters to be transferred is the minimum of “u.u_count” and the number of characters left in the block (in which case additional block(s) must be read (not shown)) (and the number of characters remaining in the file (this case is not shown)).">„readi” konwertuje przesunięcie pliku na dwie części: numer bloku logicznego „lbn” i indeks bloku „on”. Liczba znaków do przesłania to minimum „u.u_count” i liczba znaków pozostałych w bloku (w tym przypadku należy przeczytać dodatkowe bloki (nie pokazano)) (oraz liczba znaków pozostałych w pliku (ten przypadek nie jest pokazany)).</p>
+<p class="bilingual" title="“dn” is the device number which is stored within the “inode”. “bn” is the actual block number on the device (disk), which is computed by “bmap” (6415) using “lbn”.">„dn” to numer urządzenia przechowywany w „i-węźle”. „bn” to rzeczywisty numer bloku na urządzeniu (dysku), który jest obliczany przez „bmap” (6415) przy użyciu „lbn”.</p>
+<p class="bilingual" title="The call on “bread” finds the required block, copying it into core from disk if necessary. “iomove” (6364) transfers the appropriate characters to their destination, and performs accounting chores.">Wywołanie „bread” znajduje wymagany blok, kopiując go z dysku do rdzenia, jeśli to konieczne. „iomove” (6364) przenosi odpowiednie znaki do miejsca docelowego i wykonuje prace księgowe.</p>
+<h2 class="bilingual" id="a0000000239" title="18.17 rdwr (5731)">18.17 rdwr (5731)</h2>
+<p class="bilingual" title="“read” and “write” perform similar operations and share much code. The two system calls, “read” (5711) and “write” (5720), call “rdwr” immediately to:">„Odczyt” i „zapis” wykonują podobne operacje i współdzielą dużą część kodu. Obydwa wywołania systemowe „read” (5711) i „write” (5720) powodują natychmiastowe wywołanie „rdwr”, aby:</p>
+<dl class="description">
+<dt><a class="line-ref" data-line="5736" href="../all.html#line5736" target="source">5736:</a></dt>
+<dd class="bilingual" title="Convert the user program file identification to a pointer in the file table;"><p class="bilingual" title="Konwertuj identyfikator pliku programu użytkownika na wskaźnik w tabeli plików;">Konwertuj identyfikator pliku użytkownika na znaczniku w tabeli plików;</p>
+</dd>
+<dt><a class="line-ref" data-line="5739" href="../all.html#line5739" target="source">5739:</a></dt>
+<dd class="bilingual" title="Check that the operation (read or write) is in accordance with the mode with which the file was opened;"><p class="bilingual" title="Sprawdź, czy operacja (odczyt lub zapis) jest zgodna z trybem, w jakim plik został otwarty;">Sprawdź, czy operacja (odczyt lub zapis) jest zgodna z trybem, w jakim plik został otwarty;</p>
+</dd>
+<dt><a class="line-ref" data-line="5743" href="../all.html#line5743" target="source">5743:</a></dt>
+<dd class="bilingual" title="Set up various standard locations in “u” with the appropriate parameters;"><p class="bilingual" title="Skonfiguruj różne standardowe lokalizacje w „u” z odpowiednimi parametrami;">Skonfiguruj różne standardowe lokalizacje w „u” z parametrami;</p>
+</dd>
+<dt><a class="line-ref" data-line="5746" href="../all.html#line5746" target="source">5746:</a></dt>
+<dd class="bilingual" title="“pipes” get special treatment right from the start!"><p class="bilingual" title="„Rury” od samego początku są traktowane w specjalny sposób!">„Rury” od samego początku są dostępne w specjalny sposób!</p>
+</dd>
+<dt><a class="line-ref" data-line="5755" href="../all.html#line5755" target="source">5755:</a></dt>
+<dd class="bilingual" title="Call “readi” or “writei” as appropriate;"><p class="bilingual" title="Nazwij „readi” lub „writei” odpowiednio;">Nazwij „readi” lub „writei” odpowiednio;</p>
+</dd>
+<dt><a class="line-ref" data-line="5756" href="../all.html#line5756" target="source">5756:</a></dt>
+<dd class="bilingual" title="Update the file offset by, and set the value returned to the user program to, the number of characters actually transferred."><p class="bilingual" title="Zaktualizuj przesunięcie pliku i ustaw wartość zwracaną do programu użytkownika na liczbę faktycznie przesłanych znaków.">Zaktualizowano plik i ustawę o wartości zwracanej do programu użytkownika na faktycznie przesłanych znakach towarowych.</p>
+</dd>
+</dl>
+<h2 class="bilingual" id="a0000000240" title="18.18 readi (6221)">18.18 gotowy (6221)</h2>
+<dl class="description">
+<dt><a class="line-ref" data-line="6230" href="../all.html#line6230" target="source">6230:</a></dt>
+<dd class="bilingual" title="If no characters are to be transferred, do nothing;"><p class="bilingual" title="Jeśli nie chcesz przenosić żadnych postaci, nie rób nic;">Jeśli nie chcesz przenosić żadnych postaci, nie rób nic;</p>
+</dd>
+<dt><a class="line-ref" data-line="6232" href="../all.html#line6232" target="source">6232:</a></dt>
+<dd class="bilingual" title="Set the “inode” flag to indicate that the “inode” has been accessed;"><p class="bilingual" title="Ustaw flagę „i-węzeł”, aby wskazać, że uzyskano dostęp do „i-węzła”;">Ustaw flagę „i-węzeł”, aby wskazać, że można uzyskać dostęp do „i-węzła”;</p>
+</dd>
+<dt><a class="line-ref" data-line="6233" href="../all.html#line6233" target="source">6233:</a></dt>
+<dd class="bilingual" title="If the file is a character special file, call the appropriate device “read” procedure, passing the device identification as parameter;"><p class="bilingual" title="Jeżeli plik jest plikiem specjalnym znakowym, wywołaj odpowiednią procedurę „odczytu” urządzenia, przekazując jako parametr identyfikację urządzenia;">Jeśli plik jest dostępny, znakowy, uruchamia procedurę „odczytu” urządzenia, przekazując jako parametr użytkowy urządzenia;</p>
+</dd>
+<dt><a class="line-ref" data-line="6238" href="../all.html#line6238" target="source">6238:</a></dt>
+<dd class="bilingual" title="Begin a loop to transfer data in amounts up to 512 characters at a time until (6262) either an irrecoverable error condition has been encountered or the requested number of characters has been transferred;"><p class="bilingual" title="Rozpocznij pętlę do przesyłania danych w ilościach do 512 znaków na raz, aż do (6262) napotkania warunku nieodwracalnego błędu lub przesłania żądanej liczby znaków;">Rozpocznij pętlę do przenoszenia danych w ilościach do 512 znaków na raz, aż do (6262) pojawiania się nieodwracalnego lub przesłanego przez wprowadzonej liczby znaków;</p>
+</dd>
+<dt><a class="line-ref" data-line="6239" href="../all.html#line6239" target="source">6239:</a></dt>
+<dd class="bilingual" title="“lshift” (1410) concatenates the two words of the array “u.u_offset”, shifts right by nine places, and truncates to 16 bits. This defines the “logical block number” of the file which is to be referenced;"><p class="bilingual" title="„lshift” (1410) łączy dwa słowa tablicy „u.u_offset”, przesuwa w prawo o dziewięć miejsc i obcina do 16 bitów. Definiuje to „numer bloku logicznego” pliku, do którego ma się odnosić;">„lshift” (1410) łączy dwa słowa tablicy „u.u_offset”, przesuwa w prawo o dziewięć miejsc i obcina do 16 bitów. Definiuje to „numer blokującego logicznego” pliku, do którego ma się odnosić;</p>
+</dd>
+<dt><a class="line-ref" data-line="6240" href="../all.html#line6240" target="source">6240:</a></dt>
+<dd class="bilingual" title="“on” is a character offset within the block;"><p class="bilingual" title="„on” oznacza przesunięcie znaku w bloku;">„on” oznacza przesunięcie właściciela w bloku;</p>
+</dd>
+<dt><a class="line-ref" data-line="6241" href="../all.html#line6241" target="source">6241:</a></dt>
+<dd class="bilingual" title="“n” is determined initially as the minimum of the number of characters beyond “on” in the block, and the number requested for transfer. (Note that “min” (6339) treats its arguments as unsigned integers.)"><p class="bilingual" title="„n” jest początkowo określane jako minimalna liczba znaków poza „on” w bloku i liczba żądana do przeniesienia. (Zauważ, że „min” (6339) traktuje swoje argumenty jako liczby całkowite bez znaku.)">„n” jest określane jako minimalna liczba znaków poza „on” w bloku i liczbie fizycznej do użycia. (Zauważ, że „min” (6339) przedstawia swoje argumenty jako liczbę bez znaku towarowego.)</p>
+</dd>
+<dt><a class="line-ref" data-line="6242" href="../all.html#line6242" target="source">6242:</a></dt>
+<dd class="bilingual" title="If the file is not a special block file then ..."><p class="bilingual" title="Jeśli plik nie jest specjalnym plikiem blokowym, to ...">Jeśli plik nie jest wydaniem wersji blokowej, do ...</p>
+</dd>
+<dt><a class="line-ref" data-line="6243" href="../all.html#line6243" target="source">6243:</a></dt>
+<dd class="bilingual" title="Compare the file offset with the current file size;"><p class="bilingual" title="Porównaj przesunięcie pliku z bieżącym rozmiarem pliku;">Porównaj przesunięcie pliku z pliku;</p>
+</dd>
+<dt><a class="line-ref" data-line="6246" href="../all.html#line6246" target="source">6246:</a></dt>
+<dd class="bilingual" title="Reset “n” as the minimum of the characters requested and the remaining characters in the file;"><p class="bilingual" title="Zresetuj „n” jako minimum żądanych znaków i pozostałych znaków w pliku;">Zresetuj „n” jako minimum znaków towarowych i znaków w pliku;</p>
+</dd>
+<dt><a class="line-ref" data-line="6248" href="../all.html#line6248" target="source">6248:</a></dt>
+<dd class="bilingual" title="Call “bmap” to convert the logical block number for the file to a physical block number for its host device. There will be more on “bmap” shortly. For now, note that “bmap” sets “rablock” as a side effect;"><p class="bilingual" title="Wywołaj „bmap”, aby przekonwertować numer bloku logicznego pliku na numer bloku fizycznego jego urządzenia hosta. Niedługo będzie więcej na temat „bmap”. Na razie zauważ, że „bmap” ustawia „rablock” jako efekt uboczny;">Wywołaj „bmap”, aby przekonwertować numer bloku logicznego na numer indywidualny jego urządzenia hosta. Będzie więcej na temat „bmap”. W razie zauważenia, że ​​„bmap” ustawia „rablock” jako efekt uboczny;</p>
+</dd>
+<dt><a class="line-ref" data-line="6250" href="../all.html#line6250" target="source">6250:</a></dt>
+<dd class="bilingual" title="Set “dn” as the device identification from the “inode”;"><p class="bilingual" title="Ustaw „dn” jako identyfikację urządzenia z „i-węzła”;">Ustaw „dn” jako urządzenie z „i-węzła”;</p>
+</dd>
+<dt><a class="line-ref" data-line="6251" href="../all.html#line6251" target="source">6251:</a></dt>
+<dd class="bilingual" title="If the file is a special block file then ..."><p class="bilingual" title="Jeśli plik jest specjalnym plikiem blokowym, to ...">Jeśli plik jest wydaniem wykonawczym blokowym, do ...</p>
+</dd>
+<dt><a class="line-ref" data-line="6252" href="../all.html#line6252" target="source">6252:</a></dt>
+<dd class="bilingual" title="Set “dn” from the “i_addr” field of the “inode” entry. (Presumably this will nearly always be the same as the “i_dev” field, so why the distinction?)"><p class="bilingual" title="Ustaw „dn” z pola „i_addr” wpisu „i-węzeł”. (Przypuszczalnie będzie to prawie zawsze to samo, co pole „i_dev”, więc skąd to rozróżnienie?)">Ustaw „dn” z pola „i_addr” wpisu „i-węzeł”. (Przypuszczalnie będzie to prawie zawsze to samo, co pole „i_dev”, skąd to rozróżnienie?)</p>
+</dd>
+<dt><a class="line-ref" data-line="6253" href="../all.html#line6253" target="source">6253:</a></dt>
+<dd class="bilingual" title="Set the “read ahead block” to the next physical block;"><p class="bilingual" title="Ustaw „blok czytania z wyprzedzeniem” na następny blok fizyczny;">Ustaw „blok czytania z dodatkowym” na następny blok fizyczny;</p>
+</dd>
+<dt><a class="line-ref" data-line="6255" href="../all.html#line6255" target="source">6255:</a></dt>
+<dd class="bilingual" title="If the blocks of the file are apparently being read sequentially then ..."><p class="bilingual" title="Jeśli bloki pliku najwyraźniej są odczytywane sekwencyjnie, to ...">Jeśli bloki plików są dostarczane, aby uzyskać ...</p>
+</dd>
+<dt><a class="line-ref" data-line="6256" href="../all.html#line6256" target="source">6256:</a></dt>
+<dd class="bilingual" title="Call “breada” to read the desired block and to initiate reading of the “read ahead block”;"><p class="bilingual" title="Wywołaj „bread”, aby przeczytać żądany blok i zainicjować czytanie „bloku czytaj z wyprzedzeniem”;">Wywołaj „chleb”, aby uzyskać dostępny blok i uzyskać czytanie „bloku czytaj z możliwością”;</p>
+</dd>
+<dt><a class="line-ref" data-line="6258" href="../all.html#line6258" target="source">6258:</a></dt>
+<dd class="bilingual" title="else just read the desired block;"><p class="bilingual" title="w przeciwnym razie po prostu przeczytaj żądany blok;">w razie wypadku po prostu przeczytaj dostępny blok;</p>
+</dd>
+<dt><a class="line-ref" data-line="6260" href="../all.html#line6260" target="source">6260:</a></dt>
+<dd class="bilingual" title="Call “iomove” to transfer information from the buffer to the user area;"><p class="bilingual" title="Wywołaj „iomove”, aby przenieść informacje z bufora do obszaru użytkownika;">Wywołaj „iomove”, aby podać informacje z bufora do obszaru użytkownika;</p>
+</dd>
+<dt><a class="line-ref" data-line="6261" href="../all.html#line6261" target="source">6261:</a></dt>
+<dd class="bilingual" title="Return the buffer to the “av”-list."><p class="bilingual" title="Wróć bufor do listy „av”.">Wróć bufor do list „av”.</p>
+</dd>
+</dl>
+<h2 class="bilingual" id="a0000000241" title="18.19 writei">18.19 napisz</h2>
+<dl class="description">
+<dt><a class="line-ref" data-line="6303" href="../all.html#line6303" target="source">6303:</a></dt>
+<dd class="bilingual" title="If less than a full block is being written the previous contents of the buffer must be read so that the appropriate part can be preserved, otherwise just get any available buffer;"><p class="bilingual" title="Jeśli zapisywany jest mniej niż pełny blok, należy odczytać poprzednią zawartość bufora, aby zachować odpowiednią część, w przeciwnym razie po prostu pobierz dowolny dostępny bufor;">Jeśli zapisano mniej niż pełny blok, należy odczytać poprzednią zawartość bufora, aby była dostępna część, w razie potrzeby po prostu pobierz zwykły dostępny bufor;</p>
+</dd>
+<dt><a class="line-ref" data-line="6311" href="../all.html#line6311" target="source">6311:</a></dt>
+<dd class="bilingual" title="There is no “write ahead” facility, but there is a “delayed write” for buffers whose final characters have not been changed;"><p class="bilingual" title="Nie ma funkcji „zapisu z wyprzedzeniem”, ale istnieje „zapis opóźniony” dla buforów, których końcowe znaki nie zostały zmienione;">Nie ma funkcji „zapisu z dystrybucji”, ale istnieje „zapis opóźniony” dla buforów, których końcowe znaki nie są widoczne;</p>
+</dd>
+<dt><a class="line-ref" data-line="6312" href="../all.html#line6312" target="source">6312:</a></dt>
+<dd class="bilingual" title="If the file offset now points beyond the recorded end of file character, the file has obviously grown bigger!"><p class="bilingual" title="Jeśli przesunięcie pliku wskazuje teraz poza nagrany znak końca pliku, oznacza to, że plik wyraźnie się powiększył!">Jeśli pojawi się plik, który teraz jest wyświetlany poza znakiem końca pliku, oznacza to, że plik wyraźny się powiększył!</p>
+</dd>
+<dt><a class="line-ref" data-line="6318" href="../all.html#line6318" target="source">6318:</a></dt>
+<dd class="bilingual" title="Why is it necessary/desirable to set the “IUPD” flag again? (See line 6285.)"><p class="bilingual" title="Dlaczego konieczne/pożądane jest ponowne ustawienie flagi „IUPD”? (Patrz linia 6285.)">Dlaczego/pożądane jest ustawienie flagi „IUPD”? (Patrz linia 6285.)</p>
+</dd>
+</dl>
+<h2 class="bilingual" id="a0000000242" title="18.20 iomove (6364)">18.20 iomove (6364)</h2>
+<p class="bilingual" title="The comment at the beginning of this procedure says most of what needs to be said. “copyin”, “copyout”, “cpass” and “passc” may be found at lines 1244, 1252, 6542 and 6517 respectively.">Komentarz na początku tej procedury mówi większość tego, co należy powiedzieć. „copyin”, „copyout”, „cpass” i „passc” można znaleźć odpowiednio w liniach 1244, 1252, 6542 i 6517.</p>
+<h2 class="bilingual" id="a0000000243" title="18.21 bmap (6415)">18.21 bmapa (6415)</h2>
+<p class="bilingual" title="A general description of the function of “bmap” may be found on Page 2 of “FILE SYSTEM (V)” of the UPM.">Ogólny opis funkcji „bmap” można znaleźć na stronie 2 „SYSTEM PLIKÓW (V)” UPM.</p>
+<dl class="description">
+<dt><a class="line-ref" data-line="6423" href="../all.html#line6423" target="source">6423:</a></dt>
+<dd class="bilingual" title="Files of more than 2**15 blocks (2**24 characters) are not supported;"><p class="bilingual" title="Pliki dłuższe niż 2**15 bloków (2**24 znaki) nie są obsługiwane;">Pliki trwające niż 2**15 bloków (2**24 znaków) nie są pobierane;</p>
+</dd>
+<dt><a class="line-ref" data-line="6427" href="../all.html#line6427" target="source">6427:</a></dt>
+<dd class="bilingual" title="Start with the “small” file algorithm (file is not greater than eight blocks i.e. 4096 characters);"><p class="bilingual" title="Zacznij od algorytmu „małego” pliku (plik nie jest większy niż osiem bloków, czyli 4096 znaków);">Uruchom od algorytmu „małego” pliku (plik nie jest większy niż osiem bloków, czyli 4096 znaków);</p>
+</dd>
+<dt><a class="line-ref" data-line="6431" href="../all.html#line6431" target="source">6431:</a></dt>
+<dd class="bilingual" title="If the block number is 8 or more, the “small” file must converted into a large file. Note this is a side effect of “bmap”, and should occur only when “bmap” has been called by “writei” (and never by “readi” – see line 6245). Thus all files start life as “small” files and are never explicitly changed to “large” files. Note also that the change is irreversible!"><p class="bilingual" title="Jeśli numer bloku wynosi 8 lub więcej, „mały” plik należy przekonwertować na duży plik. Należy pamiętać, że jest to efekt uboczny „bmap” i powinien wystąpić tylko wtedy, gdy „bmap” został wywołany przez „writei” (a nigdy przez „readi” – patrz linia 6245). Dlatego wszystkie pliki zaczynają życie jako „małe” i nigdy nie są wyraźnie zmieniane na „duże”. Pamiętaj też, że zmiana jest nieodwracalna!">Jeśli numer bloku wynosi 8 lub więcej, „mały” plik należy przekonwertować na duży plik. Konieczne jest, że jest efekt „bmap” i powinien zostać wywołany tylko wtedy, gdy „bmap” został wywołany przez „writei” (a nigdy przez „readi” – patrz linia 6245). Wszystkie te działania, które działają jako „małe” i nigdy nie są alternatywne, na „duże”. Pamiętaj też, że zmiana jest nieodwracalna!</p>
+</dd>
+<dt><a class="line-ref" data-line="6435" href="../all.html#line6435" target="source">6435:</a></dt>
+<dd class="bilingual" title="“alloc” (6956) allocates a block on device “d” from the device’s free list. It then assigns a buffer to this block and returns a pointer to the buffer header;"><p class="bilingual" title="„alloc” (6956) przydziela blok na urządzeniu „d” z listy wolnych urządzeń. Następnie przypisuje bufor do tego bloku i zwraca wskaźnik do nagłówka bufora;">„alloc” (6956) przydziela blok na urządzeniu „d” z listami wolnych urządzeń. przypisuje bufor do tego bloku i wskaźnika do nagłówka bufora;</p>
+</dd>
+<dt><a class="line-ref" data-line="6438" href="../all.html#line6438" target="source">6438:</a></dt>
+<dd class="bilingual" title="The eight buffer addresses in the “i_addr” array for the “inode” are copied into the buffer area and then erased;"><p class="bilingual" title="Osiem adresów buforów w tablicy „i_addr” dla „i-węzła” jest kopiowanych do obszaru bufora, a następnie usuwanych;">Osiem adresów buforów w tablicy „i_addr” dla „i-węzła” jest kopiowanych do obszaru bufora, a następnie usuwanych;</p>
+</dd>
+<dt><a class="line-ref" data-line="6442" href="../all.html#line6442" target="source">6442:</a></dt>
+<dd class="bilingual" title="“i_addr[0]” is set to point to the buffer which is set up for a “delayed” write;"><p class="bilingual" title="„i_addr[0]” jest ustawione tak, aby wskazywało bufor ustawiony na „opóźniony” zapis;">„i_addr[0]” jest ustawieniem, aby móc podłączyć bufor na „opóźniony” zapis;</p>
+</dd>
+<dt><a class="line-ref" data-line="6448" href="../all.html#line6448" target="source">6448:</a></dt>
+<dd class="bilingual" title="The file is still small. Get the next block if necessary;"><p class="bilingual" title="Plik jest nadal mały. Jeśli to konieczne, zdobądź następny blok;">Plik jest nadal mały. Jeśli to konieczne, zdobądź następny blok;</p>
+</dd>
+<dt><a class="line-ref" data-line="6456" href="../all.html#line6456" target="source">6456:</a></dt>
+<dd class="bilingual" title="Note the setting of “rablock”;"><p class="bilingual" title="Zwróć uwagę na ustawienie „rablock”;">Zwróć uwagę na ustawienie „rablock”;</p>
+</dd>
+</dl>
+<h2 class="bilingual" id="a0000000244" title="18.22 Leftovers">18.22 Resztki</h2>
+<p class="bilingual" title="You should investigate the following procedures for yourself:">Powinieneś sam sprawdzić następujące procedury:</p>
+<pre class="verbatim">
+   seek  (5861)   statl (6045)
+   sslep (5979)   dup   (6069)
+   fstat (6014)   owner (6791)
+   stat  (6028)   suser (6811)
+</pre>
+</div> <!--main-text -->
+</div> <!-- content-wrapper -->
+</div> <!-- content -->
+</div> <!-- wrapper -->
+<nav class="prev_up_next">
+<a href="sect0020.html" title="Buffer Manipulation"><svg class="icon icon-arrow-left"><use xlink:href="symbol-defs.svg#icon-arrow-left"></use></svg>
+</a>
+<a href="index.html" title=""><svg class="icon icon-arrow-up"><use xlink:href="symbol-defs.svg#icon-arrow-up"></use></svg>
+</a>
+<a href="sect0022.html" title="File Directories and Directory Files"><svg class="icon icon-arrow-right"><use xlink:href="symbol-defs.svg#icon-arrow-right"></use></svg>
+</a>
+</nav>
+<script src="js/jquery.min.js" type="text/javascript"></script>
+<script src="js/plastex.js" type="text/javascript"></script>
+<script src="js/svgxuse.js" type="text/javascript"></script>
+</body>
+</html>
