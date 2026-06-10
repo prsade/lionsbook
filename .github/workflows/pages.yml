@@ -19,6 +19,9 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      # Opt into Node.js 24 to avoid deprecation warnings for actions using Node 20
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -34,6 +37,17 @@ jobs:
           # Install a specific version of uv.
           version: "0.11.3"
 
+      - name: Install TeX Live and image tools (required by plastex)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq \
+            texlive-latex-base \
+            texlive-latex-recommended \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            texlive-pictures \
+            dvisvgm \
+            poppler-utils
 
       - name: Build
         run: make lions
