@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lions' Commentary — Modern Viewer (experimental)</title>
+  <style>
+    :root {
+      --header-h: 48px;
+      --gap: 6px;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0; height: 100%; font-family: system-ui, sans-serif;
+      background: #f8f8f8; color: #222;
+    }
+    .app {
+      display: flex; flex-direction: column; height: 100vh;
+    }
+    header {
+      height: var(--header-h);
+      background: #1a1a1a; color: #eee;
+      display: flex; align-items: center; padding: 0 12px;
+      font-size: 14px; gap: 12px; flex-shrink: 0;
+      border-bottom: 1px solid #333;
+    }
+    header .title { font-weight: 600; margin-right: auto; }
+    header button {
+      background: #333; color: #ddd; border: 1px solid #555;
+      padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px;
+    }
+    header button:hover { background: #444; }
+    .split {
+      flex: 1 1 auto;
+      display: grid;
+      grid-template-columns: 1fr 7px 1fr;
+      gap: 0;
+      min-height: 0; /* important for inner scroll */
+      background: #ddd;
+    }
+    .pane {
+      background: white;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .pane-header {
+      padding: 4px 8px;
+      background: #f0f0f0;
+      font-size: 12px;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .pane-header .label { font-weight: 600; }
+    .pane iframe {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: white;
+    }
+    #resizer {
+      background: #999;
+      cursor: col-resize;
+      position: relative;
+      z-index: 10;
+    }
+    #resizer:hover { background: #666; }
+    .status {
+      font-size: 11px; color: #888; margin-left: 8px;
+    }
+    .help {
+      font-size: 11px; color: #aaa; margin-left: 16px;
+    }
+    @media (max-width: 700px) {
+      .split {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 7px 1fr;
+      }
+      #resizer { cursor: row-resize; width: 100%; height: 7px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <span class="title">Lions' Commentary on UNIX 6th Edition</span>
+      <button id="btn-both" title="50/50 split">Both</button>
+      <button id="btn-left" title="Focus commentary (left)">Commentary</button>
+      <button id="btn-right" title="Focus source (right)">Source</button>
+      <button id="btn-vh" title="Toggle vertical / horizontal">↕︎/↔︎</button>
+      <button id="btn-reset" title="Reset split sizes">Reset</button>
+      <span class="status" id="status">Experimental modern viewer — no framesets</span>
+      <span class="help">Click line numbers in the left pane</span>
+    </header>
+
+    <div class="split" id="split">
+      <div class="pane" id="left-pane">
+        <div class="pane-header">
+          <span class="label">Commentary</span>
+          <span id="left-title" style="font-size:11px; color:#666;"></span>
+        </div>
+        <iframe id="commentary" src="lionc/index.html" title="Commentary"></iframe>
+      </div>
+
+      <div id="resizer" title="Drag to resize"></div>
+
+      <div class="pane" id="right-pane">
+        <div class="pane-header">
+          <span class="label">Source (all lines)</span>
+          <span id="right-line" style="font-size:11px; color:#666; margin-left:auto;"></span>
+        </div>
+        <iframe id="source" src="all.html" title="UNIX v6 Source"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Very small, self-contained modern viewer controller.
+    // Replaces the ancient <frameset> approach.
+
+    const split = document.getElementById('split');
+    const resizer = document.getElementById('resizer');
+    const leftIframe = document.getElementById('commentary');
+    const rightIframe = document.getElementById('source');
+    const statusEl = document.getElementById('status');
+
+    let isVertical = false; // false = columns (default), true = rows
+    let isDragging = false;
+
+    // --- Persistence ---
+    function loadPrefs() {
+      try {
+        const raw = localStorage.getItem('lions-viewer-prefs');
+        if (!raw) return;
+        const p = JSON.parse(raw);
+        if (p.isVertical) toggleOrientation(true);
+        if (p.cols) {
+          split.style.gridTemplateColumns = p.cols;
+          split.style.gridTemplateRows = '';
+        }
+        if (p.rows) {
+          split.style.gridTemplateRows = p.rows;
+          split.style.gridTemplateColumns = '';
+        }
+      } catch (e) {}
+    }
+    function savePrefs() {
+      try {
+        const cols = split.style.gridTemplateColumns;
+        const rows = split.style.gridTemplateRows;
+        localStorage.setItem('lions-viewer-prefs', JSON.stringify({
+          isVertical,
+          cols: cols || null,
+          rows: rows || null,
+        }));
+      } catch (e) {}
+    }
+
+    // --- Splitter drag ---
+    function startDrag(e) {
+      isDragging = true;
+      document.body.style.userSelect = 'none';
+      document.body.style.cursor = isVertical ? 'row-resize' : 'col-resize';
+    }
+    function stopDrag() {
+      if (!isDragging) return;
+      isDragging = false;
+      document.body.style.userSelect = '';
+      document.body.style.cursor = '';
+      savePrefs();
+    }
+    function onDrag(e) {
+      if (!isDragging) return;
+
+      const rect = split.getBoundingClientRect();
+      let ratio;
+
+      if (isVertical) {
+        const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
+        ratio = Math.max(0.15, Math.min(0.85, y / rect.height));
+        split.style.gridTemplateRows = `${ratio * 100}% 7px ${100 - ratio * 100}%`;
+        split.style.gridTemplateColumns = '';
+      } else {
+        const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
+        ratio = Math.max(0.15, Math.min(0.85, x / rect.width));
+        split.style.gridTemplateColumns = `${ratio * 100}% 7px ${100 - ratio * 100}%`;
+        split.style.gridTemplateRows = '';
+      }
+    }
+
+    resizer.addEventListener('mousedown', startDrag);
+    resizer.addEventListener('touchstart', startDrag, { passive: true });
+    window.addEventListener('mousemove', onDrag);
+    window.addEventListener('touchmove', onDrag, { passive: true });
+    window.addEventListener('mouseup', stopDrag);
+    window.addEventListener('touchend', stopDrag);
+
+    // --- Orientation toggle ---
+    function toggleOrientation(force) {
+      isVertical = (typeof force === 'boolean') ? force : !isVertical;
+
+      if (isVertical) {
+        // rows
+        const current = split.style.gridTemplateColumns || '1fr 7px 1fr';
+        // convert last used column ratio to row ratio if possible (rough)
+        split.style.gridTemplateColumns = '';
+        split.style.gridTemplateRows = current.replace(/%/g, '%').replace('7px', '7px'); // keep similar ratios
+        resizer.style.cursor = 'row-resize';
+      } else {
+        split.style.gridTemplateRows = '';
+        split.style.gridTemplateColumns = '1fr 7px 1fr';
+        resizer.style.cursor = 'col-resize';
+      }
+      savePrefs();
+    }
+
+    document.getElementById('btn-vh').addEventListener('click', () => toggleOrientation());
+
+    // --- Focus helpers (like the old a/f/s/d keys) ---
+    function setSplit(ratioLeft) {
+      if (isVertical) {
+        split.style.gridTemplateRows = `${ratioLeft * 100}% 7px ${100 - ratioLeft * 100}%`;
+        split.style.gridTemplateColumns = '';
+      } else {
+        split.style.gridTemplateColumns = `${ratioLeft * 100}% 7px ${100 - ratioLeft * 100}%`;
+        split.style.gridTemplateRows = '';
+      }
+      savePrefs();
+    }
+
+    document.getElementById('btn-both').addEventListener('click', () => setSplit(0.5));
+    document.getElementById('btn-left').addEventListener('click', () => setSplit(0.92));
+    document.getElementById('btn-right').addEventListener('click', () => setSplit(0.08));
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      localStorage.removeItem('lions-viewer-prefs');
+      split.style.gridTemplateColumns = '1fr 7px 1fr';
+      split.style.gridTemplateRows = '';
+      isVertical = false;
+      resizer.style.cursor = 'col-resize';
+    });
+
+    // --- Cross-frame line navigation ---
+    // When the user clicks a .line-ref inside the commentary iframe,
+    // we want to update the source iframe and the URL.
+
+    function goToLine(lineNum, sect = null) {
+      const padded = String(lineNum).padStart(4, '0');
+      const hash = `#line${padded}`;
+
+      // Update right pane
+      try {
+        // Option 1: change src (simple & reliable)
+        rightIframe.src = `all.html${hash}`;
+
+        // Also try to call a helper if the child script is listening
+        setTimeout(() => {
+          try {
+            rightIframe.contentWindow.postMessage({ type: 'highlight-line', line: padded }, '*');
+          } catch (e) {}
+        }, 120);
+      } catch (e) {}
+
+      // Update URL for shareability
+      const url = new URL(window.location.href);
+      url.searchParams.set('line', lineNum);
+      if (sect) url.searchParams.set('sect', sect);
+      history.replaceState(null, '', url.toString());
+
+      document.getElementById('right-line').textContent = `line ${padded}`;
+    }
+
+    // Listen for messages from the commentary iframe (we will inject a tiny bridge)
+    window.addEventListener('message', (ev) => {
+      const data = ev.data || {};
+      if (data.type === 'goto-line') {
+        goToLine(data.line, data.sect);
+      }
+    });
+
+    // Inject a tiny bridge into the commentary iframe so .line-ref clicks talk to us.
+    // This runs after the iframe loads its content.
+    function installCommentaryBridge() {
+      const iframeWin = leftIframe.contentWindow;
+      if (!iframeWin) return;
+
+      // We poll a bit because plastex pages are multi-file and the DOM changes on navigation.
+      let attempts = 0;
+      const timer = setInterval(() => {
+        attempts++;
+        try {
+          const doc = leftIframe.contentDocument || leftIframe.contentWindow.document;
+          if (!doc) return;
+
+          // Mark the bridge as installed so we don't add listeners 50 times
+          if (doc.documentElement.dataset.lionsBridge) {
+            clearInterval(timer);
+            return;
+          }
+
+          const links = doc.querySelectorAll('a.line-ref, dt a[href*="#line"]');
+          links.forEach(a => {
+            a.addEventListener('click', (e) => {
+              const href = a.getAttribute('href') || '';
+              const m = href.match(/#line(\d+)/);
+              if (m) {
+                e.preventDefault();
+                const line = parseInt(m[1], 10);
+                // Try to guess current sect from the iframe location
+                const sectMatch = (leftIframe.contentWindow.location.pathname || '').match(/sect\d+/);
+                const sect = sectMatch ? sectMatch[0] : null;
+
+                // Tell the parent
+                window.postMessage({ type: 'goto-line', line, sect }, '*');
+
+                // Also navigate the iframe ourselves in case the link was relative
+                // (the original link would have tried to target the old "source" frame name)
+              }
+            }, { passive: false });
+          });
+
+          // Also update the title in the header when the commentary page changes
+          const titleEl = doc.querySelector('title');
+          if (titleEl) {
+            document.getElementById('left-title').textContent = titleEl.textContent.replace(/^:\s*/, '');
+          }
+
+          doc.documentElement.dataset.lionsBridge = '1';
+          if (attempts > 8) clearInterval(timer);
+        } catch (err) {
+          // cross-origin or not ready yet — ignore
+        }
+      }, 350);
+
+      // Fallback: also listen to load events
+      leftIframe.addEventListener('load', () => {
+        // re-arm the bridge on navigation inside the commentary
+        setTimeout(installCommentaryBridge, 80);
+      });
+    }
+
+    // Initial setup
+    function init() {
+      loadPrefs();
+
+      // Keyboard shortcuts (similar spirit to the old ones, without the alert spam)
+      document.addEventListener('keydown', (e) => {
+        if (e.key.toLowerCase() === '?') {
+          e.preventDefault();
+          alert('Modern viewer shortcuts:\n' +
+                'b – both panes\n' +
+                'l – focus left (commentary)\n' +
+                'r – focus right (source)\n' +
+                'v – toggle vertical/horizontal\n' +
+                'Click any line number in the left pane to jump.');
+        }
+        if (e.key.toLowerCase() === 'b') setSplit(0.5);
+        if (e.key.toLowerCase() === 'l') setSplit(0.92);
+        if (e.key.toLowerCase() === 'r') setSplit(0.08);
+        if (e.key.toLowerCase() === 'v') toggleOrientation();
+      });
+
+      // Boot the bridge that makes line numbers in the commentary work
+      leftIframe.addEventListener('load', () => {
+        // small delay so inner content (including injected style) is there
+        setTimeout(installCommentaryBridge, 180);
+      });
+
+      // If the URL already contains ?line= or ?sect=, try to honor it
+      const params = new URLSearchParams(location.search);
+      const initialLine = params.get('line');
+      const initialSect = params.get('sect');
+
+      if (initialSect) {
+        leftIframe.src = `lionc/${initialSect}.html`;
+      }
+      if (initialLine) {
+        // delay a bit so the source iframe has a chance to be ready
+        setTimeout(() => goToLine(initialLine), 450);
+      }
+
+      // Nice touch: update header when commentary navigates
+      leftIframe.addEventListener('load', () => {
+        try {
+          const doc = leftIframe.contentDocument;
+          if (doc && doc.title) {
+            document.getElementById('left-title').textContent =
+              doc.title.replace(/^:\s*/, '');
+          }
+        } catch (e) {}
+      });
+
+      statusEl.textContent = 'Modern viewer ready — drag the divider';
+      // One-time hint
+      setTimeout(() => {
+        if (statusEl.textContent.includes('ready')) {
+          statusEl.textContent = 'Tip: drag the middle bar • click line numbers on the left';
+        }
+      }, 6500);
+    }
+
+    init();
+
+    // Expose a tiny API for debugging / future use
+    window.LionsViewer = { goToLine, setSplit, toggleOrientation };
+  </script>
+</body>
+</html>

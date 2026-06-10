@@ -1,12 +1,23 @@
 <html>
-  <script type="text/javascript" src="jquery.js"></script>          
-  <script type="text/javascript" src="js.js"></script>          
-<frameset cols="54%,46%">
+  <head>
+    <meta charset="utf-8">
+    <title>Lions' Commentary — Classic frames viewer (legacy)</title>
+  </head>
+  <body>
+    <p style="font-family: system-ui; padding: 1rem; background:#fff3cd; border:1px solid #ffeaa7; max-width: 720px;">
+      <strong>Legacy frames viewer.</strong><br>
+      This uses the ancient &lt;frameset&gt; technique. It still mostly works but is not great for accessibility, mobile, or modern browsers.
+      <br><br>
+      <a href="viewer.html" style="font-weight:600">→ Try the new modern viewer (recommended)</a><br>
+      <small>You can still use this one if you really want the classic experience.</small>
+    </p>
 
-  <frame src="lionc/index.html" name="commentary">
-  <frame src="all.html" name="source">
-
-</frameset>
-
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="js.js"></script>
+    <frameset cols="54%,46%">
+      <frame src="lionc/index.html" name="commentary">
+      <frame src="all.html" name="source">
+    </frameset>
+  </body>
 </html>
 

@@ -1,0 +1,113 @@
+# =============================================================================
+# lions-book .gitignore
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Python / uv
+# -----------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+.uv/
+uv.lock  # uncomment if you prefer not to commit the lockfile
+
+# -----------------------------------------------------------------------------
+# LaTeX / TeX / plastex build artifacts (sources only in git)
+# -----------------------------------------------------------------------------
+*.aux
+*.log
+*.toc
+*.out
+*.dvi
+*.ps
+*.pdf
+*.fls
+*.fdb_latexmk
+*.synctex*
+*.bbl
+*.blg
+*.idx
+*.ilg
+*.ind
+*.lof
+*.lot
+
+# -----------------------------------------------------------------------------
+# Generated web output (rebuild with "make lions" or CI)
+# We build this on demand / in CI for GitHub Pages.
+# Keeping it out of git avoids constant churn and huge diffs.
+# -----------------------------------------------------------------------------
+lionc/
+
+# Special case: if you want to commit the Polish translation output,
+# you can un-ignore it selectively after a build, or maintain it
+# separately. For now we treat all of lionc/ as generated.
+# lionc/pol/
+
+# -----------------------------------------------------------------------------
+# Translation tooling secrets (CRITICAL - never commit real tokens)
+# -----------------------------------------------------------------------------
+pyt/credentials.json
+pyt/token.json
+pyt/*.json
+pyt/token*.json
+
+# -----------------------------------------------------------------------------
+# Old / backup / experimental dumps
+# -----------------------------------------------------------------------------
+lioncold/
+all.css.bak
+*.bak
+
+# -----------------------------------------------------------------------------
+# Operating system / editor noise
+# -----------------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editors and IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.sublime-*
+.project
+.pydevproject
+.settings/
+
+# -----------------------------------------------------------------------------
+# Misc
+# -----------------------------------------------------------------------------
+*.tmp
+*.temp
+node_modules/
